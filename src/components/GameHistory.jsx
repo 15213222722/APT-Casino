@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Box, Typography, Grid, Paper, Chip, IconButton, Tooltip } from '@mui/material';
 import { OpenInNew, Verified } from '@mui/icons-material';
+import oneChainClientService from '../services/OneChainClientService.js';
 
 const GameHistory = ({ hotNumbers, coldNumbers, recentGames = [] }) => {
   const [showVrfDetails, setShowVrfDetails] = useState(true);
@@ -10,74 +11,114 @@ const GameHistory = ({ hotNumbers, coldNumbers, recentGames = [] }) => {
     ? recentGames.map(game => game.resultData?.number || 0)
     : [0, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8, 23, 10, 5, 24, 16, 33, 1, 20, 14, 31, 9, 22, 18, 29, 7, 28, 12, 35, 3, 26];
   
-  const openMonadExplorer = (txHash) => {
+  /**
+   * Open One Chain explorer for game transaction
+   * @param {string} txHash - One Chain transaction hash
+   */
+  const openOneChainExplorer = (txHash) => {
     if (txHash) {
-      const network = process.env.NEXT_PUBLIC_NETWORK || 'monad-testnet';
-      let explorerUrl;
-      
-      if (network === 'monad-testnet') {
-        explorerUrl = `https://testnet.monadexplorer.com/tx/${txHash}`;
-      } else {
-        explorerUrl = `https://testnet.monadexplorer.com/tx/${txHash}`;
-      }
-      
+      const explorerUrl = oneChainClientService.getExplorerUrl(txHash);
       window.open(explorerUrl, '_blank');
     }
   };
 
-  const NumberBall = ({ number, size = 32, opacity = 1, game = null }) => (
-    <Tooltip 
-      title={game?.vrfDetails?.transactionHash ? 
-        `VRF Verified - Block #${game.vrfDetails.blockNumber || 'N/A'}` : 
-        'Number result'
-      }
-      arrow
-    >
-      <Box 
-        sx={{ 
-          position: 'relative',
-          width: size, 
-          height: size, 
-          borderRadius: '50%', 
-          display: 'flex', 
-          alignItems: 'center', 
-          justifyContent: 'center',
-          backgroundColor: number === 0 ? '#14D854' : 
-            [1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36].includes(number) ? '#d82633' : '#333',
-          color: 'white',
-          fontWeight: 'bold',
-          fontSize: `${size * 0.025}rem`,
-          opacity,
-          transition: 'transform 0.2s ease-in-out',
-          cursor: game?.vrfDetails?.transactionHash ? 'pointer' : 'default',
-          '&:hover': {
-            transform: game?.vrfDetails?.transactionHash ? 'scale(1.1)' : 'scale(1.05)',
-          }
-        }}
-        onClick={() => game?.vrfDetails?.transactionHash && openMonadExplorer(game.vrfDetails.transactionHash)}
-      >
-        {number}
-        {game?.vrfDetails?.transactionHash && (
-          <Box
-            sx={{
-              position: 'absolute',
-              top: -2,
-              right: -2,
-              width: 12,
-              height: 12,
-              borderRadius: '50%',
-              backgroundColor: '#4CAF50',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}
-          >
-            <Verified sx={{ fontSize: 8, color: 'white' }} />
-          </Box>
-        )}
-      </Box>
-    </Tooltip>
-  );
+  /**
+   * Open Arbitrum Sepolia explorer for entropy transaction
+   * @param {string} txHash - Arbitrum Sepolia transaction hash
+   */
+  const openArbitrumExplorer = (txHash) => {
+    if (txHash) {
+      const explorerUrl = `https://sepolia.arbiscan.io/tx/${txHash}`;
+      window.open(explorerUrl, '_blank');
+    }
+  };
+
+  const NumberBall = ({ number, size = 32, opacity = 1, game = null }) => {
+    // Determine which transaction hash to use (One Chain or legacy)
+    const hasOneChainTx = game?.transactionHash || game?.onechainTxHash;
+    const hasEntropyTx = game?.entropyTxHash || game?.arbitrumEntropyTxHash || game?.vrfDetails?.transactionHash;
+    
+    const tooltipTitle = hasOneChainTx 
+      ? `One Chain Verified - Block #${game?.blockNumber || game?.onechainBlockNumber || 'N/A'}${hasEntropyTx ? ' | Entropy Verified' : ''}`
+      : hasEntropyTx
+      ? `Entropy Verified - Block #${game?.vrfDetails?.blockNumber || 'N/A'}`
+      : 'Number result';
+
+    return (
+      <Tooltip title={tooltipTitle} arrow>
+        <Box 
+          sx={{ 
+            position: 'relative',
+            width: size, 
+            height: size, 
+            borderRadius: '50%', 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'center',
+            backgroundColor: number === 0 ? '#14D854' : 
+              [1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36].includes(number) ? '#d82633' : '#333',
+            color: 'white',
+            fontWeight: 'bold',
+            fontSize: `${size * 0.025}rem`,
+            opacity,
+            transition: 'transform 0.2s ease-in-out',
+            cursor: hasOneChainTx ? 'pointer' : 'default',
+            '&:hover': {
+              transform: hasOneChainTx ? 'scale(1.1)' : 'scale(1.05)',
+            }
+          }}
+          onClick={() => {
+            if (hasOneChainTx) {
+              openOneChainExplorer(game.transactionHash || game.onechainTxHash);
+            }
+          }}
+        >
+          {number}
+          {hasOneChainTx && (
+            <Box
+              sx={{
+                position: 'absolute',
+                top: -2,
+                right: -2,
+                width: 12,
+                height: 12,
+                borderRadius: '50%',
+                backgroundColor: '#4CAF50',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}
+            >
+              <Verified sx={{ fontSize: 8, color: 'white' }} />
+            </Box>
+          )}
+          {hasEntropyTx && (
+            <Box
+              sx={{
+                position: 'absolute',
+                top: -2,
+                left: -2,
+                width: 12,
+                height: 12,
+                borderRadius: '50%',
+                backgroundColor: '#2196F3',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer'
+              }}
+              onClick={(e) => {
+                e.stopPropagation();
+                openArbitrumExplorer(game.entropyTxHash || game.arbitrumEntropyTxHash || game.vrfDetails?.transactionHash);
+              }}
+            >
+              <Verified sx={{ fontSize: 8, color: 'white' }} />
+            </Box>
+          )}
+        </Box>
+      </Tooltip>
+    );
+  };
 
   return (
     <Paper 
@@ -90,18 +131,28 @@ const GameHistory = ({ hotNumbers, coldNumbers, recentGames = [] }) => {
     >
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
         <Typography variant="h5" color="white">Recent Game Results</Typography>
-        <Chip
-          icon={<Verified />}
-          label="VRF Verified"
-          color="success"
-          size="small"
-          onClick={() => setShowVrfDetails(!showVrfDetails)}
-          sx={{ cursor: 'pointer' }}
-        />
+        <Box sx={{ display: 'flex', gap: 1 }}>
+          <Chip
+            icon={<Verified />}
+            label="One Chain"
+            color="success"
+            size="small"
+            onClick={() => setShowVrfDetails(!showVrfDetails)}
+            sx={{ cursor: 'pointer' }}
+          />
+          <Chip
+            icon={<Verified />}
+            label="Entropy"
+            color="info"
+            size="small"
+            onClick={() => setShowVrfDetails(!showVrfDetails)}
+            sx={{ cursor: 'pointer' }}
+          />
+        </Box>
       </Box>
       <Typography variant="body1" paragraph color="white">
-        Track the results of previous spins and identify patterns. All results are verified using Pyth Entropy.
-        {showVrfDetails && ' Click on verified numbers to view transaction details.'}
+        Track the results of previous spins and identify patterns. All results are logged on One Chain and verified using Pyth Entropy on Arbitrum Sepolia.
+        {showVrfDetails && ' Click on verified badges to view transaction details: Green for One Chain, Blue for Entropy.'}
       </Typography>
       
       <Box 

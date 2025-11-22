@@ -2,19 +2,27 @@
 import React from 'react';
 import { Box, Typography, Paper, Chip, IconButton, Tooltip } from '@mui/material';
 import { OpenInNew, Verified, Security } from '@mui/icons-material';
+import oneChainClientService from '../services/OneChainClientService.js';
 
 const BettingHistory = ({ history }) => {
-  const openMonadExplorer = (txHash) => {
+  /**
+   * Open One Chain explorer for game transaction
+   * @param {string} txHash - One Chain transaction hash
+   */
+  const openOneChainExplorer = (txHash) => {
     if (txHash) {
-      const network = process.env.NEXT_PUBLIC_NETWORK || 'monad-testnet';
-      let explorerUrl;
-      
-      if (network === 'monad-testnet') {
-        explorerUrl = `https://testnet.monadexplorer.com/tx/${txHash}`;
-      } else {
-        explorerUrl = `https://testnet.monadexplorer.com/tx/${txHash}`;
-      }
-      
+      const explorerUrl = oneChainClientService.getExplorerUrl(txHash);
+      window.open(explorerUrl, '_blank');
+    }
+  };
+
+  /**
+   * Open Arbitrum Sepolia explorer for entropy transaction
+   * @param {string} txHash - Arbitrum Sepolia transaction hash
+   */
+  const openArbitrumExplorer = (txHash) => {
+    if (txHash) {
+      const explorerUrl = `https://sepolia.arbiscan.io/tx/${txHash}`;
       window.open(explorerUrl, '_blank');
     }
   };
@@ -39,13 +47,22 @@ const BettingHistory = ({ history }) => {
         <Typography variant="h6" color="primary">
           Betting History
         </Typography>
-        <Chip
-          icon={<Security />}
-          label="VRF Verified"
-          color="success"
-          size="small"
-          variant="outlined"
-        />
+        <Box sx={{ display: 'flex', gap: 1 }}>
+          <Chip
+            icon={<Security />}
+            label="One Chain"
+            color="success"
+            size="small"
+            variant="outlined"
+          />
+          <Chip
+            icon={<Security />}
+            label="Entropy"
+            color="info"
+            size="small"
+            variant="outlined"
+          />
+        </Box>
       </Box>
       {history.length === 0 ? (
         <Box sx={{ textAlign: 'center', py: 3 }}>
@@ -77,7 +94,7 @@ const BettingHistory = ({ history }) => {
                 {bet.type}
               </Typography>
               <Typography variant="body1" color="text.primary">
-                {bet.amount} MON
+                {bet.amount} OCT
               </Typography>
               <Typography variant="caption" color="text.secondary">
                 {new Date(bet.timestamp).toLocaleTimeString()}
@@ -89,13 +106,19 @@ const BettingHistory = ({ history }) => {
                 fontWeight="bold"
                 color={bet.won ? 'success.main' : 'error.main'}
               >
-                {bet.won ? '+' : '-'}{bet.payout} MON
+                {bet.won ? '+' : '-'}{bet.payout} OCT
               </Typography>
               <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', mt: 0.5 }}>
                 <Typography variant="caption" color="text.secondary" sx={{ mr: 1 }}>
                   Result:
                 </Typography>
-                <Tooltip title={bet.vrfDetails?.transactionHash ? 'VRF Verified - Click to view' : 'Result'}>
+                <Tooltip title={
+                  bet.transactionHash || bet.onechainTxHash 
+                    ? 'One Chain Verified - Click to view' 
+                    : bet.vrfDetails?.transactionHash 
+                    ? 'Entropy Verified - Click to view' 
+                    : 'Result'
+                }>
                   <Box
                     sx={{
                       position: 'relative',
@@ -110,15 +133,19 @@ const BettingHistory = ({ history }) => {
                       fontWeight: 'bold',
                       backgroundColor: bet.roll === 0 ? '#14D854' : 
                         [1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36].includes(bet.roll) ? '#d82633' : '#333',
-                      cursor: bet.vrfDetails?.transactionHash ? 'pointer' : 'default',
+                      cursor: (bet.transactionHash || bet.onechainTxHash) ? 'pointer' : 'default',
                       '&:hover': {
-                        transform: bet.vrfDetails?.transactionHash ? 'scale(1.1)' : 'none'
+                        transform: (bet.transactionHash || bet.onechainTxHash) ? 'scale(1.1)' : 'none'
                       }
                     }}
-                    onClick={() => bet.vrfDetails?.transactionHash && openMonadExplorer(bet.vrfDetails.transactionHash)}
+                    onClick={() => {
+                      if (bet.transactionHash || bet.onechainTxHash) {
+                        openOneChainExplorer(bet.transactionHash || bet.onechainTxHash);
+                      }
+                    }}
                   >
                     {bet.roll}
-                    {bet.vrfDetails?.transactionHash && (
+                    {(bet.transactionHash || bet.onechainTxHash) && (
                       <Box
                         sx={{
                           position: 'absolute',
@@ -136,30 +163,80 @@ const BettingHistory = ({ history }) => {
                         <Verified sx={{ fontSize: 6, color: 'white' }} />
                       </Box>
                     )}
+                    {(bet.entropyTxHash || bet.arbitrumEntropyTxHash || bet.vrfDetails?.transactionHash) && (
+                      <Box
+                        sx={{
+                          position: 'absolute',
+                          top: -2,
+                          left: -2,
+                          width: 8,
+                          height: 8,
+                          borderRadius: '50%',
+                          backgroundColor: '#2196F3',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          cursor: 'pointer'
+                        }}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          openArbitrumExplorer(bet.entropyTxHash || bet.arbitrumEntropyTxHash || bet.vrfDetails?.transactionHash);
+                        }}
+                      >
+                        <Verified sx={{ fontSize: 6, color: 'white' }} />
+                      </Box>
+                    )}
                   </Box>
                 </Tooltip>
               </Box>
               
-              {/* VRF Transaction Details */}
-              {bet.vrfDetails?.transactionHash && (
+              {/* One Chain Transaction Details */}
+              {(bet.transactionHash || bet.onechainTxHash) && (
                 <Box sx={{ mt: 1, display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
                   <Typography variant="caption" color="text.secondary" sx={{ mr: 1 }}>
-                    VRF:
+                    One Chain:
                   </Typography>
-                  <Tooltip title="Click to verify on Monad Explorer">
+                  <Tooltip title="Click to verify on One Chain Explorer">
                     <Chip
-                      label={formatTxHash(bet.vrfDetails.transactionHash)}
+                      label={formatTxHash(bet.transactionHash || bet.onechainTxHash)}
                       size="small"
                       variant="outlined"
                       color="success"
                       icon={<Verified />}
-                      onClick={() => openMonadExplorer(bet.vrfDetails.transactionHash)}
+                      onClick={() => openOneChainExplorer(bet.transactionHash || bet.onechainTxHash)}
                       sx={{ 
                         fontSize: '0.6rem', 
                         height: 20,
                         cursor: 'pointer',
                         '&:hover': {
                           backgroundColor: 'rgba(76, 175, 80, 0.1)'
+                        }
+                      }}
+                    />
+                  </Tooltip>
+                </Box>
+              )}
+              
+              {/* Entropy Transaction Details */}
+              {(bet.entropyTxHash || bet.arbitrumEntropyTxHash || bet.vrfDetails?.transactionHash) && (
+                <Box sx={{ mt: 1, display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
+                  <Typography variant="caption" color="text.secondary" sx={{ mr: 1 }}>
+                    Entropy:
+                  </Typography>
+                  <Tooltip title="Click to verify on Arbitrum Sepolia Explorer">
+                    <Chip
+                      label={formatTxHash(bet.entropyTxHash || bet.arbitrumEntropyTxHash || bet.vrfDetails?.transactionHash)}
+                      size="small"
+                      variant="outlined"
+                      color="info"
+                      icon={<Verified />}
+                      onClick={() => openArbitrumExplorer(bet.entropyTxHash || bet.arbitrumEntropyTxHash || bet.vrfDetails?.transactionHash)}
+                      sx={{ 
+                        fontSize: '0.6rem', 
+                        height: 20,
+                        cursor: 'pointer',
+                        '&:hover': {
+                          backgroundColor: 'rgba(33, 150, 243, 0.1)'
                         }
                       }}
                     />
