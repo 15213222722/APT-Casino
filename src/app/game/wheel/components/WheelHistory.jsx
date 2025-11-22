@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { Box, Typography, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Button, TextField, InputAdornment, Select, MenuItem, FormControl, Chip, Pagination, Divider, Fade } from "@mui/material";
 import { FaHistory, FaFilter, FaDownload, FaSearch, FaTrophy, FaChartLine, FaExternalLinkAlt, FaCheck } from "react-icons/fa";
 import Image from "next/image";
+import oneChainClientService from '../../../../services/OneChainClientService.js';
 // Using Next.js public asset reference instead of import
 
 const WheelHistory = ({ gameHistory = [] }) => {
@@ -12,18 +13,24 @@ const WheelHistory = ({ gameHistory = [] }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [page, setPage] = useState(1);
 
-   // Open Monad Explorer link for transaction hash
-   const openMonadExplorer = (hash) => {
-    if (hash && hash !== 'unknown') {
-      const network = process.env.NEXT_PUBLIC_NETWORK || 'monad-testnet';
-      let explorerUrl;
-      
-      if (network === 'monad-testnet') {
-        explorerUrl = `https://testnet.monadexplorer.com/tx/${hash}`;
-      } else {
-        explorerUrl = `https://testnet.monadexplorer.com/tx/${hash}`;
-      }
-      
+  /**
+   * Open One Chain explorer for game transaction
+   * @param {string} txHash - One Chain transaction hash
+   */
+  const openOneChainExplorer = (txHash) => {
+    if (txHash) {
+      const explorerUrl = oneChainClientService.getExplorerUrl(txHash);
+      window.open(explorerUrl, '_blank');
+    }
+  };
+
+  /**
+   * Open Arbitrum Sepolia explorer for entropy transaction
+   * @param {string} txHash - Arbitrum Sepolia transaction hash
+   */
+  const openArbitrumExplorer = (txHash) => {
+    if (txHash) {
+      const explorerUrl = `https://sepolia.arbiscan.io/tx/${txHash}`;
       window.open(explorerUrl, '_blank');
     }
   };
@@ -592,48 +599,69 @@ const WheelHistory = ({ gameHistory = [] }) => {
                               }
                             }}
                           />
-                          <Button
-                            onClick={() => {
-                              if (item.entropyProof.transactionHash) {
-                                window.open(`https://entropy-explorer.pyth.network/?chain=monad-testnet&search=${item.entropyProof.transactionHash}`, '_blank');
-                              }
-                            }}
-                            size="small"
-                            startIcon={<FaExternalLinkAlt size={10} />}
-                            sx={{ 
-                              color: '#681DDB',
-                              fontSize: '0.7rem',
-                              minWidth: 'auto',
-                              p: 0,
-                              '&:hover': {
-                                backgroundColor: 'transparent',
-                                textDecoration: 'underline',
-                              }
-                            }}
-                          >
-                            Entropy
-                          </Button>
-                          <Button
-                            onClick={() => {
-                              if (item.entropyProof?.transactionHash) {
-                                window.open(`https://testnet.monadexplorer.com/tx/${item.entropyProof.transactionHash}`, '_blank');
-                              }
-                            }}
-                            size="small"
-                            startIcon={<FaExternalLinkAlt size={10} />}
-                            sx={{ 
-                              color: '#8B2398',
-                              fontSize: '0.7rem',
-                              minWidth: 'auto',
-                              p: 0,
-                              '&:hover': {
-                                backgroundColor: 'transparent',
-                                textDecoration: 'underline',
-                              }
-                            }}
-                          >
-                            Monad
-                          </Button>
+                          {/* One Chain Explorer Link */}
+                          {(item.transactionHash || item.onechainTxHash) && (
+                            <Button
+                              onClick={() => openOneChainExplorer(item.transactionHash || item.onechainTxHash)}
+                              size="small"
+                              startIcon={<FaExternalLinkAlt size={10} />}
+                              sx={{ 
+                                color: '#4CAF50',
+                                fontSize: '0.7rem',
+                                minWidth: 'auto',
+                                p: 0,
+                                '&:hover': {
+                                  backgroundColor: 'transparent',
+                                  textDecoration: 'underline',
+                                }
+                              }}
+                            >
+                              One Chain
+                            </Button>
+                          )}
+                          {/* Arbitrum Sepolia Entropy Link */}
+                          {(item.entropyProof?.transactionHash || item.entropyTxHash || item.arbitrumEntropyTxHash) && (
+                            <Button
+                              onClick={() => {
+                                const txHash = item.entropyProof?.transactionHash || item.entropyTxHash || item.arbitrumEntropyTxHash;
+                                openArbitrumExplorer(txHash);
+                              }}
+                              size="small"
+                              startIcon={<FaExternalLinkAlt size={10} />}
+                              sx={{ 
+                                color: '#2196F3',
+                                fontSize: '0.7rem',
+                                minWidth: 'auto',
+                                p: 0,
+                                '&:hover': {
+                                  backgroundColor: 'transparent',
+                                  textDecoration: 'underline',
+                                }
+                              }}
+                            >
+                              Entropy
+                            </Button>
+                          )}
+                          {/* Pyth Entropy Explorer Link */}
+                          {item.entropyProof?.explorerUrl && (
+                            <Button
+                              onClick={() => window.open(item.entropyProof.explorerUrl, '_blank')}
+                              size="small"
+                              startIcon={<FaExternalLinkAlt size={10} />}
+                              sx={{ 
+                                color: '#681DDB',
+                                fontSize: '0.7rem',
+                                minWidth: 'auto',
+                                p: 0,
+                                '&:hover': {
+                                  backgroundColor: 'transparent',
+                                  textDecoration: 'underline',
+                                }
+                              }}
+                            >
+                              Pyth
+                            </Button>
+                          )}
                         </Box>
                         <Typography variant="caption" color="rgba(255,255,255,0.5)">
                           Pyth Entropy

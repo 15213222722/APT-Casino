@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { Box, Typography, Paper, Tabs, Tab, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Chip, CircularProgress, Fade } from '@mui/material';
 import { FaHistory, FaChartLine, FaFire, FaExclamationCircle, FaCoins, FaInfoCircle, FaTrophy, FaDice, FaExternalLinkAlt } from 'react-icons/fa';
+import oneChainClientService from '../../../../services/OneChainClientService.js';
 
 // Utility function to format MON amounts with proper decimal precision
 const formatMONAmount = (amount) => {
@@ -250,27 +251,25 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
     return redNumbers.includes(num) ? '#d82633' : '#333'; // Red or black
   };
 
-  // Open Monad Explorer link for transaction hash
-  const openMonadExplorer = (hash) => {
-    if (hash && hash !== 'unknown') {
-      const network = process.env.NEXT_PUBLIC_NETWORK || 'monad-testnet';
-      let explorerUrl;
-      
-      if (network === 'monad-testnet') {
-        explorerUrl = `https://testnet.monadexplorer.com/tx/${hash}`;
-      } else {
-        explorerUrl = `https://testnet.monadexplorer.com/tx/${hash}`;
-      }
-      
+  /**
+   * Open One Chain explorer for game transaction
+   * @param {string} txHash - One Chain transaction hash
+   */
+  const openOneChainExplorer = (txHash) => {
+    if (txHash) {
+      const explorerUrl = oneChainClientService.getExplorerUrl(txHash);
       window.open(explorerUrl, '_blank');
     }
   };
 
-  // Open Entropy Explorer link
-  const openEntropyExplorer = (txHash) => {
+  /**
+   * Open Arbitrum Sepolia explorer for entropy transaction
+   * @param {string} txHash - Arbitrum Sepolia transaction hash
+   */
+  const openArbitrumExplorer = (txHash) => {
     if (txHash) {
-      const entropyExplorerUrl = `https://entropy-explorer.pyth.network/?chain=monad-testnet&search=${txHash}`;
-      window.open(entropyExplorerUrl, '_blank');
+      const explorerUrl = `https://sepolia.arbiscan.io/tx/${txHash}`;
+      window.open(explorerUrl, '_blank');
     }
   };
   
@@ -383,7 +382,7 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
                       <TableCell align="center">Amount</TableCell>
                       <TableCell align="center">Result</TableCell>
                       <TableCell align="right">Payout</TableCell>
-                      <TableCell align="center">Entropy Explorer</TableCell>
+                      <TableCell align="center">Verification</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -526,17 +525,18 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
                           </Typography>
                         </TableCell>
                         <TableCell align="center">
-                          {bet.entropyProof ? (
+                          {bet.entropyProof || bet.transactionHash || bet.onechainTxHash ? (
                             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5, alignItems: 'center' }}>
                               <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.25, alignItems: 'center' }}>
                                 <Typography variant="caption" sx={{ color: '#FFC107', fontFamily: 'monospace', fontWeight: 'bold' }}>
-                                  {bet.entropyProof.sequenceNumber && bet.entropyProof.sequenceNumber !== '0' ? String(bet.entropyProof.sequenceNumber) : ''}
+                                  {bet.entropyProof?.sequenceNumber && bet.entropyProof.sequenceNumber !== '0' ? String(bet.entropyProof.sequenceNumber) : ''}
                                 </Typography>
                               </Box>
-                              <Box sx={{ display: 'flex', gap: 0.5 }}>
-                                {bet.entropyProof.arbiscanUrl && (
+                              <Box sx={{ display: 'flex', gap: 0.5, flexWrap: 'wrap', justifyContent: 'center' }}>
+                                {/* One Chain Explorer Link */}
+                                {(bet.transactionHash || bet.onechainTxHash) && (
                                   <Box
-                                    onClick={() => window.open(bet.entropyProof.arbiscanUrl, '_blank')}
+                                    onClick={() => openOneChainExplorer(bet.transactionHash || bet.onechainTxHash)}
                                     sx={{
                                       display: 'flex',
                                       alignItems: 'center',
@@ -544,22 +544,55 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
                                       cursor: 'pointer',
                                       padding: '2px 6px',
                                       borderRadius: '4px',
-                                      backgroundColor: 'rgba(0, 150, 255, 0.1)',
-                                      border: '1px solid rgba(0, 150, 255, 0.3)',
+                                      backgroundColor: 'rgba(76, 175, 80, 0.1)',
+                                      border: '1px solid rgba(76, 175, 80, 0.3)',
                                       transition: 'all 0.2s ease',
                                       '&:hover': {
-                                        backgroundColor: 'rgba(0, 150, 255, 0.2)',
+                                        backgroundColor: 'rgba(76, 175, 80, 0.2)',
                                         transform: 'scale(1.05)'
                                       }
                                     }}
                                   >
-                                    <FaExternalLinkAlt size={10} color="#0096FF" />
-                                    <Typography variant="caption" sx={{ color: '#0096FF', fontSize: '0.7rem', fontWeight: 'bold' }}>
-                                      Arbiscan
+                                    <FaExternalLinkAlt size={10} color="#4CAF50" />
+                                    <Typography variant="caption" sx={{ color: '#4CAF50', fontSize: '0.7rem', fontWeight: 'bold' }}>
+                                      One Chain
                                     </Typography>
                                   </Box>
                                 )}
-                                {bet.entropyProof.explorerUrl && (
+                                {/* Arbitrum Sepolia Entropy Link */}
+                                {(bet.entropyProof?.arbiscanUrl || bet.entropyTxHash || bet.arbitrumEntropyTxHash) && (
+                                  <Box
+                                    onClick={() => {
+                                      if (bet.entropyProof?.arbiscanUrl) {
+                                        window.open(bet.entropyProof.arbiscanUrl, '_blank');
+                                      } else {
+                                        openArbitrumExplorer(bet.entropyTxHash || bet.arbitrumEntropyTxHash);
+                                      }
+                                    }}
+                                    sx={{
+                                      display: 'flex',
+                                      alignItems: 'center',
+                                      gap: 0.5,
+                                      cursor: 'pointer',
+                                      padding: '2px 6px',
+                                      borderRadius: '4px',
+                                      backgroundColor: 'rgba(33, 150, 243, 0.1)',
+                                      border: '1px solid rgba(33, 150, 243, 0.3)',
+                                      transition: 'all 0.2s ease',
+                                      '&:hover': {
+                                        backgroundColor: 'rgba(33, 150, 243, 0.2)',
+                                        transform: 'scale(1.05)'
+                                      }
+                                    }}
+                                  >
+                                    <FaExternalLinkAlt size={10} color="#2196F3" />
+                                    <Typography variant="caption" sx={{ color: '#2196F3', fontSize: '0.7rem', fontWeight: 'bold' }}>
+                                      Entropy
+                                    </Typography>
+                                  </Box>
+                                )}
+                                {/* Pyth Entropy Explorer Link */}
+                                {bet.entropyProof?.explorerUrl && (
                                   <Box
                                     onClick={() => window.open(bet.entropyProof.explorerUrl, '_blank')}
                                     sx={{
@@ -580,36 +613,7 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
                                   >
                                     <FaExternalLinkAlt size={10} color="#681DDB" />
                                     <Typography variant="caption" sx={{ color: '#681DDB', fontSize: '0.7rem', fontWeight: 'bold' }}>
-                                      Entropy
-                                    </Typography>
-                                  </Box>
-                                )}
-                                {(bet.entropyProof?.monadExplorerUrl || bet.vrfProof?.transactionHash) && (
-                                  <Box
-                                    onClick={() => {
-                                      const url = bet.entropyProof?.monadExplorerUrl || 
-                                                 `https://testnet.monadexplorer.com/tx/${bet.vrfProof?.transactionHash}`;
-                                      window.open(url, '_blank');
-                                    }}
-                                    sx={{
-                                      display: 'flex',
-                                      alignItems: 'center',
-                                      gap: 0.5,
-                                      cursor: 'pointer',
-                                      padding: '2px 6px',
-                                      borderRadius: '4px',
-                                      backgroundColor: 'rgba(139, 35, 152, 0.1)',
-                                      border: '1px solid rgba(139, 35, 152, 0.3)',
-                                      transition: 'all 0.2s ease',
-                                      '&:hover': {
-                                        backgroundColor: 'rgba(139, 35, 152, 0.2)',
-                                        transform: 'scale(1.05)'
-                                      }
-                                    }}
-                                  >
-                                    <FaExternalLinkAlt size={10} color="#8B2398" />
-                                    <Typography variant="caption" sx={{ color: '#8B2398', fontSize: '0.7rem', fontWeight: 'bold' }}>
-                                      Monad
+                                      Pyth
                                     </Typography>
                                   </Box>
                                 )}

@@ -5,25 +5,32 @@ import { motion, AnimatePresence } from "framer-motion";
 import { FaHistory, FaStar, FaTrophy, FaChartBar, FaChartLine, FaBomb, FaSort, FaSortUp, FaSortDown, FaExternalLinkAlt } from "react-icons/fa";
 import { GiMining, GiDiamonds, GiTreasureMap, GiGoldBar, GiDiamondHard, GiDiamondTrophy } from "react-icons/gi";
 import { HiClock, HiOutlineLightningBolt } from "react-icons/hi";
+import oneChainClientService from '../../../../services/OneChainClientService.js';
 
 const MinesHistory = ({ gameHistory = [], userStats = {} }) => {
   // State for sorting
   const [sortField, setSortField] = useState(null);
   const [sortDirection, setSortDirection] = useState('asc');
 
-  // Open Monad Explorer link for transaction hash
-  const openMonadExplorer = (hash) => {
-    if (hash && hash !== 'unknown') {
-      const explorerUrl = `https://testnet.monadexplorer.com/tx/${hash}`;
+  /**
+   * Open One Chain explorer for game transaction
+   * @param {string} txHash - One Chain transaction hash
+   */
+  const openOneChainExplorer = (txHash) => {
+    if (txHash) {
+      const explorerUrl = oneChainClientService.getExplorerUrl(txHash);
       window.open(explorerUrl, '_blank');
     }
   };
 
-  // Open Entropy Explorer link
-  const openEntropyExplorer = (txHash) => {
+  /**
+   * Open Arbitrum Sepolia explorer for entropy transaction
+   * @param {string} txHash - Arbitrum Sepolia transaction hash
+   */
+  const openArbitrumExplorer = (txHash) => {
     if (txHash) {
-      const entropyExplorerUrl = `https://entropy-explorer.pyth.network/?chain=monad-testnet&search=${txHash}`;
-      window.open(entropyExplorerUrl, '_blank');
+      const explorerUrl = `https://sepolia.arbiscan.io/tx/${txHash}`;
+      window.open(explorerUrl, '_blank');
     }
   };
   
@@ -308,32 +315,43 @@ const MinesHistory = ({ gameHistory = [], userStats = {} }) => {
                 <span>{game.time}</span>
               </div>
               <div className="text-white/70 flex items-center justify-center">
-                {game.entropyProof ? (
+                {game.entropyProof || game.transactionHash || game.onechainTxHash ? (
                   <div className="flex flex-col gap-1 items-center">
                     <div className="text-xs text-gray-300 font-mono text-center">
-                      <div className="text-yellow-400 font-bold">{game.entropyProof.sequenceNumber && game.entropyProof.sequenceNumber !== '0' ? String(game.entropyProof.sequenceNumber) : ''}</div>
+                      <div className="text-yellow-400 font-bold">{game.entropyProof?.sequenceNumber && game.entropyProof.sequenceNumber !== '0' ? String(game.entropyProof.sequenceNumber) : ''}</div>
                     </div>
-                    <div className="flex gap-1">
-                      {(game.entropyProof.monadExplorerUrl || game.entropyProof.transactionHash) && (
+                    <div className="flex gap-1 flex-wrap justify-center">
+                      {/* One Chain Explorer Link */}
+                      {(game.transactionHash || game.onechainTxHash) && (
                         <button
-                          onClick={() => {
-                            const url = game.entropyProof.monadExplorerUrl || 
-                                       `https://testnet.monadexplorer.com/tx/${game.entropyProof.transactionHash}`;
-                            window.open(url, '_blank');
-                          }}
-                          className="flex items-center gap-1 px-2 py-1 bg-[#8B2398]/10 border border-[#8B2398]/30 rounded text-[#8B2398] text-xs hover:bg-[#8B2398]/20 transition-colors"
+                          onClick={() => openOneChainExplorer(game.transactionHash || game.onechainTxHash)}
+                          className="flex items-center gap-1 px-2 py-1 bg-[#4CAF50]/10 border border-[#4CAF50]/30 rounded text-[#4CAF50] text-xs hover:bg-[#4CAF50]/20 transition-colors"
                         >
                           <FaExternalLinkAlt size={8} />
-                          Monad
+                          One Chain
                         </button>
                       )}
-                      {game.entropyProof.transactionHash && (
+                      {/* Arbitrum Sepolia Entropy Link */}
+                      {(game.entropyProof?.transactionHash || game.entropyTxHash || game.arbitrumEntropyTxHash) && (
                         <button
-                          onClick={() => openEntropyExplorer(game.entropyProof.transactionHash)}
-                          className="flex items-center gap-1 px-2 py-1 bg-[#681DDB]/10 border border-[#681DDB]/30 rounded text-[#681DDB] text-xs hover:bg-[#681DDB]/20 transition-colors"
+                          onClick={() => {
+                            const txHash = game.entropyProof?.transactionHash || game.entropyTxHash || game.arbitrumEntropyTxHash;
+                            openArbitrumExplorer(txHash);
+                          }}
+                          className="flex items-center gap-1 px-2 py-1 bg-[#2196F3]/10 border border-[#2196F3]/30 rounded text-[#2196F3] text-xs hover:bg-[#2196F3]/20 transition-colors"
                         >
                           <FaExternalLinkAlt size={8} />
                           Entropy
+                        </button>
+                      )}
+                      {/* Pyth Entropy Explorer Link */}
+                      {game.entropyProof?.explorerUrl && (
+                        <button
+                          onClick={() => window.open(game.entropyProof.explorerUrl, '_blank')}
+                          className="flex items-center gap-1 px-2 py-1 bg-[#681DDB]/10 border border-[#681DDB]/30 rounded text-[#681DDB] text-xs hover:bg-[#681DDB]/20 transition-colors"
+                        >
+                          <FaExternalLinkAlt size={8} />
+                          Pyth
                         </button>
                       )}
                     </div>
