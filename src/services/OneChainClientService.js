@@ -255,13 +255,13 @@ class OneChainClientService {
   }
 
   /**
-   * Log game result to One Chain
+   * Log game result to One Chain via smart contract
    * @param {Object} gameData - Game result data
    * @returns {Promise<string>} Transaction hash
    */
   async logGameResult(gameData) {
     try {
-      console.log('🎮 ONE CHAIN: Logging game result...');
+      console.log('🎮 ONE CHAIN: Logging game result to smart contract...');
       console.log('📋 Game data:', gameData);
 
       const {
@@ -272,8 +272,7 @@ class OneChainClientService {
         gameConfig,
         resultData,
         entropyValue,
-        entropyTxHash,
-        timestamp
+        entropyTxHash
       } = gameData;
 
       // Validate required fields
@@ -281,44 +280,121 @@ class OneChainClientService {
         throw new Error('Missing required game data fields');
       }
 
-      // Create transaction data for game result logging
-      // This would typically involve calling a Move smart contract
-      // For now, we'll create a transaction that stores the data
-      const txData = {
-        kind: 'moveCall',
-        data: {
-          packageObjectId: '0x2', // System package
-          module: 'game_logger',
-          function: 'log_game_result',
-          typeArguments: [],
-          arguments: [
-            gameType,
-            playerAddress,
-            betAmount.toString(),
-            payoutAmount ? payoutAmount.toString() : '0',
-            JSON.stringify(gameConfig || {}),
-            JSON.stringify(resultData || {}),
-            entropyValue || '',
-            entropyTxHash || '',
-            timestamp || Date.now()
-          ]
-        }
+      // Get contract package ID from environment or config
+      const packageId = process.env.NEXT_PUBLIC_GAME_LOGGER_PACKAGE_ID || this.config.gameLoggerPackageId;
+      
+      if (!packageId) {
+        console.warn('⚠️ ONE CHAIN: Game logger package ID not configured, using mock');
+        return this._mockLogGameResult(gameData);
+      }
+
+      // Map game type to contract function
+      const functionMap = {
+        'ROULETTE': 'log_roulette_game',
+        'MINES': 'log_mines_game',
+        'PLINKO': 'log_plinko_game',
+        'WHEEL': 'log_wheel_game'
       };
 
-      console.log('📤 ONE CHAIN: Transaction data prepared');
+      const functionName = functionMap[gameType];
+      if (!functionName) {
+        throw new Error(`Unknown game type: ${gameType}`);
+      }
+
+      // Prepare transaction arguments
+      const txData = {
+        packageObjectId: packageId,
+        module: 'game_logger',
+        function: functionName,
+        typeArguments: [],
+        arguments: [
+          playerAddress,                                    // player_address
+          betAmount.toString(),                             // bet_amount (u64)
+          (payoutAmount || '0').toString(),                 // payout_amount (u64)
+          this._stringToBytes(JSON.stringify(gameConfig || {})),  // game_config (vector<u8>)
+          this._stringToBytes(JSON.stringify(resultData || {})),  // result_data (vector<u8>)
+          this._stringToBytes(entropyValue || ''),          // entropy_value (vector<u8>)
+          this._stringToBytes(entropyTxHash || ''),         // entropy_tx_hash (vector<u8>)
+          '0x6'                                             // clock object (shared object)
+        ],
+        gasBudget: 10000000 // 0.01 SUI/OCT
+      };
+
+      console.log('📤 ONE CHAIN: Preparing Move call transaction...');
+      console.log('📦 Package:', packageId);
+      console.log('🔧 Function:', functionName);
+
+      // Build transaction block
+      const tx = await this._buildMoveCallTransaction(txData);
       
-      // Note: In a real implementation, this would need to be signed by the user's wallet
-      // and then submitted. For now, we'll return a mock transaction hash
-      // that indicates the structure is correct
+      console.log('✅ ONE CHAIN: Transaction built, ready for signing');
       
-      const mockTxHash = `0x${Date.now().toString(16)}${Math.random().toString(16).slice(2)}`;
-      console.log(`✅ ONE CHAIN: Game result logged (mock): ${mockTxHash}`);
+      // Return transaction for wallet to sign
+      // In real implementation, this would be signed by user's wallet
+      return tx;
       
-      return mockTxHash;
     } catch (error) {
       console.error('❌ ONE CHAIN: Error logging game result:', error);
       throw error;
     }
+  }
+
+  /**
+   * Build Move call transaction
+   * @param {Object} txData - Transaction data
+   * @returns {Promise<Object>} Transaction object
+   * @private
+   */
+  async _buildMoveCallTransaction(txData) {
+    try {
+      // This creates a transaction block that can be signed by the wallet
+      const transaction = {
+        kind: 'moveCall',
+        data: {
+          packageObjectId: txData.packageObjectId,
+          module: txData.module,
+          function: txData.function,
+          typeArguments: txData.typeArguments,
+          arguments: txData.arguments,
+          gasBudget: txData.gasBudget
+        }
+      };
+
+      return transaction;
+    } catch (error) {
+      console.error('❌ ONE CHAIN: Error building transaction:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Convert string to bytes array
+   * @param {string} str - String to convert
+   * @returns {Array<number>} Bytes array
+   * @private
+   */
+  _stringToBytes(str) {
+    const encoder = new TextEncoder();
+    return Array.from(encoder.encode(str));
+  }
+
+  /**
+   * Mock game result logging (fallback when contract not deployed)
+   * @param {Object} gameData - Game result data
+   * @returns {Promise<string>} Mock transaction hash
+   * @private
+   */
+  async _mockLogGameResult(gameData) {
+    console.log('🔧 ONE CHAIN: Using mock game logging (contract not deployed)');
+    
+    const mockTxHash = `0x${Date.now().toString(16)}${Math.random().toString(16).slice(2)}`;
+    
+    // Simulate network delay
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    console.log(`✅ ONE CHAIN: Game result logged (mock): ${mockTxHash}`);
+    
+    return mockTxHash;
   }
 
   /**

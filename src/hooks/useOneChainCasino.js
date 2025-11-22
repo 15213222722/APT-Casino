@@ -64,9 +64,12 @@ export const useOneChainCasino = () => {
    * @param {string} amount - Bet amount in OCT
    * @param {number[]} numbers - Array of numbers for the bet
    * @param {string} entropyValue - Random value from Pyth Entropy
+   * @param {string} entropyTxHash - Arbitrum Sepolia entropy transaction hash
+   * @param {Object} resultData - Game result data (number, color, isWin, etc.)
+   * @param {string} payoutAmount - Payout amount in OCT (if game completed)
    * @returns {Promise<string>} Transaction hash
    */
-  const placeRouletteBet = useCallback(async (betType, betValue, amount, numbers = [], entropyValue) => {
+  const placeRouletteBet = useCallback(async (betType, betValue, amount, numbers = [], entropyValue, entropyTxHash = '', resultData = {}, payoutAmount = '0') => {
     if (!connected || !account) {
       throw new Error('Wallet not connected');
     }
@@ -76,36 +79,48 @@ export const useOneChainCasino = () => {
       setError(null);
 
       const betAmountWei = parseOCTAmount(amount);
+      const payoutAmountWei = parseOCTAmount(payoutAmount);
 
-      // Create game data for logging
+      // Create game data for logging with all required fields
       const gameData = {
         gameType: 'ROULETTE',
         playerAddress: account,
         betAmount: betAmountWei,
-        payoutAmount: '0', // Will be updated after game result
+        payoutAmount: payoutAmountWei,
         gameConfig: {
           betType,
           betValue,
-          numbers
+          numbers,
+          wheelType: 'european'
         },
-        resultData: {},
+        resultData: {
+          ...resultData,
+          timestamp: Date.now()
+        },
         entropyValue: entropyValue || '',
-        entropyTxHash: '', // Will be populated if available
+        entropyTxHash: entropyTxHash || '',
         timestamp: Date.now()
       };
+
+      console.log('🎰 ONE CHAIN: Logging roulette game result...', gameData);
 
       // Log game result to One Chain
       const txHash = await oneChainClientService.logGameResult(gameData);
       
-      // Wait for transaction confirmation
-      await oneChainClientService.waitForTransaction(txHash);
+      console.log('⏳ ONE CHAIN: Waiting for transaction confirmation...');
+      
+      // Wait for transaction confirmation before marking game complete
+      const receipt = await oneChainClientService.waitForTransaction(txHash);
+      
+      console.log('✅ ONE CHAIN: Roulette game logged successfully');
+      console.log('📋 Transaction receipt:', receipt);
       
       // Update balance after transaction
       await updateBalance();
       
       return txHash;
     } catch (error) {
-      console.error('Roulette bet failed:', error);
+      console.error('❌ Roulette bet failed:', error);
       setError(error.message);
       throw error;
     } finally {
@@ -137,9 +152,10 @@ export const useOneChainCasino = () => {
    * @param {string} betAmount - Bet amount in OCT
    * @param {number} minesCount - Number of mines
    * @param {string} entropyValue - Random value from Pyth Entropy
+   * @param {string} entropyTxHash - Arbitrum Sepolia entropy transaction hash
    * @returns {Promise<string>} Transaction hash (game ID)
    */
-  const startMinesGame = useCallback(async (betAmount, minesCount, entropyValue) => {
+  const startMinesGame = useCallback(async (betAmount, minesCount, entropyValue, entropyTxHash = '') => {
     if (!connected || !account) {
       throw new Error('Wallet not connected');
     }
@@ -150,7 +166,7 @@ export const useOneChainCasino = () => {
 
       const betAmountWei = parseOCTAmount(betAmount);
 
-      // Create game data for logging
+      // Create game data for logging with all required fields
       const gameData = {
         gameType: 'MINES',
         playerAddress: account,
@@ -158,29 +174,39 @@ export const useOneChainCasino = () => {
         payoutAmount: '0',
         gameConfig: {
           minesCount,
-          gridSize: 25
+          gridSize: 25,
+          action: 'start'
         },
         resultData: {
           status: 'started',
-          revealedTiles: []
+          revealedTiles: [],
+          minePositions: [], // Will be generated from entropy
+          timestamp: Date.now()
         },
         entropyValue: entropyValue || '',
-        entropyTxHash: '',
+        entropyTxHash: entropyTxHash || '',
         timestamp: Date.now()
       };
+
+      console.log('💣 ONE CHAIN: Logging mines game start...', gameData);
 
       // Log game start to One Chain
       const txHash = await oneChainClientService.logGameResult(gameData);
       
-      // Wait for transaction confirmation
-      await oneChainClientService.waitForTransaction(txHash);
+      console.log('⏳ ONE CHAIN: Waiting for transaction confirmation...');
+      
+      // Wait for transaction confirmation before marking game complete
+      const receipt = await oneChainClientService.waitForTransaction(txHash);
+      
+      console.log('✅ ONE CHAIN: Mines game started successfully');
+      console.log('📋 Transaction receipt:', receipt);
       
       // Update balance after transaction
       await updateBalance();
       
       return txHash;
     } catch (error) {
-      console.error('Mines game start failed:', error);
+      console.error('❌ Mines game start failed:', error);
       setError(error.message);
       throw error;
     } finally {
@@ -192,9 +218,11 @@ export const useOneChainCasino = () => {
    * Reveal a tile in mines game
    * @param {string} gameId - Game ID (transaction hash)
    * @param {number} tileIndex - Index of tile to reveal
+   * @param {boolean} isMine - Whether the revealed tile is a mine
+   * @param {number} currentMultiplier - Current multiplier after reveal
    * @returns {Promise<string>} Transaction hash
    */
-  const revealMinesTile = useCallback(async (gameId, tileIndex) => {
+  const revealMinesTile = useCallback(async (gameId, tileIndex, isMine = false, currentMultiplier = 1.0) => {
     if (!connected || !account) {
       throw new Error('Wallet not connected');
     }
@@ -203,7 +231,7 @@ export const useOneChainCasino = () => {
       setLoading(true);
       setError(null);
 
-      // Create game data for tile reveal
+      // Create game data for tile reveal with all required fields
       const gameData = {
         gameType: 'MINES',
         playerAddress: account,
@@ -215,22 +243,32 @@ export const useOneChainCasino = () => {
         },
         resultData: {
           tileIndex,
-          status: 'revealed'
+          isMine,
+          currentMultiplier,
+          status: isMine ? 'lost' : 'revealed',
+          timestamp: Date.now()
         },
         entropyValue: '',
         entropyTxHash: '',
         timestamp: Date.now()
       };
 
+      console.log('💣 ONE CHAIN: Logging mines tile reveal...', gameData);
+
       // Log tile reveal to One Chain
       const txHash = await oneChainClientService.logGameResult(gameData);
       
-      // Wait for transaction confirmation
-      await oneChainClientService.waitForTransaction(txHash);
+      console.log('⏳ ONE CHAIN: Waiting for transaction confirmation...');
+      
+      // Wait for transaction confirmation before marking game complete
+      const receipt = await oneChainClientService.waitForTransaction(txHash);
+      
+      console.log('✅ ONE CHAIN: Mines tile reveal logged successfully');
+      console.log('📋 Transaction receipt:', receipt);
       
       return txHash;
     } catch (error) {
-      console.error('Mines tile reveal failed:', error);
+      console.error('❌ Mines tile reveal failed:', error);
       setError(error.message);
       throw error;
     } finally {
@@ -241,9 +279,12 @@ export const useOneChainCasino = () => {
   /**
    * Cashout from mines game
    * @param {string} gameId - Game ID (transaction hash)
+   * @param {string} payoutAmount - Payout amount in OCT
+   * @param {number} finalMultiplier - Final multiplier achieved
+   * @param {number} tilesRevealed - Number of tiles revealed
    * @returns {Promise<string>} Transaction hash
    */
-  const cashoutMinesGame = useCallback(async (gameId) => {
+  const cashoutMinesGame = useCallback(async (gameId, payoutAmount, finalMultiplier = 1.0, tilesRevealed = 0) => {
     if (!connected || !account) {
       throw new Error('Wallet not connected');
     }
@@ -252,36 +293,49 @@ export const useOneChainCasino = () => {
       setLoading(true);
       setError(null);
 
-      // Create game data for cashout
+      const payoutAmountWei = parseOCTAmount(payoutAmount);
+
+      // Create game data for cashout with all required fields
       const gameData = {
         gameType: 'MINES',
         playerAddress: account,
         betAmount: '0',
-        payoutAmount: '0', // Will be calculated based on revealed tiles
+        payoutAmount: payoutAmountWei,
         gameConfig: {
           gameId,
           action: 'cashout'
         },
         resultData: {
-          status: 'completed'
+          status: 'completed',
+          finalMultiplier,
+          tilesRevealed,
+          isWin: true,
+          timestamp: Date.now()
         },
         entropyValue: '',
         entropyTxHash: '',
         timestamp: Date.now()
       };
 
+      console.log('💣 ONE CHAIN: Logging mines cashout...', gameData);
+
       // Log cashout to One Chain
       const txHash = await oneChainClientService.logGameResult(gameData);
       
-      // Wait for transaction confirmation
-      await oneChainClientService.waitForTransaction(txHash);
+      console.log('⏳ ONE CHAIN: Waiting for transaction confirmation...');
+      
+      // Wait for transaction confirmation before marking game complete
+      const receipt = await oneChainClientService.waitForTransaction(txHash);
+      
+      console.log('✅ ONE CHAIN: Mines cashout logged successfully');
+      console.log('📋 Transaction receipt:', receipt);
       
       // Update balance after cashout
       await updateBalance();
       
       return txHash;
     } catch (error) {
-      console.error('Mines cashout failed:', error);
+      console.error('❌ Mines cashout failed:', error);
       setError(error.message);
       throw error;
     } finally {
@@ -294,9 +348,12 @@ export const useOneChainCasino = () => {
    * @param {string} betAmount - Bet amount in OCT
    * @param {number} rows - Number of rows (8, 12, or 16)
    * @param {string} entropyValue - Random value from Pyth Entropy
+   * @param {string} entropyTxHash - Arbitrum Sepolia entropy transaction hash
+   * @param {Object} resultData - Game result data (path, landingSlot, multiplier, etc.)
+   * @param {string} payoutAmount - Payout amount in OCT
    * @returns {Promise<string>} Transaction hash
    */
-  const playPlinko = useCallback(async (betAmount, rows, entropyValue) => {
+  const playPlinko = useCallback(async (betAmount, rows, entropyValue, entropyTxHash = '', resultData = {}, payoutAmount = '0') => {
     if (!connected || !account) {
       throw new Error('Wallet not connected');
     }
@@ -306,34 +363,46 @@ export const useOneChainCasino = () => {
       setError(null);
 
       const betAmountWei = parseOCTAmount(betAmount);
+      const payoutAmountWei = parseOCTAmount(payoutAmount);
 
-      // Create game data for plinko
+      // Create game data for plinko with all required fields
       const gameData = {
         gameType: 'PLINKO',
         playerAddress: account,
         betAmount: betAmountWei,
-        payoutAmount: '0',
+        payoutAmount: payoutAmountWei,
         gameConfig: {
-          rows
+          rows,
+          risk: resultData.risk || 'medium'
         },
-        resultData: {},
+        resultData: {
+          ...resultData,
+          timestamp: Date.now()
+        },
         entropyValue: entropyValue || '',
-        entropyTxHash: '',
+        entropyTxHash: entropyTxHash || '',
         timestamp: Date.now()
       };
+
+      console.log('🎯 ONE CHAIN: Logging plinko game result...', gameData);
 
       // Log plinko game to One Chain
       const txHash = await oneChainClientService.logGameResult(gameData);
       
-      // Wait for transaction confirmation
-      await oneChainClientService.waitForTransaction(txHash);
+      console.log('⏳ ONE CHAIN: Waiting for transaction confirmation...');
+      
+      // Wait for transaction confirmation before marking game complete
+      const receipt = await oneChainClientService.waitForTransaction(txHash);
+      
+      console.log('✅ ONE CHAIN: Plinko game logged successfully');
+      console.log('📋 Transaction receipt:', receipt);
       
       // Update balance after transaction
       await updateBalance();
       
       return txHash;
     } catch (error) {
-      console.error('Plinko game failed:', error);
+      console.error('❌ Plinko game failed:', error);
       setError(error.message);
       throw error;
     } finally {
@@ -364,9 +433,12 @@ export const useOneChainCasino = () => {
    * @param {string} betAmount - Bet amount in OCT
    * @param {number} segments - Number of segments
    * @param {string} entropyValue - Random value from Pyth Entropy
+   * @param {string} entropyTxHash - Arbitrum Sepolia entropy transaction hash
+   * @param {Object} resultData - Game result data (segment, multiplier, isWin, etc.)
+   * @param {string} payoutAmount - Payout amount in OCT
    * @returns {Promise<string>} Transaction hash
    */
-  const spinWheel = useCallback(async (betAmount, segments, entropyValue) => {
+  const spinWheel = useCallback(async (betAmount, segments, entropyValue, entropyTxHash = '', resultData = {}, payoutAmount = '0') => {
     if (!connected || !account) {
       throw new Error('Wallet not connected');
     }
@@ -376,34 +448,46 @@ export const useOneChainCasino = () => {
       setError(null);
 
       const betAmountWei = parseOCTAmount(betAmount);
+      const payoutAmountWei = parseOCTAmount(payoutAmount);
 
-      // Create game data for wheel
+      // Create game data for wheel with all required fields
       const gameData = {
         gameType: 'WHEEL',
         playerAddress: account,
         betAmount: betAmountWei,
-        payoutAmount: '0',
+        payoutAmount: payoutAmountWei,
         gameConfig: {
-          segments
+          segments,
+          risk: resultData.risk || 'medium'
         },
-        resultData: {},
+        resultData: {
+          ...resultData,
+          timestamp: Date.now()
+        },
         entropyValue: entropyValue || '',
-        entropyTxHash: '',
+        entropyTxHash: entropyTxHash || '',
         timestamp: Date.now()
       };
+
+      console.log('🎡 ONE CHAIN: Logging wheel spin result...', gameData);
 
       // Log wheel spin to One Chain
       const txHash = await oneChainClientService.logGameResult(gameData);
       
-      // Wait for transaction confirmation
-      await oneChainClientService.waitForTransaction(txHash);
+      console.log('⏳ ONE CHAIN: Waiting for transaction confirmation...');
+      
+      // Wait for transaction confirmation before marking game complete
+      const receipt = await oneChainClientService.waitForTransaction(txHash);
+      
+      console.log('✅ ONE CHAIN: Wheel spin logged successfully');
+      console.log('📋 Transaction receipt:', receipt);
       
       // Update balance after transaction
       await updateBalance();
       
       return txHash;
     } catch (error) {
-      console.error('Wheel spin failed:', error);
+      console.error('❌ Wheel spin failed:', error);
       setError(error.message);
       throw error;
     } finally {

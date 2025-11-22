@@ -34,6 +34,8 @@ export const ONECHAIN_TESTNET_CONFIG = {
   },
   testnet: true,
   faucetUrl: process.env.NEXT_PUBLIC_ONECHAIN_FAUCET_URL || 'https://faucet-testnet.onelabs.cc',
+  // Game Logger Contract Package ID
+  gameLoggerPackageId: process.env.NEXT_PUBLIC_GAME_LOGGER_PACKAGE_ID || null,
 };
 
 // One Chain Testnet Tokens
