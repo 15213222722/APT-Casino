@@ -14,8 +14,13 @@ import { Typography } from "@mui/material";
 import { GiRollingDices, GiCardRandom, GiPokerHand } from "react-icons/gi";
 import { FaPercentage, FaBalanceScale, FaChartLine, FaCoins, FaTrophy, FaPlay, FaExternalLinkAlt } from "react-icons/fa";
 import pythEntropyService from '../../../services/PythEntropyService';
+import { useOneChainCasino } from '@/hooks/useOneChainCasino';
+import { useCurrentAccount } from '@mysten/dapp-kit';
 
 export default function Plinko() {
+  const currentAccount = useCurrentAccount();
+  const address = currentAccount?.address;
+  const { playPlinko: logPlinkoGame } = useOneChainCasino();
   const userBalance = useSelector((state) => state.balance.userBalance);
   
   const [currentRows, setCurrentRows] = useState(15);
@@ -221,6 +226,21 @@ export default function Plinko() {
       
       console.log('📝 Enhanced bet result:', enhancedBetResult);
       setGameHistory(prev => [enhancedBetResult, ...prev].slice(0, 100)); // Keep up to last 100 entries
+      
+      // Log to OneChain
+      if (logPlinkoGame && address) {
+        logPlinkoGame(
+          betAmount,
+          multiplier,
+          payout,
+          randomData.randomValue,
+          randomData.entropyProof?.transactionHash
+        ).then(() => {
+          console.log('✅ ONE CHAIN: Plinko game logged successfully');
+        }).catch(error => {
+          console.error('❌ ONE CHAIN: Error logging Plinko game:', error);
+        });
+      }
       
     } catch (error) {
       console.error('❌ Error using Yellow Network for Plinko game:', error);

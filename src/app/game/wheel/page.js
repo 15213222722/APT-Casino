@@ -20,6 +20,8 @@ import useWalletStatus from '@/hooks/useWalletStatus';
 // import VRFProofRequiredModal from '@/components/VRF/VRFProofRequiredModal';
 // import vrfLogger from '@/services/VRFLoggingService';
 import pythEntropyService from '@/services/PythEntropyService';
+import { useOneChainCasino } from '@/hooks/useOneChainCasino';
+import { useCurrentAccount } from '@mysten/dapp-kit';
 
 // Import new components
 import WheelVideo from "./components/WheelVideo";
@@ -53,6 +55,11 @@ export default function Home() {
   const { userBalance, isLoading: isLoadingBalance } = useSelector((state) => state.balance);
   const notification = useNotification();
   const { isConnected } = useWalletStatus();
+  
+  // OneChain Casino hook for game logging
+  const currentAccount = useCurrentAccount();
+  const address = currentAccount?.address;
+  const { playWheel: logWheelGame } = useOneChainCasino();
   
   // Use ref to prevent infinite loop in useEffect
   const isInitialized = useRef(false);
@@ -105,6 +112,22 @@ export default function Home() {
       
       console.log('✅ PYTH ENTROPY: Background entropy generated successfully');
       console.log('🔗 Transaction:', entropyResult.entropyProof.transactionHash);
+      
+      // Log to OneChain
+      const historyItem = gameHistory.find(item => item.id === historyItemId);
+      if (logWheelGame && address && historyItem) {
+        logWheelGame(
+          historyItem.betAmount,
+          historyItem.multiplier,
+          historyItem.payout,
+          entropyResult.randomValue,
+          entropyResult.entropyProof.transactionHash
+        ).then(() => {
+          console.log('✅ ONE CHAIN: Wheel game logged successfully');
+        }).catch(error => {
+          console.error('❌ ONE CHAIN: Error logging Wheel game:', error);
+        });
+      }
       
       // Update the history item with real entropy proof
       setGameHistory(prev => prev.map(item => 

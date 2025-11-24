@@ -124,17 +124,39 @@ export const useOneChainCasino = () => {
 
       console.log('🎰 ONE CHAIN: Logging roulette game result...', gameData);
 
-      // Log game result to One Chain
-      // This operation is isolated - errors here don't affect entropy service
-      const txHash = await oneChainClientService.logGameResult(gameData);
+      // Build transaction data using OneChainClientService
+      const txData = await oneChainClientService.logGameResult(gameData);
       
-      console.log('⏳ ONE CHAIN: Waiting for transaction confirmation...');
+      console.log('📝 ONE CHAIN: Transaction data prepared:', txData);
       
-      // Wait for transaction confirmation before marking game complete
-      const receipt = await oneChainClientService.waitForTransaction(txHash);
+      // Send transaction to backend API for signing with treasury wallet
+      console.log('🔐 ONE CHAIN: Sending to backend for treasury signing...');
+      
+      const response = await fetch('/api/onechain-log-game', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          packageId: txData.data.packageObjectId,
+          module: txData.data.module,
+          functionName: txData.data.function,
+          arguments: txData.data.arguments,
+          typeArguments: txData.data.typeArguments || []
+        })
+      });
+
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        throw new Error(result.error || 'Failed to log game to OneChain');
+      }
+
+      const txHash = result.transactionDigest;
       
       console.log('✅ ONE CHAIN: Roulette game logged successfully');
-      console.log('📋 Transaction receipt:', receipt);
+      console.log('📋 Transaction hash:', txHash);
+      console.log('📊 Transaction effects:', result.effects);
       
       // Update balance after transaction (independent operation)
       // Balance update failure doesn't fail the game

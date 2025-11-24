@@ -25,8 +25,14 @@ import GameDetail from "@/components/GameDetail";
 import AIAutoBetting from "./components/AIAutoBetting";
 import AISettingsModal from "./components/AISettingsModal";
 import pythEntropyService from '@/services/PythEntropyService';
+import { useOneChainCasino } from '@/hooks/useOneChainCasino';
+import { useCurrentAccount } from '@mysten/dapp-kit';
 
 export default function Mines() {
+  // OneChain Casino hook for game logging
+  const currentAccount = useCurrentAccount();
+  const address = currentAccount?.address;
+  const { startMinesGame: logMinesStart, revealMinesTile: logMinesReveal, cashoutMines: logMinesCashout } = useOneChainCasino();
   // Game State
   const [betSettings, setBetSettings] = useState({});
   const [activeTab, setActiveTab] = useState("Manual");
@@ -215,6 +221,33 @@ export default function Mines() {
       };
       
       console.log('✅ PYTH ENTROPY: Mines randomness generated:', entropyProof);
+      
+      // Log to OneChain based on game action
+      if (address && entropyProof) {
+        if (result.action === 'cashout' && logMinesCashout) {
+          logMinesCashout(
+            result.gameId || 'mines_game_1', // gameId
+            (result.payout || 0).toString(), // payoutAmount
+            result.multiplier || 1.0, // finalMultiplier
+            result.tilesRevealed || 0 // tilesRevealed
+          ).then(() => {
+            console.log('✅ ONE CHAIN: Mines cashout logged successfully');
+          }).catch(error => {
+            console.error('❌ ONE CHAIN: Error logging Mines cashout:', error);
+          });
+        } else if (result.action === 'reveal' && logMinesReveal) {
+          logMinesReveal(
+            result.gameId || 'mines_game_1', // gameId
+            result.tileIndex || 0, // tileIndex
+            result.isMine || false, // isMine
+            result.multiplier || 1.0 // currentMultiplier
+          ).then(() => {
+            console.log('✅ ONE CHAIN: Mines tile reveal logged successfully');
+          }).catch(error => {
+            console.error('❌ ONE CHAIN: Error logging Mines tile reveal:', error);
+          });
+        }
+      }
     } catch (error) {
       console.error('❌ Error using Pyth Entropy for Mines game:', error);
     }

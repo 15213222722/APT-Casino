@@ -12,6 +12,7 @@ import OneChainWalletButton from "./OneChainWalletButton";
 import LiveChat from "./LiveChat";
 import SmartAccountInfo from "./SmartAccountInfo";
 import SmartAccountModal from "./SmartAccountModal";
+import WalletDebug from "./WalletDebug";
 import { Transaction } from '@mysten/sui/transactions';
 
 import { useNotification } from './NotificationSystem';

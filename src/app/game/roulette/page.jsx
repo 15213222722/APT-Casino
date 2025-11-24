@@ -35,6 +35,7 @@ import { useCurrentAccount } from '@mysten/dapp-kit';
 import { useSelector, useDispatch } from 'react-redux';
 import { setBalance, setLoading, loadBalanceFromStorage } from '@/store/balanceSlice';
 import pythEntropyService from '@/services/PythEntropyService';
+import { useOneChainCasino } from '@/hooks/useOneChainCasino';
 
 // Ethereum client functions will be added here when needed
 
@@ -1200,6 +1201,9 @@ export default function GameRoulette() {
   const [realBalance, setRealBalance] = useState('0');
   const { balance } = useToken(address); // Keep for compatibility
   const HOUSE_ADDR = CASINO_MODULE_ADDRESS;
+  
+  // OneChain Casino hook for game logging
+  const { placeRouletteBet: logRouletteGame } = useOneChainCasino();
 
   // Function to fetch real OCT balance will be defined after useSelector
 
@@ -2067,6 +2071,48 @@ export default function GameRoulette() {
           
           // Pyth Entropy handles randomness generation
           console.log('✅ Pyth Entropy randomness processed for Roulette');
+          
+          // Log to OneChain
+          console.log('🔍 ONE CHAIN DEBUG:', { 
+            hasLogFunction: !!logRouletteGame, 
+            hasAddress: !!address,
+            address: address 
+          });
+          
+          if (logRouletteGame && address) {
+            // Collect all bet numbers from all bets
+            const allBetNumbers = allBets.flatMap(bet => bet.numbers || []);
+            
+            console.log('🎲 ONE CHAIN: Calling logRouletteGame with params:', {
+              betType: newBet.betType,
+              winningNumber,
+              totalBetAmount,
+              allBetNumbers,
+              entropyValue: entropyResult.randomValue,
+              entropyTxHash: entropyResult.entropyProof.transactionHash
+            });
+            
+            logRouletteGame(
+              newBet.betType, // betType (e.g., "Multiple Bets (3)")
+              winningNumber, // betValue (winning number)
+              totalBetAmount, // amount
+              allBetNumbers, // numbers (all numbers from all bets)
+              entropyResult.randomValue, // entropyValue
+              entropyResult.entropyProof.transactionHash, // entropyTxHash
+              { 
+                winningNumber, 
+                isWin: newBet.win,
+                totalBets: allBets.length,
+                winningBets: winningBets.length,
+                netResult: netResult
+              }, // resultData
+              totalPayout.toString() // payoutAmount
+            ).then(() => {
+              console.log('✅ ONE CHAIN: Roulette game logged successfully');
+            }).catch(error => {
+              console.error('❌ ONE CHAIN: Error logging Roulette game:', error);
+            });
+          }
         }).then(() => {
           console.log('📊 PYTH ENTROPY: Roulette game completed successfully');
         }).catch(error => {

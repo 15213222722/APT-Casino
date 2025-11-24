@@ -623,8 +623,13 @@ class OneChainClientService {
       const data = await response.json();
 
       if (data.error) {
+        // Handle error message properly - could be string or object
+        const errorMessage = typeof data.error === 'string' 
+          ? data.error 
+          : (data.error.message || JSON.stringify(data.error) || 'RPC call failed');
+        
         throw new ServiceError(
-          data.error.message || 'RPC call failed',
+          errorMessage,
           ErrorType.RPC,
           ErrorSeverity.MEDIUM,
           null,
