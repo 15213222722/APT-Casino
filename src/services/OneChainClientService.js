@@ -694,7 +694,7 @@ class OneChainClientService {
    */
   getAddressExplorerUrl(address) {
     const baseUrl = this.config.blockExplorers.default.url;
-    return `${baseUrl}/address/${address}`;
+    return `${baseUrl}/account/${address}`;
   }
 
   /**

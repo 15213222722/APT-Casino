@@ -125,7 +125,7 @@ async function deployGameLogger() {
     console.log('   3. Verify transactions on One Chain explorer\n');
 
     console.log('🔗 One Chain Explorer:');
-    console.log(`   https://explorer-testnet.onelabs.cc/object/${packageId}\n`);
+    console.log(`   https://onescan.cc/testnet/object/${packageId}\n`);
 
   } catch (error) {
     console.error('\n❌ Deployment failed:', error.message);

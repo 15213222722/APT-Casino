@@ -28,8 +28,8 @@ export const ONECHAIN_TESTNET_CONFIG = {
   },
   blockExplorers: {
     default: {
-      name: 'One Chain Testnet Explorer',
-      url: process.env.NEXT_PUBLIC_ONECHAIN_TESTNET_EXPLORER || 'https://explorer-testnet.onelabs.cc',
+      name: 'OneScan Testnet Explorer',
+      url: process.env.NEXT_PUBLIC_ONECHAIN_TESTNET_EXPLORER || 'https://onescan.cc/testnet',
     },
   },
   testnet: true,

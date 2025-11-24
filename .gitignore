@@ -125,3 +125,6 @@ artifacts/
 .env
 
 .vercel
+
+# Wallet information
+.wallet-info/

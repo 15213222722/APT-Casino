@@ -146,14 +146,14 @@ describe('OneChainClientService', () => {
       const txHash = '0x123abc';
       const url = service.getExplorerUrl(txHash);
       expect(url).toContain(txHash);
-      expect(url).toContain('explorer-testnet.onelabs.cc');
+      expect(url).toContain('onescan.cc');
     });
 
     test('should generate explorer URL for address', () => {
       const address = '0x123abc';
       const url = service.getAddressExplorerUrl(address);
       expect(url).toContain(address);
-      expect(url).toContain('explorer-testnet.onelabs.cc');
+      expect(url).toContain('onescan.cc');
     });
   });
 

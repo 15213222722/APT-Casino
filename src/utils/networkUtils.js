@@ -12,7 +12,7 @@ export const ONECHAIN_NETWORK_CONFIG = {
     decimals: 18,
   },
   rpcUrls: [process.env.NEXT_PUBLIC_ONECHAIN_TESTNET_RPC || 'https://rpc-testnet.onelabs.cc:443'],
-  blockExplorerUrls: [process.env.NEXT_PUBLIC_ONECHAIN_TESTNET_EXPLORER || 'https://explorer-testnet.onelabs.cc'],
+  blockExplorerUrls: [process.env.NEXT_PUBLIC_ONECHAIN_TESTNET_EXPLORER || 'https://onescan.cc/testnet'],
 };
 
 // Legacy Monad Testnet Configuration (kept for reference)
@@ -103,7 +103,7 @@ export const formatMonBalance = (balance, decimals = 5) => {
 };
 
 export const getOneChainTestnetExplorerUrl = (txHash) => {
-  return `${process.env.NEXT_PUBLIC_ONECHAIN_TESTNET_EXPLORER || 'https://explorer-testnet.onelabs.cc'}/tx/${txHash}`;
+  return `${process.env.NEXT_PUBLIC_ONECHAIN_TESTNET_EXPLORER || 'https://onescan.cc/testnet'}/tx/${txHash}`;
 };
 
 export const getMonadTestnetExplorerUrl = (txHash) => {

@@ -78,7 +78,7 @@ export async function exampleRouletteWithEntropy() {
   // Step 5: Verification
   console.log('Step 5: Cross-chain verification:');
   console.log('  - Arbitrum Sepolia:', `https://sepolia.arbiscan.io/tx/${entropyTxHash}`);
-  console.log('  - One Chain:', `https://explorer-testnet.onelabs.cc/tx/${onechainTxHash}`);
+  console.log('  - One Chain:', `https://onescan.cc/testnet/tx/${onechainTxHash}`);
   console.log('');
 
   return {
