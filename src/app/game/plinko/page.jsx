@@ -242,8 +242,7 @@ export default function Plinko() {
       if (typeof logPlinkoGame === 'function') {
         console.log('🎲 ONE CHAIN: Calling logPlinkoGame with params');
         
-        try {
-          logPlinkoGame(
+        logPlinkoGame(
           newBetResult.betAmount || currentBetAmount, // betAmount
           currentRows || 16, // rows (default plinko rows)
           randomData.randomValue, // entropyValue
