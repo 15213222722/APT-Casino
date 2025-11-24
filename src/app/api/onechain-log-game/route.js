@@ -56,15 +56,56 @@ export async function POST(request) {
 
     // Create keypair from private key (base64 encoded)
     // OneChain uses Ed25519 keypairs like Sui
-    const keypair = Ed25519Keypair.fromSecretKey(
-      Buffer.from(treasuryPrivateKey, 'base64')
-    );
+    // Sui keystore format: flag (1 byte) || private_key (32 bytes)
+    // We need to skip the first byte (flag) to get the 32-byte private key
+    const privateKeyBuffer = Buffer.from(treasuryPrivateKey, 'base64');
+    
+    console.log('🔑 Private key buffer length:', privateKeyBuffer.length);
+    
+    // Skip the first byte (flag) if present
+    const secretKey = privateKeyBuffer.length === 33 
+      ? privateKeyBuffer.slice(1) 
+      : privateKeyBuffer;
+    
+    console.log('🔑 Secret key length:', secretKey.length);
+    
+    const keypair = Ed25519Keypair.fromSecretKey(secretKey);
     const treasuryAddress = keypair.getPublicKey().toSuiAddress();
     
     console.log('🏦 Treasury address:', treasuryAddress);
 
+    // Get OCT coins for gas
+    console.log('💰 Fetching OCT coins for gas...');
+    const coins = await suiClient.getCoins({
+      owner: treasuryAddress,
+      coinType: '0x2::oct::OCT'
+    });
+
+    if (!coins.data || coins.data.length === 0) {
+      console.error('❌ ONE CHAIN API: No OCT coins found in treasury');
+      return NextResponse.json({
+        success: false,
+        error: 'No OCT coins available in treasury wallet. Please fund the treasury with OCT tokens.',
+        treasuryAddress
+      }, { status: 500 });
+    }
+
+    console.log(`✓ Found ${coins.data.length} OCT coin(s)`);
+    console.log(`💰 Total balance: ${coins.data.reduce((sum, coin) => sum + BigInt(coin.balance), 0n)} MIST`);
+
     // Build transaction
     const tx = new Transaction();
+    
+    // Set gas payment using OCT coins
+    // Use the first coin with sufficient balance
+    const gasCoin = coins.data.find(coin => BigInt(coin.balance) >= 10000000n) || coins.data[0];
+    tx.setGasPayment([{
+      objectId: gasCoin.coinObjectId,
+      version: gasCoin.version,
+      digest: gasCoin.digest
+    }]);
+    
+    console.log(`⛽ Using gas coin: ${gasCoin.coinObjectId} (${gasCoin.balance} MIST)`);
     
     // Convert arguments to proper format
     const txArguments = args.map((arg, index) => {

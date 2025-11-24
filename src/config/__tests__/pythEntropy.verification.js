@@ -48,7 +48,7 @@ const checks = [
     actual: PYTH_ENTROPY_CONFIG.NETWORK.explorerUrl
   },
   {
-    name: 'Currency is ETH (not MON)',
+    name: 'Currency is ETH (not OCT)',
     pass: PYTH_ENTROPY_CONFIG.NETWORK.currency === 'ETH',
     expected: 'ETH',
     actual: PYTH_ENTROPY_CONFIG.NETWORK.currency
@@ -66,9 +66,9 @@ const checks = [
     actual: PYTH_ENTROPY_CONFIG.NETWORK.entropyExplorerUrl
   },
   {
-    name: 'No Monad references in supported networks',
-    pass: !PYTH_ENTROPY_CONFIG.getSupportedNetworks().includes('monad-testnet'),
-    expected: 'No "monad-testnet" in supported networks',
+    name: 'No One Chain references in supported networks',
+    pass: !PYTH_ENTROPY_CONFIG.getSupportedNetworks().includes('onechain-testnet'),
+    expected: 'No "onechain-testnet" in supported networks',
     actual: PYTH_ENTROPY_CONFIG.getSupportedNetworks().join(', ')
   }
 ];

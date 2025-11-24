@@ -86,8 +86,8 @@ const MOCK_SEARCH_RESULTS = {
     { id: 'game4', name: 'Plinko', path: '/game/plinko', type: 'Popular' },
   ],
   tournaments: [
-    { id: 'tournament1', name: 'High Roller Tournament', path: '/tournaments/high-roller', prize: '10,000 MON' },
-    { id: 'tournament2', name: 'Weekend Battle', path: '/tournaments/weekend-battle', prize: '5,000 MON' },
+    { id: 'tournament1', name: 'High Roller Tournament', path: '/tournaments/high-roller', prize: '10,000 OCT' },
+    { id: 'tournament2', name: 'Weekend Battle', path: '/tournaments/weekend-battle', prize: '5,000 OCT' },
   ],
   pages: [
     { id: 'page1', name: 'Bank', path: '/bank', description: 'Deposit and withdraw funds' },
@@ -168,7 +168,7 @@ export default function Navbar() {
     {
       id: '1',
       title: 'Balance Updated',
-      message: 'Your MON balance has been updated',
+      message: 'Your OCT balance has been updated',
       isRead: false,
       time: '2 min ago'
     },
@@ -973,7 +973,7 @@ export default function Navbar() {
                     <div className="flex justify-between items-center mb-2">
                       <span className="text-sm text-gray-300">House Balance:</span>
                       <span className="text-sm text-green-300 font-medium">
-                      {isLoadingBalance ? 'Loading...' : `${parseFloat(userBalance || '0').toFixed(5)} MON`}
+                      {isLoadingBalance ? 'Loading...' : `${parseFloat(userBalance || '0').toFixed(5)} OCT`}
                     </span>
                     </div>
                     <button

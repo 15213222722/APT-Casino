@@ -228,15 +228,43 @@ export default function Plinko() {
       setGameHistory(prev => [enhancedBetResult, ...prev].slice(0, 100)); // Keep up to last 100 entries
       
       // Log to OneChain
-      if (logPlinkoGame && address) {
-        logPlinkoGame(
-          betAmount,
-          multiplier,
-          payout,
-          randomData.randomValue,
-          randomData.entropyProof?.transactionHash
-        ).then(() => {
+      console.log('🔍 ONE CHAIN DEBUG (Plinko):', { 
+        hasLogFunction: !!logPlinkoGame, 
+        hasAddress: !!address,
+        address: address,
+        betAmount: newBetResult.betAmount || currentBetAmount,
+        rows: currentRows,
+        logPlinkoGameType: typeof logPlinkoGame,
+        logPlinkoGame: logPlinkoGame
+      });
+      
+      // Log to OneChain (address is optional, can use placeholder if not connected)
+      if (typeof logPlinkoGame === 'function') {
+        console.log('🎲 ONE CHAIN: Calling logPlinkoGame with params');
+        
+        try {
+          logPlinkoGame(
+          newBetResult.betAmount || currentBetAmount, // betAmount
+          currentRows || 16, // rows (default plinko rows)
+          randomData.randomValue, // entropyValue
+          randomData.entropyProof?.transactionHash, // entropyTxHash
+          { 
+            multiplier: newBetResult.multiplier, 
+            landingSlot: newBetResult.finalSlot 
+          }, // resultData
+          (newBetResult.payout || 0).toString() // payoutAmount
+        ).then((onechainTxHash) => {
           console.log('✅ ONE CHAIN: Plinko game logged successfully');
+          console.log('📋 ONE CHAIN Transaction Hash:', onechainTxHash);
+          
+          // Update history with OneChain transaction hash
+          setGameHistory(prev => {
+            const updated = [...prev];
+            if (updated.length > 0) {
+              updated[0] = { ...updated[0], onechainTxHash };
+            }
+            return updated;
+          });
         }).catch(error => {
           console.error('❌ ONE CHAIN: Error logging Plinko game:', error);
         });

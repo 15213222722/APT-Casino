@@ -15,17 +15,17 @@ export const ONECHAIN_NETWORK_CONFIG = {
   blockExplorerUrls: [process.env.NEXT_PUBLIC_ONECHAIN_TESTNET_EXPLORER || 'https://onescan.cc/testnet'],
 };
 
-// Legacy Monad Testnet Configuration (kept for reference)
-export const MONAD_TESTNET_CONFIG = {
+// Legacy One Chain Testnet Configuration (kept for reference)
+export const ONECHAIN_TESTNET_CONFIG = {
   chainId: '0x279f', // 10143 in hex
-  chainName: 'Monad Testnet',
+  chainName: 'One Chain Testnet',
   nativeCurrency: {
-    name: 'Monad',
-    symbol: 'MON',
+    name: 'One Chain',
+    symbol: 'OCT',
     decimals: 18,
   },
-  rpcUrls: ['https://testnet-rpc.monad.xyz'],
-  blockExplorerUrls: ['https://testnet.monadexplorer.com'],
+  rpcUrls: ['https://testnet-rpc.onechain.xyz'],
+  blockExplorerUrls: ['https://testnet.onescan.com'],
 };
 
 export const switchToOneChainTestnet = async () => {
@@ -57,7 +57,7 @@ export const switchToOneChainTestnet = async () => {
 };
 
 // Legacy function (kept for backward compatibility)
-export const switchToMonadTestnet = async () => {
+export const switchToOneChainTestnet = async () => {
   if (!window.ethereum) {
     throw new Error('MetaMask is not installed');
   }
@@ -65,20 +65,20 @@ export const switchToMonadTestnet = async () => {
   try {
     await window.ethereum.request({
       method: 'wallet_switchEthereumChain',
-      params: [{ chainId: MONAD_TESTNET_CONFIG.chainId }],
+      params: [{ chainId: ONECHAIN_TESTNET_CONFIG.chainId }],
     });
   } catch (switchError) {
     if (switchError.code === 4902) {
       try {
         await window.ethereum.request({
           method: 'wallet_addEthereumChain',
-          params: [MONAD_TESTNET_CONFIG],
+          params: [ONECHAIN_TESTNET_CONFIG],
         });
       } catch (addError) {
-        throw new Error('Failed to add Monad Testnet to MetaMask');
+        throw new Error('Failed to add One Chain Testnet to MetaMask');
       }
     } else {
-      throw new Error('Failed to switch to Monad Testnet');
+      throw new Error('Failed to switch to One Chain Testnet');
     }
   }
 };
@@ -88,7 +88,7 @@ export const isOneChainTestnet = (chainId) => {
   return chainId === onechainChainId || chainId === ONECHAIN_NETWORK_CONFIG.chainId;
 };
 
-export const isMonadTestnet = (chainId) => {
+export const isOneChainTestnet = (chainId) => {
   return chainId === 10143 || chainId === '0x279f';
 };
 
@@ -99,13 +99,13 @@ export const formatOCTBalance = (balance, decimals = 5) => {
 
 export const formatMonBalance = (balance, decimals = 5) => {
   const numBalance = parseFloat(balance || '0');
-  return `${numBalance.toFixed(decimals)} MON`;
+  return `${numBalance.toFixed(decimals)} OCT`;
 };
 
 export const getOneChainTestnetExplorerUrl = (txHash) => {
   return `${process.env.NEXT_PUBLIC_ONECHAIN_TESTNET_EXPLORER || 'https://onescan.cc/testnet'}/tx/${txHash}`;
 };
 
-export const getMonadTestnetExplorerUrl = (txHash) => {
-  return `https://testnet.monadexplorer.com/tx/${txHash}`;
+export const getOneChainTestnetExplorerUrl = (txHash) => {
+  return `https://testnet.onescan.com/tx/${txHash}`;
 };

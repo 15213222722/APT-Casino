@@ -2107,8 +2107,21 @@ export default function GameRoulette() {
                 netResult: netResult
               }, // resultData
               totalPayout.toString() // payoutAmount
-            ).then(() => {
+            ).then((onechainTxHash) => {
               console.log('✅ ONE CHAIN: Roulette game logged successfully');
+              console.log('📋 ONE CHAIN Transaction Hash:', onechainTxHash);
+              
+              // Add OneChain transaction hash to bet history
+              newBet.onechainTxHash = onechainTxHash;
+              
+              // Update betting history with OneChain tx hash
+              setBettingHistory(prev => {
+                const updatedHistory = [...prev];
+                if (updatedHistory.length > 0) {
+                  updatedHistory[0] = { ...updatedHistory[0], onechainTxHash };
+                }
+                return updatedHistory;
+              });
             }).catch(error => {
               console.error('❌ ONE CHAIN: Error logging Roulette game:', error);
             });
@@ -3296,7 +3309,7 @@ export default function GameRoulette() {
                       loading={submitDisabled}
                       onClick={lockBet}
                     >
-                      {total > 0 ? `Place Bet (${total.toFixed(5)} MON)` : 'Place Bet (MON)'}
+                      {total > 0 ? `Place Bet (${total.toFixed(5)} OCT)` : 'Place Bet (OCT)'}
                     </Button>
                     {submitDisabled && rollResult < 0 && (
                       <Typography color="white" sx={{ opacity: 0.8 }}>
@@ -3638,9 +3651,9 @@ export default function GameRoulette() {
             {notificationIndex === notificationSteps.RESULT_READY && (
               <Typography>
                 {winnings > 0
-                  ? `🎉 You won ${winnings.toFixed(4)} MON!`
+                  ? `🎉 You won ${winnings.toFixed(4)} OCT!`
                   : winnings < 0
-                  ? `💸 You lost ${Math.abs(winnings).toFixed(4)} MON!`
+                  ? `💸 You lost ${Math.abs(winnings).toFixed(4)} OCT!`
                   : "🤝 Break even!"}
               </Typography>
             )}

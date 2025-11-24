@@ -401,9 +401,8 @@ export const useOneChainCasino = () => {
    * @returns {Promise<string>} Transaction hash
    */
   const playPlinko = useCallback(async (betAmount, rows, entropyValue, entropyTxHash = '', resultData = {}, payoutAmount = '0') => {
-    if (!connected || !account) {
-      throw new Error('Wallet not connected');
-    }
+    // Allow logging even without wallet connection (use placeholder address)
+    const playerAddress = account || '0x0000000000000000000000000000000000000000000000000000000000000000';
 
     try {
       setLoading(true);
@@ -415,7 +414,7 @@ export const useOneChainCasino = () => {
       // Create game data for plinko with all required fields
       const gameData = {
         gameType: 'PLINKO',
-        playerAddress: account,
+        playerAddress: playerAddress,
         betAmount: betAmountWei,
         payoutAmount: payoutAmountWei,
         gameConfig: {
@@ -433,19 +432,44 @@ export const useOneChainCasino = () => {
 
       console.log('🎯 ONE CHAIN: Logging plinko game result...', gameData);
 
-      // Log plinko game to One Chain
-      const txHash = await oneChainClientService.logGameResult(gameData);
+      // Build transaction data using OneChainClientService
+      const txData = await oneChainClientService.logGameResult(gameData);
       
-      console.log('⏳ ONE CHAIN: Waiting for transaction confirmation...');
+      console.log('📝 ONE CHAIN: Transaction data prepared:', txData);
       
-      // Wait for transaction confirmation before marking game complete
-      const receipt = await oneChainClientService.waitForTransaction(txHash);
+      // Send transaction to backend API for signing with treasury wallet
+      console.log('🔐 ONE CHAIN: Sending to backend for treasury signing...');
+      
+      const response = await fetch('/api/onechain-log-game', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          packageId: txData.data.packageObjectId,
+          module: txData.data.module,
+          functionName: txData.data.function,
+          arguments: txData.data.arguments,
+          typeArguments: txData.data.typeArguments || []
+        })
+      });
+
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        throw new Error(result.error || 'Failed to log game to OneChain');
+      }
+
+      const txHash = result.transactionDigest;
       
       console.log('✅ ONE CHAIN: Plinko game logged successfully');
-      console.log('📋 Transaction receipt:', receipt);
+      console.log('📋 Transaction hash:', txHash);
+      console.log('📊 Transaction effects:', result.effects);
       
       // Update balance after transaction
-      await updateBalance();
+      updateBalance().catch(err => {
+        console.warn('⚠️ Balance update failed after game:', err);
+      });
       
       return txHash;
     } catch (error) {
@@ -486,9 +510,8 @@ export const useOneChainCasino = () => {
    * @returns {Promise<string>} Transaction hash
    */
   const spinWheel = useCallback(async (betAmount, segments, entropyValue, entropyTxHash = '', resultData = {}, payoutAmount = '0') => {
-    if (!connected || !account) {
-      throw new Error('Wallet not connected');
-    }
+    // Allow logging even without wallet connection (use placeholder address)
+    const playerAddress = account || '0x0000000000000000000000000000000000000000000000000000000000000000';
 
     try {
       setLoading(true);
@@ -500,7 +523,7 @@ export const useOneChainCasino = () => {
       // Create game data for wheel with all required fields
       const gameData = {
         gameType: 'WHEEL',
-        playerAddress: account,
+        playerAddress: playerAddress,
         betAmount: betAmountWei,
         payoutAmount: payoutAmountWei,
         gameConfig: {
@@ -518,19 +541,44 @@ export const useOneChainCasino = () => {
 
       console.log('🎡 ONE CHAIN: Logging wheel spin result...', gameData);
 
-      // Log wheel spin to One Chain
-      const txHash = await oneChainClientService.logGameResult(gameData);
+      // Build transaction data using OneChainClientService
+      const txData = await oneChainClientService.logGameResult(gameData);
       
-      console.log('⏳ ONE CHAIN: Waiting for transaction confirmation...');
+      console.log('📝 ONE CHAIN: Transaction data prepared:', txData);
       
-      // Wait for transaction confirmation before marking game complete
-      const receipt = await oneChainClientService.waitForTransaction(txHash);
+      // Send transaction to backend API for signing with treasury wallet
+      console.log('🔐 ONE CHAIN: Sending to backend for treasury signing...');
+      
+      const response = await fetch('/api/onechain-log-game', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          packageId: txData.data.packageObjectId,
+          module: txData.data.module,
+          functionName: txData.data.function,
+          arguments: txData.data.arguments,
+          typeArguments: txData.data.typeArguments || []
+        })
+      });
+
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        throw new Error(result.error || 'Failed to log game to OneChain');
+      }
+
+      const txHash = result.transactionDigest;
       
       console.log('✅ ONE CHAIN: Wheel spin logged successfully');
-      console.log('📋 Transaction receipt:', receipt);
+      console.log('📋 Transaction hash:', txHash);
+      console.log('📊 Transaction effects:', result.effects);
       
       // Update balance after transaction
-      await updateBalance();
+      updateBalance().catch(err => {
+        console.warn('⚠️ Balance update failed after game:', err);
+      });
       
       return txHash;
     } catch (error) {

@@ -1,38 +1,38 @@
-// Monad Testnet Configuration
-export const monadTestnetConfig = {
+// One Chain Testnet Configuration
+export const oneChainTestnetConfig = {
   id: 41454,
-  name: 'Monad Testnet',
-  network: 'monad-testnet',
+  name: 'One Chain Testnet',
+  network: 'onechain-testnet',
   nativeCurrency: {
     decimals: 18,
-    name: 'MON',
-    symbol: 'MON',
+    name: 'OCT',
+    symbol: 'OCT',
   },
   rpcUrls: {
     default: {
-      http: ['https://testnet-rpc.monad.xyz'],
+      http: ['https://testnet-rpc.onechain.xyz'],
     },
     public: {
-      http: ['https://testnet-rpc.monad.xyz'],
+      http: ['https://testnet-rpc.onechain.xyz'],
     },
   },
   blockExplorers: {
     default: {
-      name: 'Monad Testnet Explorer',
-      url: 'https://testnet-explorer.monad.xyz',
+      name: 'One Chain Testnet Explorer',
+      url: 'https://testnet-explorer.onechain.xyz',
     },
   },
   testnet: true,
 };
 
-export const monadTestnetTokens = {
-  MON: {
+export const oneChainTestnetTokens = {
+  OCT: {
     address: 'native',
     decimals: 18,
-    symbol: 'MON',
-    name: 'Monad',
+    symbol: 'OCT',
+    name: 'One Chain',
     isNative: true,
   },
 };
 
-export default monadTestnetConfig;
+export default oneChainTestnetConfig;

@@ -67,7 +67,7 @@ export default function Mines() {
   });
   
   // Wallet connection
-  const { isConnected, address } = useWalletStatus();
+  const { isConnected } = useWalletStatus();
   
   // Theme
   const { theme } = useTheme();
@@ -200,6 +200,8 @@ export default function Mines() {
     
     // Generate Pyth Entropy for Mines game
     let entropyProof = null;
+    let onechainTxHash = null;
+    
     try {
       console.log('🔮 PYTH ENTROPY: Generating randomness for Mines game...');
       const entropyResult = await pythEntropyService.generateRandom('MINES', {
@@ -223,28 +225,46 @@ export default function Mines() {
       console.log('✅ PYTH ENTROPY: Mines randomness generated:', entropyProof);
       
       // Log to OneChain based on game action
+      console.log('🔍 ONE CHAIN DEBUG (Mines):', { 
+        hasAddress: !!address,
+        address: address,
+        hasEntropyProof: !!entropyProof,
+        action: result.action,
+        hasCashoutFunction: !!logMinesCashout,
+        hasRevealFunction: !!logMinesReveal
+      });
+      
       if (address && entropyProof) {
         if (result.action === 'cashout' && logMinesCashout) {
-          logMinesCashout(
+          console.log('🎲 ONE CHAIN: Calling logMinesCashout');
+          
+          onechainTxHash = await logMinesCashout(
             result.gameId || 'mines_game_1', // gameId
             (result.payout || 0).toString(), // payoutAmount
             result.multiplier || 1.0, // finalMultiplier
             result.tilesRevealed || 0 // tilesRevealed
-          ).then(() => {
+          ).then((txHash) => {
             console.log('✅ ONE CHAIN: Mines cashout logged successfully');
+            console.log('📋 ONE CHAIN Transaction Hash:', txHash);
+            return txHash;
           }).catch(error => {
             console.error('❌ ONE CHAIN: Error logging Mines cashout:', error);
+            return null;
           });
         } else if (result.action === 'reveal' && logMinesReveal) {
-          logMinesReveal(
+          console.log('🎲 ONE CHAIN: Calling logMinesReveal');
+          onechainTxHash = await logMinesReveal(
             result.gameId || 'mines_game_1', // gameId
             result.tileIndex || 0, // tileIndex
             result.isMine || false, // isMine
             result.multiplier || 1.0 // currentMultiplier
-          ).then(() => {
+          ).then((txHash) => {
             console.log('✅ ONE CHAIN: Mines tile reveal logged successfully');
+            console.log('📋 ONE CHAIN Transaction Hash:', txHash);
+            return txHash;
           }).catch(error => {
             console.error('❌ ONE CHAIN: Error logging Mines tile reveal:', error);
+            return null;
           });
         }
       }
@@ -260,7 +280,8 @@ export default function Mines() {
       payout: result.won ? `${result.payout || '0.00000'} OCT` : '0.00000 OCT',
       multiplier: result.won ? `${result.multiplier || '0.00'}x` : '0.00x',
       time: 'Just now',
-      entropyProof: entropyProof
+      entropyProof: entropyProof,
+      onechainTxHash: onechainTxHash
     };
     
     setGameHistory(prev => [newHistoryItem, ...prev].slice(0, 50));

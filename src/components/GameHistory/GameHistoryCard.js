@@ -37,13 +37,13 @@ const GameHistoryCard = ({ game, gameType }) => {
   };
 
   const openTransaction = (txHash, logIndex) => {
-    const network = process.env.NEXT_PUBLIC_NETWORK || 'monad-testnet';
+    const network = process.env.NEXT_PUBLIC_NETWORK || 'onechain-testnet';
     let explorerUrl;
     
-    if (network === 'monad-testnet') {
-      explorerUrl = `https://testnet.monadexplorer.com/tx/${txHash}#eventlog`;
+    if (network === 'onechain-testnet') {
+      explorerUrl = `https://testnet.onescan.com/tx/${txHash}#eventlog`;
     } else {
-      explorerUrl = `https://testnet.monadexplorer.com/tx/${txHash}#eventlog`;
+      explorerUrl = `https://testnet.onescan.com/tx/${txHash}#eventlog`;
     }
     
     window.open(explorerUrl, '_blank');
@@ -137,7 +137,7 @@ const GameHistoryCard = ({ game, gameType }) => {
                 Bet Amount:
               </Typography>
               <Typography variant="body1" sx={{ color: 'white', fontWeight: 'bold' }}>
-                {game.betAmount} MON
+                {game.betAmount} OCT
               </Typography>
             </Grid>
             <Grid item xs={6}>
@@ -145,7 +145,7 @@ const GameHistoryCard = ({ game, gameType }) => {
                 Payout:
               </Typography>
               <Typography variant="body1" sx={{ color: 'white', fontWeight: 'bold' }}>
-                {game.payout || '0'} MON
+                {game.payout || '0'} OCT
               </Typography>
             </Grid>
           </Grid>
@@ -215,7 +215,7 @@ const GameHistoryCard = ({ game, gameType }) => {
                       px: 1
                     }}
                   >
-                    Monad
+                    One Chain
                   </Button>
                 )}
                 {entropyTransactionHash && (

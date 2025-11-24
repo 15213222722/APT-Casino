@@ -14,7 +14,7 @@
 - Default: `https://rpc-testnet.onelabs.cc:443`
 
 ### Requirement 1.3
-✅ WHEN the application initializes THEN the system SHALL use One Chain testnet configuration instead of Monad testnet configuration
+✅ WHEN the application initializes THEN the system SHALL use One Chain testnet configuration instead of One Chain testnet configuration
 - Created separate `ONECHAIN_TESTNET_CONFIG` object
 - Network identifier: `onechain-testnet`
 - Name: `One Chain Testnet`

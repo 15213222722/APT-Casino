@@ -684,12 +684,13 @@ class OneChainClientService {
 
   /**
    * Get block explorer URL for transaction
-   * @param {string} txHash - Transaction hash
+   * @param {string} txHash - Transaction hash (digest)
    * @returns {string} Explorer URL
    */
   getExplorerUrl(txHash) {
     const baseUrl = this.config.blockExplorers.default.url;
-    return `${baseUrl}/tx/${txHash}`;
+    // OneChain uses Sui-style explorer URLs with digest parameter
+    return `${baseUrl}/transactionBlocksDetail?digest=${txHash}`;
   }
 
   /**

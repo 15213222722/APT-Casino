@@ -4,7 +4,7 @@ import { ethers } from 'ethers';
 const PYTH_ENTROPY_ADDRESS = process.env.NEXT_PUBLIC_PYTH_ENTROPY_ARBITRUM_SEPOLIA || '0x549Ebba8036Ab746611B4fFA1423eb0A4Df61440';
 const ARBITRUM_SEPOLIA_RPC = process.env.NEXT_PUBLIC_ARBITRUM_SEPOLIA_RPC || 'https://sepolia-rollup.arbitrum.io/rpc';
 
-// Minimal ABI for Pyth Entropy V2 on Monad
+// Minimal ABI for Pyth Entropy V2 on One Chain
 const PYTH_ENTROPY_ABI = [
   // Core entrypoint used by consumer contracts
   "function requestWithCallback(address provider, bytes32 userCommitment) external payable returns (uint64)",

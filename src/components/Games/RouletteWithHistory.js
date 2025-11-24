@@ -33,7 +33,7 @@ const RouletteWithHistory = () => {
   const [betConfig, setBetConfig] = useState({
     betType: 'straight',
     betValue: 7,
-    betAmount: ethers.parseEther('0.01') // 0.01 MON
+    betAmount: ethers.parseEther('0.01') // 0.01 OCT
   });
 
   // Initialize roulette processor
@@ -303,8 +303,8 @@ const RouletteWithHistory = () => {
               {gameState.result.isWin ? '🎉 YOU WIN!' : '😔 YOU LOSE'}
             </div>
             <div className="text-sm text-gray-600">
-              Bet: {ethers.formatEther(betConfig.betAmount)} MON →
-              Payout: {ethers.formatEther(gameState.result.payoutResult.payout.toString())} MON
+              Bet: {ethers.formatEther(betConfig.betAmount)} OCT →
+              Payout: {ethers.formatEther(gameState.result.payoutResult.payout.toString())} OCT
             </div>
             <div className={`font-medium ${gameState.result.isWin ? 'text-green-600' : 'text-red-600'
               }`}>
@@ -337,7 +337,7 @@ const RouletteWithHistory = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-blue-600 hover:text-blue-800"
-                  title="View on Monad Explorer"
+                  title="View on One Chain Explorer"
                 >
                   <ExternalLink size={14} />
                 </a>

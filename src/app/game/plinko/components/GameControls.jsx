@@ -130,12 +130,12 @@ export default function GameControls({ onBet, onRowChange, onRiskLevelChange, on
     console.log('handleBet called with betValue:', betValue, 'currentBalance (ETH):', currentBalance);
     
     if (betValue < 0.001) {
-      alert("Minimum bet amount is 0.001 MON");
+      alert("Minimum bet amount is 0.001 OCT");
       return;
     }
     
     if (betValue > currentBalance) {
-      alert(`Insufficient balance! You have ${currentBalance.toFixed(5)} MON but need ${betValue} MON`);
+      alert(`Insufficient balance! You have ${currentBalance.toFixed(5)} OCT but need ${betValue} OCT`);
       return;
     }
     
@@ -189,7 +189,7 @@ export default function GameControls({ onBet, onRowChange, onRiskLevelChange, on
     });
     
     if (totalBetAmount > currentBalance) {
-      alert(`Insufficient balance for ${totalBets} bets of ${betAmount} MON each. You need ${totalBetAmount.toFixed(3)} MON but have ${currentBalance.toFixed(5)} MON`);
+      alert(`Insufficient balance for ${totalBets} bets of ${betAmount} OCT each. You need ${totalBetAmount.toFixed(3)} OCT but have ${currentBalance.toFixed(5)} OCT`);
       setIsAutoPlaying(false);
       return;
     }
@@ -337,7 +337,7 @@ export default function GameControls({ onBet, onRowChange, onRiskLevelChange, on
     return totalBetAmount <= currentBalance && betValue >= 0.001;
   };
 
-  // Get current balance in MON for display
+  // Get current balance in OCT for display
   const getCurrentBalanceInMON = () => {
     return parseFloat(userBalance || '0').toFixed(5);
   };
@@ -377,7 +377,7 @@ export default function GameControls({ onBet, onRowChange, onRiskLevelChange, on
           Bet Amount
         </label>
         <div className="mb-2">
-          <span className="text-2xl font-bold text-white">{betAmount} MON</span>
+          <span className="text-2xl font-bold text-white">{betAmount} OCT</span>
         </div>
         <div className="relative">
           <input
@@ -433,37 +433,37 @@ export default function GameControls({ onBet, onRowChange, onRiskLevelChange, on
             onClick={() => handleBetAmountChange(0.001)}
             className="bg-[#2A0025] border border-[#333947] rounded-lg py-2 text-xs text-white hover:bg-[#3A0035] transition-colors"
           >
-            0.001 MON
+            0.001 OCT
           </button>
           <button
             onClick={() => handleBetAmountChange(0.01)}
             className="bg-[#2A0025] border border-[#333947] rounded-lg py-2 text-xs text-white hover:bg-[#3A0035] transition-colors"
           >
-            0.01 MON
+            0.01 OCT
           </button>
           <button
             onClick={() => handleBetAmountChange(0.1)}
             className="bg-[#2A0025] border border-[#333947] rounded-lg py-2 text-xs text-white hover:bg-[#3A0035] transition-colors"
           >
-            0.1 MON
+            0.1 OCT
           </button>
           <button
             onClick={() => handleBetAmountChange(1)}
             className="bg-[#2A0025] border border-[#333947] rounded-lg py-2 text-xs text-white hover:bg-[#3A0035] transition-colors"
           >
-            1.0 MON
+            1.0 OCT
           </button>
           <button
             onClick={() => handleBetAmountChange(5)}
             className="bg-[#2A0025] border border-[#333947] rounded-lg py-2 text-xs text-white hover:bg-[#3A0035] transition-colors"
           >
-            5.0 MON
+            5.0 OCT
           </button>
           <button
             onClick={() => handleBetAmountChange(10)}
             className="bg-[#2A0025] border border-[#333947] rounded-lg py-2 text-xs text-white hover:bg-[#3A0035] transition-colors"
           >
-            10.0 MON
+            10.0 OCT
           </button>
         </div>
       </div>
@@ -568,7 +568,7 @@ export default function GameControls({ onBet, onRowChange, onRiskLevelChange, on
           <div className="text-center p-3 bg-[#2A0025] rounded-lg border border-[#333947]">
             <span className="text-sm text-gray-400">Current Balance:</span>
             {isConnected ? (
-              <div className="text-lg font-bold text-green-400">{getCurrentBalanceInMON()} MON</div>
+              <div className="text-lg font-bold text-green-400">{getCurrentBalanceInMON()} OCT</div>
             ) : (
               <div className="text-lg font-bold text-red-400">Connect Wallet</div>
             )}
@@ -591,8 +591,8 @@ export default function GameControls({ onBet, onRowChange, onRiskLevelChange, on
           {((gameMode === "auto" && !hasSufficientBalanceForAutoBet()) || (!gameMode === "auto" && !hasSufficientBalance())) && parseFloat(betAmount) > 0 && (
             <div className="text-center text-red-400 text-sm">
               {gameMode === "auto" 
-                ? `Insufficient balance MON each` 
-                : `Insufficient balance MON bet`
+                ? `Insufficient balance OCT each` 
+                : `Insufficient balance OCT bet`
               }
             </div>
           )}

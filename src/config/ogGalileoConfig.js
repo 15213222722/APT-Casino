@@ -1,46 +1,46 @@
 /**
- * Monad Testnet Testnet Configuration
- * Configuration for Monad Testnet testnet with MON token
+ * One Chain Testnet Testnet Configuration
+ * Configuration for One Chain Testnet testnet with OCT token
  */
 
-// Monad Testnet Chain Configuration
-export const MONAD_TESTNET_CONFIG = {
+// One Chain Testnet Chain Configuration
+export const ONECHAIN_TESTNET_CONFIG = {
   chainId: 16602,
-  name: 'monad-testnet-Testnet',
-  network: 'monad-testnet-testnet',
+  name: 'onechain-testnet-Testnet',
+  network: 'onechain-testnet-testnet',
   nativeCurrency: {
     decimals: 18,
-    name: 'MON',
-    symbol: 'MON',
+    name: 'OCT',
+    symbol: 'OCT',
   },
   rpcUrls: {
     default: {
       http: [
-        process.env.NEXT_PUBLIC_0G_GALILEO_RPC || 'https://testnet-rpc.monad.xyz',
+        process.env.NEXT_PUBLIC_0G_GALILEO_RPC || 'https://testnet-rpc.onechain.xyz',
         process.env.NEXT_PUBLIC_0G_GALILEO_RPC_FALLBACK || 'https://evm-rpc-galileo.0g.ai'
       ],
     },
     public: {
       http: [
-        'https://testnet-rpc.monad.xyz',
+        'https://testnet-rpc.onechain.xyz',
         'https://evm-rpc-galileo.0g.ai'
       ],
     },
   },
   blockExplorers: {
     default: {
-      name: 'Monad Testnet Explorer',
-      url: process.env.NEXT_PUBLIC_0G_GALILEO_EXPLORER || 'https://testnet.monadexplorer.com',
+      name: 'One Chain Testnet Explorer',
+      url: process.env.NEXT_PUBLIC_0G_GALILEO_EXPLORER || 'https://testnet.onescan.com',
     },
   },
   testnet: true,
 };
 
-// Monad Testnet Tokens
-export const MONAD_TESTNET_TOKENS = {
-  MON: {
-    symbol: 'MON',
-    name: 'MON token',
+// One Chain Testnet Tokens
+export const ONECHAIN_TESTNET_TOKENS = {
+  OCT: {
+    symbol: 'OCT',
+    name: 'OCT token',
     decimals: 18,
     address: '0x0000000000000000000000000000000000000000',
     isNative: true,
@@ -49,13 +49,13 @@ export const MONAD_TESTNET_TOKENS = {
   }
 };
 
-// Casino configuration for Monad Testnet
-export const MONAD_TESTNET_CASINO_CONFIG = {
+// Casino configuration for One Chain Testnet
+export const ONECHAIN_TESTNET_CASINO_CONFIG = {
   // Deposit/Withdraw settings
-  minDeposit: '0.001', // 0.001 MON
-  maxDeposit: '100',   // 100 MON
-  minWithdraw: '0.001', // 0.001 MON
-  maxWithdraw: '100',   // 100 MON
+  minDeposit: '0.001', // 0.001 OCT
+  maxDeposit: '100',   // 100 OCT
+  minWithdraw: '0.001', // 0.001 OCT
+  maxWithdraw: '100',   // 100 OCT
   
   // Game settings (same as Arbitrum for consistency)
   games: {
@@ -86,14 +86,14 @@ export const MONAD_TESTNET_CASINO_CONFIG = {
   }
 };
 
-// Network switching helper for Monad Testnet
+// Network switching helper for One Chain Testnet
 export const switchToOGGalileo = async () => {
   if (typeof window === 'undefined' || !window.ethereum) {
     throw new Error('MetaMask not found');
   }
 
   try {
-    // Try to switch to Monad Testnet
+    // Try to switch to One Chain Testnet
     await window.ethereum.request({
       method: 'wallet_switchEthereumChain',
       params: [{ chainId: '0x40da' }], // 16602 in hex
@@ -105,14 +105,14 @@ export const switchToOGGalileo = async () => {
         method: 'wallet_addEthereumChain',
         params: [{
           chainId: '0x40da',
-          chainName: 'monad-testnet-Testnet',
+          chainName: 'onechain-testnet-Testnet',
           nativeCurrency: {
-            name: 'MON',
-            symbol: 'MON',
+            name: 'OCT',
+            symbol: 'OCT',
             decimals: 18,
           },
-          rpcUrls: ['https://testnet-rpc.monad.xyz'],
-          blockExplorerUrls: ['https://testnet.monadexplorer.com'],
+          rpcUrls: ['https://testnet-rpc.onechain.xyz'],
+          blockExplorerUrls: ['https://testnet.onescan.com'],
         }],
       });
     } else {
@@ -121,4 +121,4 @@ export const switchToOGGalileo = async () => {
   }
 };
 
-export default MONAD_TESTNET_CONFIG;
+export default ONECHAIN_TESTNET_CONFIG;

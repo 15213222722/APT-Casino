@@ -7,8 +7,8 @@ const NewsUpdates = () => {
   const newsItems = [
     {
       id: 1,
-      title: 'New Token Bridge Partnership with Monad Network',
-      excerpt: 'APT Casino partners with Monad Network to provide seamless cross-chain token transfers with lower fees.',
+      title: 'New Token Bridge Partnership with One Chain Network',
+      excerpt: 'APT Casino partners with One Chain Network to provide seamless cross-chain token transfers with lower fees.',
       date: '2025-05-08',
       category: 'Partnership',
       image: '/images/news/partnership.png',
@@ -16,7 +16,7 @@ const NewsUpdates = () => {
     },
     {
       id: 2,
-      title: 'MON Governance Proposal: Community Jackpots',
+      title: 'OCT Governance Proposal: Community Jackpots',
       excerpt: 'Vote on the new proposal to allocate 5% of platform fees to community-controlled jackpot pools.',
       date: '2025-05-04',
       category: 'Governance',

@@ -41,7 +41,7 @@ npm install @mysten/dapp-kit @mysten/sui
 - Updated title to "APT Casino - One Chain"
 
 ### 8. Updated Navbar.js (Main Balance Modal)
-- Changed all MON references to OCT
+- Changed all OCT references to OCT
 - Updated balance display to show OCT
 - Updated deposit/withdraw UI for OCT
 - Removed Smart Account features (not needed for Sui)
@@ -73,8 +73,8 @@ npm install @mysten/dapp-kit @mysten/sui
 ## Currency Changes
 
 ### All References Updated
-- MON → OCT throughout the application
-- Monad Testnet → One Chain Testnet
+- OCT → OCT throughout the application
+- One Chain Testnet → One Chain Testnet
 - EVM transactions → Sui TransactionBlock
 
 ## Technical Details
@@ -152,7 +152,7 @@ const executeTransaction = async (transaction, options = {}) => {
 - [ ] Verify balance displays in OCT
 - [ ] Test deposit functionality
 - [ ] Test withdraw functionality
-- [ ] Verify no MON references remain
+- [ ] Verify no OCT references remain
 - [ ] Test with different Sui wallets
 
 ## Important Notes

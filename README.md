@@ -1,37 +1,37 @@
-# APT Casino - Monad Testnet
+# APT Casino - One Chain Testnet
 
-A decentralized casino platform built on Monad Testnet with Pyth Entropy for provably fair gaming and MetaMask Smart Accounts integration.
+A decentralized casino platform built on One Chain Testnet with Pyth Entropy for provably fair gaming and MetaMask Smart Accounts integration.
 
 ## 🎮 Features
 
 - **Provably Fair Gaming**: Powered by Pyth Entropy on Arbitrum Sepolia
 - **Multiple Games**: Wheel, Roulette, Plinko, and Mines
 - **MetaMask Smart Accounts**: Enhanced wallet experience with batch transactions
-- **MON Token**: Native currency for Monad Testnet
+- **OCT Token**: Native currency for One Chain Testnet
 - **Real-time Gaming**: Instant deposits and withdrawals
 - **Advanced Betting**: Batch transactions and automated strategies
 
 ## 🌐 Networks
 
-- **Gaming Network**: Monad Testnet (Chain ID: 10143)
+- **Gaming Network**: One Chain Testnet (Chain ID: 10143)
 - **Entropy Network**: Arbitrum Sepolia (Chain ID: 421614)
-- **Currency**: MON (Monad Token)
+- **Currency**: OCT (One Chain Token)
 
 ## 🚀 Getting Started
 
-1. **Connect Wallet**: Connect your MetaMask wallet to Monad Testnet
-2. **Get Tokens**: Get MON tokens from the Monad testnet faucet
-3. **Deposit**: Deposit MON to your house balance
+1. **Connect Wallet**: Connect your MetaMask wallet to One Chain Testnet
+2. **Get Tokens**: Get OCT tokens from the One Chain testnet faucet
+3. **Deposit**: Deposit OCT to your house balance
 4. **Play**: Start playing provably fair games!
 
 ### Network Configuration
 
-Add Monad Testnet to MetaMask:
-- **Network Name**: Monad Testnet
-- **RPC URL**: `https://testnet-rpc.monad.xyz`
+Add One Chain Testnet to MetaMask:
+- **Network Name**: One Chain Testnet
+- **RPC URL**: `https://testnet-rpc.onechain.xyz`
 - **Chain ID**: `10143`
-- **Currency Symbol**: `MON`
-- **Block Explorer**: `https://testnet.monadexplorer.com`
+- **Currency Symbol**: `OCT`
+- **Block Explorer**: `https://testnet.onescan.com`
 
 ## 🔷 Smart Accounts
 
@@ -81,12 +81,12 @@ if (isSmartAccount) {
 ### Prerequisites
 - Node.js 18+
 - MetaMask wallet
-- Monad Testnet MON tokens
+- One Chain Testnet OCT tokens
 
 ### Installation
 ```bash
 # Clone the repository
-git clone https://github.com/your-repo/apt-casino-monad
+git clone https://github.com/your-repo/apt-casino-onechain
 
 # Install dependencies
 npm install
@@ -101,19 +101,19 @@ npm run build
 npm start
 ```
 
-### Deploy to Monad Testnet
+### Deploy to One Chain Testnet
 ```bash
-npm run deploy:monad
+npm run deploy:onechain
 ```
 
 ## 🏗 Architecture
 
 ```
 ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-│   Frontend      │    │  Monad Testnet  │    │ Arbitrum Sepolia│
+│   Frontend      │    │  One Chain Testnet  │    │ Arbitrum Sepolia│
 │   (Next.js)     │◄──►│   (Gaming)      │    │   (Entropy)     │
 │                 │    │                 │    │                 │
-│ • React UI      │    │ • MON Token     │    │ • Pyth Entropy  │
+│ • React UI      │    │ • OCT Token     │    │ • Pyth Entropy  │
 │ • Smart Accounts│    │ • Deposits      │    │ • Randomness    │
 │ • Wagmi/Viem    │    │ • Withdrawals   │    │ • Proof Gen     │
 └─────────────────┘    └─────────────────┘    └─────────────────┘
@@ -136,8 +136,8 @@ The application tracks Smart Account usage:
 
 ## 🔗 Links
 
-- **Live Demo**: [https://apt-casino-monad.vercel.app](https://apt-casino-monad.vercel.app)
-- **Monad Testnet**: [https://docs.monad.xyz](https://docs.monad.xyz)
+- **Live Demo**: [https://apt-casino-onechain.vercel.app](https://apt-casino-onechain.vercel.app)
+- **One Chain Testnet**: [https://docs.onechain.xyz](https://docs.onechain.xyz)
 - **Pyth Entropy**: [https://docs.pyth.network/entropy](https://docs.pyth.network/entropy)
 - **MetaMask Smart Accounts**: [METAMASK_SMART_ACCOUNTS.md](./METAMASK_SMART_ACCOUNTS.md)
 

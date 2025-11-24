@@ -1,5 +1,5 @@
 {
-  "name": "apt-casino-monad",
+  "name": "apt-casino-onechain",
   "version": "0.1.0",
   "private": true,
   "engines": {
@@ -36,8 +36,8 @@
     "deploy:pyth-entropy:mainnet": "npx hardhat run scripts/deploy-pyth-entropy.js --network arbitrum-one",
     "test:pyth-entropy": "node scripts/test-pyth-entropy.js",
     "verify:onchain": "npx hardhat run scripts/verify-onchain.js --network arbitrum-sepolia",
-    "deploy:monad": "npx hardhat run scripts/deploy-casino.js --network monad-testnet",
-    "test:monad": "node scripts/test-monad-integration.js"
+    "deploy:onechain": "npx hardhat run scripts/deploy-casino.js --network onechain-testnet",
+    "test:onechain": "node scripts/test-onechain-integration.js"
   },
   "dependencies": {
     "@babel/runtime": "^7.24.0",

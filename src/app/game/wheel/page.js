@@ -115,15 +115,41 @@ export default function Home() {
       
       // Log to OneChain
       const historyItem = gameHistory.find(item => item.id === historyItemId);
+      console.log('🔍 ONE CHAIN DEBUG (Wheel):', { 
+        hasLogFunction: !!logWheelGame, 
+        hasAddress: !!address,
+        address: address,
+        hasHistoryItem: !!historyItem
+      });
+      
       if (logWheelGame && address && historyItem) {
+        console.log('🎲 ONE CHAIN: Calling logWheelGame with params:', {
+          betAmount: historyItem.betAmount,
+          segments: 10,
+          entropyValue: entropyResult.randomValue,
+          entropyTxHash: entropyResult.entropyProof.transactionHash
+        });
+        
         logWheelGame(
-          historyItem.betAmount,
-          historyItem.multiplier,
-          historyItem.payout,
-          entropyResult.randomValue,
-          entropyResult.entropyProof.transactionHash
-        ).then(() => {
+          historyItem.betAmount, // betAmount
+          10, // segments (default wheel segments)
+          entropyResult.randomValue, // entropyValue
+          entropyResult.entropyProof.transactionHash, // entropyTxHash
+          { 
+            multiplier: historyItem.multiplier, 
+            segment: historyItem.segment 
+          }, // resultData
+          historyItem.payout.toString() // payoutAmount
+        ).then((onechainTxHash) => {
           console.log('✅ ONE CHAIN: Wheel game logged successfully');
+          console.log('📋 ONE CHAIN Transaction Hash:', onechainTxHash);
+          
+          // Update history with OneChain transaction hash
+          setGameHistory(prev => prev.map(item => 
+            item.id === historyItemId 
+              ? { ...item, onechainTxHash }
+              : item
+          ));
         }).catch(error => {
           console.error('❌ ONE CHAIN: Error logging Wheel game:', error);
         });
@@ -247,8 +273,8 @@ export default function Home() {
             randomValue: Math.floor(Math.random() * 1000000),
             randomNumber: Math.floor(Math.random() * 1000000),
             transactionHash: 'generating...',
-            monadExplorerUrl: 'https://testnet.monadexplorer.com/',
-            explorerUrl: 'https://entropy-explorer.pyth.network/?chain=monad-testnet',
+            monadExplorerUrl: 'https://testnet.onescan.com/',
+            explorerUrl: 'https://entropy-explorer.pyth.network/?chain=onechain-testnet',
             timestamp: Date.now(),
             source: 'Generating...'
           };

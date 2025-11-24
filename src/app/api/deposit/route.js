@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-// Monad Treasury address from environment
+// One Chain Treasury address from environment
 const MONAD_TREASURY_ADDRESS = process.env.MONAD_TREASURY_ADDRESS || process.env.TREASURY_ADDRESS || "0x025182b20Da64b5997d09a5a62489741F68d9B96";
 
 export async function POST(request) {
@@ -26,13 +26,13 @@ export async function POST(request) {
     // For now, we'll simulate a successful deposit
     const mockDepositId = 'deposit_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
     
-    console.log(`🏦 Processing deposit: ${amount} MON from ${userAddress}`);
+    console.log(`🏦 Processing deposit: ${amount} OCT from ${userAddress}`);
     console.log(`📍 Treasury: ${MONAD_TREASURY_ADDRESS}`);
     
     // Simulate processing delay
     await new Promise(resolve => setTimeout(resolve, 1000));
     
-    console.log(`✅ Deposit successful: ${amount} MON from ${userAddress}`);
+    console.log(`✅ Deposit successful: ${amount} OCT from ${userAddress}`);
     
     return NextResponse.json({
       success: true,
