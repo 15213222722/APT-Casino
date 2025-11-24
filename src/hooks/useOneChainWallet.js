@@ -1,7 +1,28 @@
 /**
  * One Chain Wallet Hook
  * Provides wallet connection functionality for One Chain (Sui-based)
- * Supports OneWallet and other Sui-compatible wallets
+ * 
+ * ARCHITECTURE:
+ * - One Chain uses the same TypeScript SDK as Sui (@mysten/sui)
+ * - Wallet Standard is identical to Sui's wallet standard
+ * - PTB (Programmable Transaction Blocks) work the same way
+ * - SerialTransactionExecutor and ParallelTransactionExecutor available
+ * 
+ * SUPPORTED WALLETS:
+ * - Sui Wallet (official, works with One Chain)
+ * - OneChain Wallet (if available, uses same standard)
+ * - Any Sui-compatible wallet (Suiet, Ethos, etc.)
+ * 
+ * COIN TYPE:
+ * - One Chain uses OCT as native token: 0x2::oct::OCT
+ * - Gas payments use OCT coins
+ * - SDK handles coin management, split/merge automatically
+ * 
+ * TRANSACTION FLOW:
+ * 1. dApp creates PTB with Transaction class
+ * 2. wallet.signAndExecuteTransaction({ transaction })
+ * 3. Wallet handles gas selection and execution
+ * 4. SDK manages coin operations automatically
  */
 
 import { useCurrentAccount, useSignAndExecuteTransaction, useSuiClient, useDisconnectWallet, useConnectWallet } from '@mysten/dapp-kit';
@@ -28,11 +49,24 @@ export function useOneChainWallet() {
     
     try {
       setIsLoading(true);
-      const balanceData = await suiClient.getBalance({
-        owner: address,
-        coinType: '0x2::sui::SUI', // Native coin (OCT on One Chain)
-      });
-      setBalance(balanceData.totalBalance);
+      
+      // Try to get OCT balance (native token on One Chain)
+      // Note: One Chain uses 0x2::oct::OCT as the native coin type
+      try {
+        const balanceData = await suiClient.getBalance({
+          owner: address,
+          coinType: '0x2::oct::OCT',
+        });
+        setBalance(balanceData.totalBalance);
+      } catch (octError) {
+        // Fallback: try SUI coin type (for compatibility)
+        console.warn('OCT balance fetch failed, trying SUI fallback:', octError);
+        const balanceData = await suiClient.getBalance({
+          owner: address,
+          coinType: '0x2::sui::SUI',
+        });
+        setBalance(balanceData.totalBalance);
+      }
     } catch (error) {
       console.error('Error fetching balance:', error);
       setBalance('0');

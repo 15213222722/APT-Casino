@@ -46,3 +46,11 @@ dependencies = [
 compiler-version = "1.59.0"
 edition = "2024.beta"
 flavor = "sui"
+
+[env]
+
+[env.onechain-testnet]
+chain-id = "1bd5c965"
+original-published-id = "0xa0b859cfe486d90c8176865541a459d7e4dbffe6e7d2559df4c1363109113a68"
+latest-published-id = "0xa0b859cfe486d90c8176865541a459d7e4dbffe6e7d2559df4c1363109113a68"
+published-version = "1"

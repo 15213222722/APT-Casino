@@ -1,0 +1,20 @@
+{
+  "network": "onechain-testnet",
+  "packageId": "0xa0b859cfe486d90c8176865541a459d7e4dbffe6e7d2559df4c1363109113a68",
+  "upgradeCap": "0x323ee9c1737c730476dd801980cdd654a273510e6e9ab5854fbaf640e8fdb122",
+  "transactionDigest": "HeNXe9cDMj6q3H3cuL3B55qqtbBmzYxPU85UCGXcDe6d",
+  "deployer": "0xdeac1680f935c0d5265b4e0656a2436361d8adebee0adf3060ef6c06e95c89eb",
+  "deployedAt": "2025-01-24T00:00:00.000Z",
+  "gasUsed": {
+    "storageCost": 14196800,
+    "computationCost": 1000000,
+    "storageRebate": 978120,
+    "totalCost": 14218680
+  },
+  "modules": [
+    "game_logger"
+  ],
+  "explorerUrl": "https://onescan.cc/testnet/object/0xa0b859cfe486d90c8176865541a459d7e4dbffe6e7d2559df4c1363109113a68",
+  "rpcUrl": "https://rpc-testnet.onelabs.cc:443",
+  "notes": "Successfully deployed game_logger contract to One Chain testnet using OCT tokens as gas"
+}
