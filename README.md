@@ -333,13 +333,13 @@ sequenceDiagram
     U->>UI: Select Multiple Games
     UI->>SA: Prepare Batch Transaction
     
-    rect rgb(0, 0, 0)
+    rect transparent
         Note over SA,OC: Batch Transaction on One Chain
         SA->>OC: Batch Bet Transaction
         OC->>SA: Confirm All Bets
     end
     
-    rect rgb(0, 0, 0)
+    rect transparent
         Note over AS,PE: Entropy Generation on Arbitrum
         UI->>AS: Request Entropy for All Games
         AS->>PE: Generate Multiple Random Numbers
@@ -347,7 +347,7 @@ sequenceDiagram
         AS->>UI: All Game Results
     end
     
-    rect rgb(0, 0, 0)
+    rect transparent
         Note over SA,OC: Batch Payout on One Chain
         UI->>SA: Process Batch Payouts
         SA->>OC: Batch Payout Transaction
