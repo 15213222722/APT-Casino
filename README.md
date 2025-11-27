@@ -366,7 +366,6 @@ sequenceDiagram
 - **Youtube Demo Link**: 
 - **Github Link**: https://github.com/AmaanSayyad/APT-Casino-OneChain 
 - **PitchDeck Link:** https://www.figma.com/deck/OXOSAPIzG0CJlKFDSepWZ8/APT-Casino-OneChain?node-id=1-1812&p=f&t=PPd57Zulv2qJt1bZ-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1 
-- **MetaMask Smart Accounts**: [METAMASK_SMART_ACCOUNTS.md](./METAMASK_SMART_ACCOUNTS.md)
 
 ## 🔮 Future Roadmap
 
