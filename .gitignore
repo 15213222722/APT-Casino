@@ -12,7 +12,7 @@ onedocs
 out/
 build/
 dist/
-
+ 
 # Environment variables
 .env
 .env.local
