@@ -19,7 +19,7 @@ const SmartAccountInfo = () => {
         setIsSmartAccount(false);
         setSmartAccountInfo({
           address,
-          type: 'Sui Account',
+          type: 'Onechain Account',
           hasCode: false
         });
       } catch (error) {

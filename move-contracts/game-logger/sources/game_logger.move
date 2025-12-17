@@ -2,8 +2,8 @@
 /// Logs all game results on-chain for transparency and verification
 module game_logger::game_logger {
     use std::string::{Self, String};
-    use sui::event;
-    use sui::clock::{Self, Clock};
+    use one::event;
+    use one::clock::{Self, Clock};
 
     /// Game types
     const GAME_TYPE_ROULETTE: u8 = 1;

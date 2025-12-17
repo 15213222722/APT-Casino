@@ -19,6 +19,7 @@ let treasuryKeypair = null;
 try {
   // Load from Sui keystore format (base64 encoded with flag byte)
   const privateKeyBase64 = process.env.ONECHAIN_TREASURY_PRIVATE_KEY;
+  console.log('🔑 Treasury private key:', privateKeyBase64);
   if (privateKeyBase64) {
     const fullKeyBytes = fromBase64(privateKeyBase64);
     // Skip the first byte (flag) and take the next 32 bytes
@@ -44,7 +45,8 @@ export async function POST(request) {
         { status: 400 }
       );
     }
-
+    console.log('treasuryKeypair:',treasuryKeypair);
+    console.log('ONECHAIN_TREASURY_ADDRESS:',ONECHAIN_TREASURY_ADDRESS);
     if (!treasuryKeypair || !ONECHAIN_TREASURY_ADDRESS) {
       return NextResponse.json(
         { error: 'Treasury wallet not configured' },
@@ -81,7 +83,7 @@ export async function POST(request) {
 
     // Convert amount to MIST (1 OCT = 1,000,000,000 MIST)
     const amountInMist = BigInt(Math.floor(amount * 1e9));
-      const estimatedGas = BigInt(10000000); // 0.01 OCT for gas
+      const estimatedGas = BigInt(1000000000); // 0.01 OCT for gas
       const totalNeeded = amountInMist + estimatedGas;
     
       // Check if treasury has sufficient funds
@@ -102,6 +104,8 @@ export async function POST(request) {
           BigInt(coin.balance) > BigInt(max.balance) ? coin : max
         );
       }
+
+     
 
       // Find a SEPARATE coin for gas (must be different from payment coin)
       gasCoin = coins.data.find(coin => 
@@ -132,7 +136,7 @@ export async function POST(request) {
 
     // Convert amount to MIST
     const amountInMist = BigInt(Math.floor(amount * 1e9));
-    const estimatedGas = BigInt(10000000); // 0.01 OCT for gas
+    const estimatedGas = BigInt(1000000000); // 0.01 OCT for gas
 
     // Create Sui transaction
     const tx = new Transaction();
@@ -155,7 +159,7 @@ export async function POST(request) {
     tx.transferObjects([coin], userAddress);
     
     // Set gas budget
-    tx.setGasBudget(estimatedGas.toString());
+    // tx.setGasBudget(estimatedGas.toString());
 
     console.log('🔧 Executing withdrawal transaction...');
     console.log('📋 Transaction details:', {
@@ -166,6 +170,8 @@ export async function POST(request) {
       gasCoin: gasCoin?.coinObjectId || 'auto-select'
     });
 
+
+    
     // Sign and execute transaction
     const result = await suiClient.signAndExecuteTransaction({
       signer: treasuryKeypair,

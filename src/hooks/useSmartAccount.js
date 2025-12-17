@@ -30,7 +30,7 @@ export const useSmartAccount = () => {
         // For Sui/One Chain, all accounts are regular accounts (not smart contracts)
         const accountInfo = {
           address,
-          type: 'Sui Account',
+          type: 'Onechain Account',
           isSmartAccount: false,
           features: {}
         };
@@ -51,7 +51,7 @@ export const useSmartAccount = () => {
   }, [isConnected, address]);
 
   const enableSmartAccountFeatures = async () => {
-    // Not applicable for Sui accounts
+    // Not applicable for Onechain accounts
     console.log('Smart account features not available on Sui/One Chain');
     return false;
   };

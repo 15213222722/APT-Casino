@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  turbopack: {
+    
+  },
   transpilePackages: ['three'],
   images: {
     domains: ['images.unsplash.com'],

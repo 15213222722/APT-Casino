@@ -78,7 +78,7 @@ check_prerequisites() {
 # Function to check environment variables
 check_environment() {
     print_step "Checking environment variables..."
-    
+    #DrorXZbexKr7aWx1BR9FosU8
     if [ -z "$DEPLOYER_PRIVATE_KEY" ]; then
         print_error "DEPLOYER_PRIVATE_KEY environment variable is not set"
         exit 1
@@ -105,12 +105,12 @@ install_dependencies() {
 compile_contracts() {
     print_step "Compiling Move contracts..."
     
-    cd "$PROJECT_ROOT/move-contracts"
+    cd "$PROJECT_ROOT/move-contracts/game-logger"
     
     if [ "$VERBOSE" = true ]; then
-        aptos move compile --verbose
+        one move test --verbose
     else
-        aptos move compile
+        one move test
     fi
     
     if [ $? -eq 0 ]; then

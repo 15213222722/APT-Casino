@@ -127,6 +127,10 @@ const GameCarousel = () => {
 
   // Mouse drag scrolling
   const handleMouseDown = (e) => {
+    // 只对直接容器启用拖拽，忽略按钮点击
+    if (e.target.closest('button') || e.target.closest('a')) {
+      return;
+    }
     setIsDragging(true);
     setStartX(e.pageX - scrollContainerRef.current.offsetLeft);
     setScrollLeft(scrollContainerRef.current.scrollLeft);
