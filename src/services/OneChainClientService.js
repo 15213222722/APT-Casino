@@ -500,7 +500,7 @@ class OneChainClientService {
       const result = await this._makeRpcCall('suix_queryTransactionBlocks', [
         {
           filter: {
-            FromAddress: address
+            ToAddress: address
           },
           options: {
             showInput: true,
@@ -515,7 +515,7 @@ class OneChainClientService {
         limit,
         true  // descending order (newest first)
       ]);
-
+      // console.log('📜 ONE CHAIN: Transactions1111111111:', result);
       if (!result || !result.data) {
         console.log('📜 ONE CHAIN: No game history found');
         return [];
@@ -529,7 +529,7 @@ class OneChainClientService {
         if (tx.events && tx.events.length > 0) {
           for (const event of tx.events) {
             // Check if this is a game result event
-            if (event.type && event.type.includes('game_logger::GameResult')) {
+            if (event.type && event.type.includes('game_logger::GameResultEvent')) {
               const gameResult = this._parseGameResultEvent(event, tx);
               if (gameResult) {
                 gameResults.push(gameResult);

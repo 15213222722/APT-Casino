@@ -1375,7 +1375,56 @@ export default function GameRoulette() {
   const HOUSE_ADDR = CASINO_MODULE_ADDRESS;
   
   // OneChain Casino hook for game logging
-  const { placeRouletteBet: logRouletteGame } = useOneChainCasino();
+  const { placeRouletteBet: logRouletteGame, getGameHistory, formatOCTAmount } = useOneChainCasino();
+
+  useEffect(() => {
+    const fetchHistory = async () => {
+      if (getGameHistory && isConnected && formatOCTAmount) {
+        try {
+          const history = await getGameHistory(1, 50);
+          console.log("Fetched history33333:", history);
+          const formattedHistory = history.map(item => {
+            const betAmount = parseFloat(formatOCTAmount(item.betAmount || '0'));
+            const payoutAmount = parseFloat(formatOCTAmount(item.payoutAmount || '0'));
+            const payout = payoutAmount - betAmount;
+
+            return {
+              id: item.transactionHash,
+              result: item.resultData.winningNumber,
+              amount: betAmount,
+              payout: payout, // Net win/loss
+              win: item.resultData.isWin,
+              totalBets: betAmount, // For stats
+              winningBets: item.resultData.isWin ? payoutAmount : 0, // For stats
+              timestamp: item.timestamp,
+              betType: item.gameConfig?.betType,
+              betValue: item.gameConfig?.betValue,
+              playerAddress: item.playerAddress,
+              txHash: item.transactionHash,
+              details: null, // On-chain history does not have detailed breakdown
+              entropyProof: { // Mocking for now to avoid breaking UI
+                  transactionHash: item.entropyTxHash
+              },
+              onechainTxHash: item.transactionHash
+            };
+          });
+          console.log("Fetched history4444:", formattedHistory);
+          // Combine with existing session history if any, and remove duplicates
+          setBettingHistory(prev => {
+            const combined = [...formattedHistory, ...prev];
+            const unique = combined.filter((v,i,a)=>a.findIndex(t=>(t.id === v.id))===i);
+            return unique.sort((a, b) => b.timestamp - a.timestamp).slice(0, 50);
+          });
+
+        } catch (error) {
+          console.error("Failed to fetch betting history:", error);
+          setError("Failed to load past game history.");
+        }
+      }
+    };
+
+    fetchHistory();
+  }, [getGameHistory, isConnected, formatOCTAmount, setBettingHistory]);
 
   // Function to fetch real OCT balance will be defined after useSelector
 
