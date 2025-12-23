@@ -63,7 +63,7 @@ export function useOneChainWallet() {
         console.warn('OCT balance fetch failed, trying SUI fallback:', octError);
         const balanceData = await suiClient.getBalance({
           owner: address,
-          coinType: '0x2::sui::SUI',
+          coinType: '0x2::oct::OCT',
         });
         setBalance(balanceData.totalBalance);
       }

@@ -26,7 +26,7 @@ import { FaVolumeMute, FaVolumeUp, FaChartLine, FaCoins, FaTrophy, FaDice, FaBal
 import { GiCardRandom, GiDiceTarget, GiRollingDices, GiPokerHand, GiSpaceship } from "react-icons/gi";
 import { Shield, Stars, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
-// import RouletteLeaderboard from './components/RouletteLeaderboard';
+import RouletteLeaderboard from './components/RouletteLeaderboard';
 import StrategyGuide from './components/StrategyGuide';
 import RoulettePayout from './components/RoulettePayout';
 import WinProbabilities from './components/WinProbabilities';
@@ -865,7 +865,10 @@ const notificationSteps = {
 const RouletteWheel = ({ spinning, result, onSpinComplete, onSpinStart, onWin, isSmallScreen, isPortrait }) => {
   const wheelRef = useRef(null);
   const [spinComplete, setSpinComplete] = useState(false);
-  const [rotation, setRotation] = useState(0);
+
+  // Add state variables for wheel animation if they don't exist in props
+  const [spinningState, setSpinningState] = useState(false);
+  const [rotationState, setRotationState] = useState(0);
 
   useEffect(() => {
     if (spinning && result >= 0) {
@@ -875,7 +878,7 @@ const RouletteWheel = ({ spinning, result, onSpinComplete, onSpinStart, onWin, i
       const resultPosition = segmentAngle * result;
       const finalRotation = baseRotation + resultPosition;
 
-      setRotation(finalRotation);
+      setRotationState(finalRotation);
       if (onSpinStart) onSpinStart();
 
       setTimeout(() => {
@@ -884,7 +887,7 @@ const RouletteWheel = ({ spinning, result, onSpinComplete, onSpinStart, onWin, i
         if (onWin) onWin();
       }, 4200); // Slightly longer than animation
     } else if (!spinning) {
-      setRotation(0);
+      setRotationState(0);
       setSpinComplete(false);
     }
   }, [spinning, result, onSpinComplete, onSpinStart, onWin]);
@@ -927,7 +930,7 @@ const RouletteWheel = ({ spinning, result, onSpinComplete, onSpinStart, onWin, i
           backgroundSize: 'contain',
           transformOrigin: 'center',
           position: 'relative',
-          transform: `rotate(${rotation}deg)`,
+          transform: `rotate(${spinningState ? rotationState : 0}deg)`,
           transition: spinning ? 'transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99)' : 'none',
           filter: spinning ? 'brightness(1.2) saturate(1.3)' : 'brightness(1) saturate(1)',
           '&::after': {
@@ -1909,287 +1912,20 @@ export default function GameRoulette() {
         remainingBalance: currentBalance - totalBetAmount
       });
 
-      // Store original balance for calculation
-      const originalBalance = parseFloat(userBalance || '0');
+      // Start wheel spinning animation
+      setWheelSpinning(true);
       
-      // Check if user has enough balance
-      if (originalBalance < totalBetAmount) {
-        alert(`Insufficient balance. You have ${originalBalance.toFixed(5)} OCT but need ${totalBetAmount.toFixed(5)} OCT`);
-        setSubmitDisabled(false);
-        setWheelSpinning(false);
-        return;
-      }
+      // Calculate initial rotation (multiple spins + offset based on winning number)
+      const spins = 5; // Number of full rotations
+      const winningNumber = Math.floor(Math.random() * 37); // Generate winning number 0-36
+      const segmentAngle = 360 / 37; // Each number takes this angle
+      const winningNumberAngle = winningNumber * segmentAngle;
+      const totalRotation = (spins * 360) + (360 - winningNumberAngle); // Start from top position
       
-      // Deduct bet amount immediately from balance
-      const balanceAfterBet = originalBalance - totalBetAmount;
-      dispatch(setBalance(balanceAfterBet.toFixed(5)));
+      // The rotation variable is not defined either, so we need to address that too
+      // Looking at the RouletteWheel component, it seems we should just set the spinning state
+      // and let the component handle the animation
       
-      console.log("Balance deducted:", {
-        originalBalance: originalBalance.toFixed(5),
-        betAmount: totalBetAmount.toFixed(5),
-        balanceAfterBet: balanceAfterBet.toFixed(5)
-      });
-
-      // Convert ALL bets into an array for multiple bet processing
-      const allBets = [];
-
-      // Add outside bets
-      if (red > 0) {
-        allBets.push({ type: BetType.COLOR, value: 0, amount: red, name: "Red" }); // Red = 0
-      }
-      if (black > 0) {
-        allBets.push({ type: BetType.COLOR, value: 1, amount: black, name: "Black" }); // Black = 1
-      }
-      if (odd > 0) {
-        allBets.push({ type: BetType.ODDEVEN, value: 1, amount: odd, name: "Odd" }); // Odd
-      }
-      if (even > 0) {
-        allBets.push({ type: BetType.ODDEVEN, value: 0, amount: even, name: "Even" }); // Even
-      }
-      if (over > 0) {
-        allBets.push({ type: BetType.HIGHLOW, value: 1, amount: over, name: "High (19-36)" }); // High
-      }
-      if (under > 0) {
-        allBets.push({ type: BetType.HIGHLOW, value: 0, amount: under, name: "Low (1-18)" }); // Low
-      }
-
-      // Add dozen bets
-      dozens.forEach((amount, index) => {
-        if (amount > 0) {
-          const dozenNames = ["1st Dozen (1-12)", "2nd Dozen (13-24)", "3rd Dozen (25-36)"];
-          allBets.push({ type: BetType.DOZEN, value: index, amount, name: dozenNames[index] });
-        }
-      });
-
-      // Add column bets
-      columns.forEach((amount, index) => {
-        if (amount > 0) {
-          const columnNames = ["1st Column", "2nd Column", "3rd Column"];
-          allBets.push({ type: BetType.COLUMN, value: index, amount, name: columnNames[index] });
-        }
-      });
-
-      // Add inside bets
-      inside.forEach((amount, index) => {
-        if (amount > 0) {
-          // inside array structure: 
-          // Index 0: Number 0 (straight bet only)
-          // Index 1-4: Number 1 (straight=1, split-left=2, split-bottom=3, corner=4)
-          // Index 5-8: Number 2 (straight=5, split-left=6, split-bottom=7, corner=8)
-          // Formula: (number-1)*4 + betType for numbers 1-36
-          
-          let actualNumber, betPosition;
-          
-          if (index === 0) {
-            // Special case for number 0 - only straight bet
-            actualNumber = 0;
-            betPosition = 1; // straight bet
-          } else {
-            // For numbers 1-36
-            betPosition = ((index - 1) % 4) + 1; // 1=straight, 2=split-left, 3=split-bottom, 4=corner
-            actualNumber = Math.floor((index - 1) / 4) + 1; // Numbers 1-36
-          }
-
-          // Debug: Check the actual structure
-          console.log(`Inside bet structure - index: ${index}, betPosition: ${betPosition}, actualNumber: ${actualNumber}`);
-
-          // Debug: Check if this is a straight bet on a number
-          if (betPosition === 1) {
-            console.log(`Straight bet detected - index: ${index}, actualNumber: ${actualNumber}, amount: ${amount}`);
-          }
-
-          console.log(`Inside bet - index: ${index}, amount: ${amount}, betPosition: ${betPosition}, actualNumber: ${actualNumber}`);
-
-          // FIXED: Use actualNumber instead of numberBase for better accuracy
-          if (betPosition === 1) {
-            // Straight up bet - actualNumber is the actual number (0-36)
-            allBets.push({ type: BetType.NUMBER, value: actualNumber, amount, name: `Number ${actualNumber}` });
-          } else if (betPosition === 2) {
-            // Left split bet - predefined split positions
-            const splitMap = {
-              // Left splits (n, n-3) - including 1,2,3 with 0
-              1: "0,1",      // Bottom-left split with 0
-              2: "0,2",      // Middle-left split with 0
-              3: "0,3",      // Top-left split with 0
-              
-              4: "1,4",      // Bottom-left split
-              7: "4,7",      // Bottom-left split
-              10: "7,10",    // Bottom-left split
-              13: "10,13",   // Bottom-left split
-              16: "13,16",   // Bottom-left split
-              19: "16,19",   // Bottom-left split
-              22: "19,22",   // Bottom-left split
-              25: "22,25",   // Bottom-left split
-              28: "25,28",   // Bottom-left split
-              31: "28,31",   // Bottom-left split
-              34: "31,34",   // Bottom-left split
-              
-              5: "2,5",      // Middle-left split
-              8: "5,8",      // Middle-left split
-              11: "8,11",    // Middle-left split
-              14: "11,14",   // Middle-left split
-              17: "14,17",   // Middle-left split
-              20: "17,20",   // Middle-left split
-              23: "20,23",   // Middle-left split
-              26: "23,26",   // Middle-left split
-              29: "26,29",   // Middle-left split
-              32: "29,32",   // Middle-left split
-              35: "32,35",   // Middle-left split
-              
-              6: "3,6",      // Top-left split
-              9: "6,9",      // Top-left split
-              12: "9,12",    // Top-left split
-              15: "12,15",   // Top-left split
-              18: "15,18",   // Top-left split
-              21: "18,21",   // Top-left split
-              24: "21,24",   // Top-left split
-              27: "24,27",   // Top-left split
-              30: "27,30",   // Top-left split
-              33: "30,33",   // Top-left split
-              36: "33,36"    // Top-left split
-            };
-            
-            const splitNumbers = splitMap[actualNumber];
-            if (splitNumbers) {
-              // Use the actualNumber (where bet was placed) to get split definition
-              allBets.push({ type: BetType.SPLIT, value: splitNumbers, amount, name: `Split ${actualNumber} (${splitNumbers})` });
-            }
-          } else if (betPosition === 3) {
-            // Bottom bet - can be either street bet or bottom split bet
-            const isBottomRow = [1, 4, 7, 10, 13, 16, 19, 22, 25, 28, 31, 34].includes(actualNumber);
-
-            if (isBottomRow) {
-              // Bottom row: street bet [n, n+1, n+2]
-              const streetNumbers = [actualNumber, actualNumber + 1, actualNumber + 2];
-              console.log(`🎯 STREET BET DETECTED: ${actualNumber} → [${streetNumbers.join(',')}] - Amount: ${amount}`);
-              allBets.push({ type: BetType.STREET, value: streetNumbers.join(','), amount, name: `Street ${streetNumbers.join('-')}` });
-            } else {
-              // Middle/Top row: bottom split bet - use predefined values
-              const bottomSplitMap = {
-                2: "1,2",      // Split 2: 1,2
-                3: "2,3",      // Split 3: 2,3
-                5: "4,5",      // Split 5: 4,5
-                6: "5,6",      // Split 6: 5,6
-                8: "7,8",      // Split 8: 7,8
-                9: "8,9",      // Split 9: 8,9
-                11: "10,11",   // Split 11: 10,11
-                12: "11,12",   // Split 12: 11,12
-                14: "13,14",   // Split 14: 13,14
-                15: "14,15",   // Split 15: 14,15
-                17: "16,17",   // Split 17: 16,17
-                18: "17,18",   // Split 18: 17,18
-                20: "19,20",   // Split 20: 19,20
-                21: "20,21",   // Split 21: 20,21
-                23: "22,23",   // Split 23: 22,23
-                24: "23,24",   // Split 24: 23,24
-                26: "25,26",   // Split 26: 25,26
-                27: "26,27",   // Split 27: 26,27
-                29: "28,29",   // Split 29: 28,29
-                30: "29,30",   // Split 30: 29,30
-                32: "31,32",   // Split 32: 31,32
-                33: "32,33",   // Split 33: 32,33
-                35: "34,35",   // Split 35: 34,35 - Changed from street to split
-                36: "35,36"    // Split 36: 35,36 - Changed from street to split
-              };
-              
-              const splitNumbers = bottomSplitMap[actualNumber];
-              if (splitNumbers) {
-                allBets.push({ type: BetType.SPLIT, value: splitNumbers, amount, name: `Split ${actualNumber} (${splitNumbers.replace(',', '-')})` });
-              } else {
-                // Fallback to old calculation if not in map
-                const bottomNumber = actualNumber + 3;
-                allBets.push({ type: BetType.SPLIT, value: `${actualNumber},${bottomNumber}`, amount, name: `Split ${actualNumber}/${bottomNumber}` });
-              }
-            }
-          } else if (betPosition === 5) {
-            // Horizontal split bet - predefined split positions (same row, adjacent numbers)
-            const horizontalSplitMap = {
-              // Horizontal splits (n, n+1) - same row - FIXED VALUES
-              2: "1,2",      // Split 2: 1,2
-              3: "2,3",      // Split 3: 2,3
-              5: "4,5",      // Split 5: 4,5
-              6: "5,6",      // Split 6: 5,6
-              8: "7,8",      // Split 8: 7,8
-              9: "8,9",      // Split 9: 8,9
-              11: "10,11",   // Split 11: 10,11
-              12: "11,12",   // Split 12: 11,12
-              14: "13,14",   // Split 14: 13,14
-              15: "14,15",   // Split 15: 14,15
-              17: "16,17",   // Split 17: 16,17
-              18: "17,18",   // Split 18: 17,18
-              20: "19,20",   // Split 20: 19,20
-              21: "20,21",   // Split 21: 20,21
-              23: "22,23",   // Split 23: 22,23
-              24: "23,24",   // Split 24: 23,24
-              26: "25,26",   // Split 26: 25,26
-              27: "26,27",   // Split 27: 26,27
-              29: "28,29",   // Split 29: 28,29
-              30: "29,30",   // Split 30: 29,30
-              32: "31,32",   // Split 32: 31,32
-              33: "32,33",   // Split 33: 32,33
-              35: "34,35",   // Split 35: 34,35
-              36: "35,36"    // Split 36: 35,36
-            };
-            
-            const horizontalSplitNumbers = horizontalSplitMap[actualNumber];
-            if (horizontalSplitNumbers) {
-              // Use the actualNumber (where bet was placed) to get split definition
-              allBets.push({ type: BetType.SPLIT, value: horizontalSplitNumbers, amount, name: `Split ${actualNumber} (${horizontalSplitNumbers})` });
-            }
-          } else if (betPosition === 4) {
-            // Corner bet (4 numbers) - predefined corner positions
-            // All possible corners in roulette table (22 corners total)
-            // FIXED: Correct corner values based on actual roulette table layout
-            const cornerMap = {
-              2: "0,1,2",      // Middle-left corner
-              5: "1,2,4,5",      // Middle-left corner
-              8: "4,5,7,8",      // Middle-left corner
-              11: "7,8,10,11",  // Middle-left corner - FIXED
-              14: "10,11,13,14", // Middle-left corner - FIXED
-              17: "13,14,16,17", // Middle-left corner - FIXED
-              20: "16,17,19,20", // Middle-left corner
-              23: "19,20,22,23", // Middle-left corner - FIXED
-              26: "22,23,25,26", // Middle-left corner
-              29: "25,26,28,29", // Middle-left corner
-              32: "28,29,31,32", // Middle-left corner
-              35: "31,32,33,35", // Middle-right corner
-              
-              3: "2,3,0",      // Top-left corner
-              6: "2,3,5,6",      // Top-left corner
-              9: "5,6,8,9",     // Top-left corner
-              12: "8,9,11,12",  // Top-left corner
-              15: "11,12,14,15", // Top-left corner - FIXED
-              18: "14,15,17,18", // Top-left corner
-              21: "17,18,20,21", // Top-left corner
-              24: "20,21,23,24", // Top-left corner
-              27: "23,24,26,27", // Top-left corner
-              30: "26,27,29,30", // Top-left corner
-              33: "29,30,32,33", // Top-left corner
-              36: "32,33,35,36"  // Top-right corner
-            };
-
-            const cornerNumbers = cornerMap[actualNumber];
-            if (cornerNumbers) {
-              // Use the actualNumber (where bet was placed) to get corner definition
-              allBets.push({ type: BetType.CORNER, value: cornerNumbers, amount, name: `Corner ${actualNumber} (${cornerNumbers})` });
-            }
-          }
-        }
-      });
-
-      console.log("All bets to process:", allBets);
-      console.log("Column bets:", columns);
-      console.log("Column bet positions:");
-      console.log(`  Index 0 (Top "2 To 1"): ${columns[0] > 0 ? `$${columns[0]} bet` : 'No bet'} → 3rd Column (3,6,9,12,15,18,21,24,27,30,33,36)`);
-      console.log(`  Index 1 (Middle "2 To 1"): ${columns[1] > 0 ? `$${columns[1]} bet` : 'No bet'} → 2nd Column (2,5,8,11,14,17,20,23,26,29,32,35)`);
-      console.log(`  Index 2 (Bottom "2 To 1"): ${columns[2] > 0 ? `$${columns[2]} bet` : 'No bet'} → 1st Column (1,4,7,10,13,16,19,22,25,28,31,34)`);
-      console.log("Inside bets:", inside);
-
-
-
-      console.log("Game simulation with multiple bets:", allBets);
-
-      // Simulate the game locally (no blockchain interaction)
       // Reset roll result for the new bet
       setRollResult(-1);
 
@@ -2840,6 +2576,7 @@ export default function GameRoulette() {
     if (winningNumber === 0 && kind !== 0) return false;
 
     const redNumbers = [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36];
+    const blackNumbers = [2, 4, 6, 8, 10, 11, 13, 15, 17, 20, 22, 24, 26, 28, 29, 31, 33, 35, 36].filter(num => !redNumbers.includes(num));
 
     switch (kind) {
       case 0: return value === winningNumber; // Single Number
@@ -4097,10 +3834,13 @@ export default function GameRoulette() {
 
           {/* Third row - Roulette History and Leaderboard */}
           <Grid container spacing={4} sx={{ mb: 6, pt: 4 }}>
-            <Grid xs={12} md={12}>
+            <Grid xs={12} md={7}>
               <div id="history" className="scroll-mt-16">
                 <RouletteHistory bettingHistory={bettingHistory} />
               </div>
+            </Grid>
+            <Grid xs={12} md={5}>
+              <RouletteLeaderboard />
             </Grid>
           </Grid>
 

@@ -7,7 +7,7 @@ export const muiStyles = {
         main1: '#8c8fdf',
         main2: '#c59df2',
         main3: '#ef7c71',
-        gradient: 'linear-gradient(90deg, #681DDB 0%, #D82633 100%)',
+        gradient: 'linear-gradient(90deg, #00d4ff 0%, #0066ff 100%)',
         contrastText: '#ffffff',
       },
       dark: {
@@ -20,12 +20,12 @@ export const muiStyles = {
       },
       accent: { // purple
         main: '#c59df2',
-        dark: '#681ddb',
+        dark: '#0066ff',
         light: '#b486ed'
       },
       accent2: { // red
         main: '#ef7c71',
-        dark: '#d82633',
+        dark: '#00d4ff',
         light: '#f9a89e'
       },
       accent3: { // blue
@@ -41,13 +41,13 @@ export const muiStyles = {
       },
       text: {
         focus: '#fff',
-        accent: '#d82633',
+        accent: '#00d4ff',
         primary: '#FFFFFF',
         secondary: '#DDDDDD',
       },
       game: {
-        green: '#14D854',
-        red: '#d82633'
+        green: '#008000',
+        red: '#FF0000'
       },
       mode: 'dark'
     },

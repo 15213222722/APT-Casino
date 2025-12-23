@@ -604,16 +604,16 @@ export default function Navbar() {
       path: "/game",
       classes: "text-hover-gradient-game",
     },
-    {
-      name: "Live",
-      path: "/live",
-      classes: "text-hover-gradient-live",
-    },
-    {
-      name: "Bank",
-      path: "/bank",
-      classes: "text-hover-gradient-bank",
-    },
+    // {
+    //   name: "Live",
+    //   path: "/live",
+    //   classes: "text-hover-gradient-live",
+    // },
+    // {
+    //   name: "Bank",
+    //   path: "/bank",
+    //   classes: "text-hover-gradient-bank",
+    // },
   ];
 
   const handleProfileClick = () => {
@@ -682,21 +682,43 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="backdrop-blur-md bg-[#070005]/90 fixed w-full z-20 transition-all duration-300 shadow-lg">
+      <nav className="backdrop-blur-md fixed w-full z-20 transition-all duration-300 shadow-lg shadow-blue-500/5"
+           style={{
+             background: 'linear-gradient(to right, rgba(0, 102, 255, 0.15), rgba(0, 163, 255, 0.08), rgba(0, 102, 255, 0.15))',
+             backgroundColor: 'rgba(0, 51, 102, 0.1)'
+           }}>
         <div className="flex w-full items-center justify-between py-6 px-4 sm:px-10 md:px-20 lg:px-36">
-          <div className="flex items-center">
-            <a href="/" className="logo mr-6">
-            <Image
-              src="/PowerPlay.png"
-              alt="powerplay image"
-              width={172}
-              height={15}
-              />
+          <div className="flex items-center mr-6" >
+            <a href="/" className="logo mr-6 flex items-center group relative animate-shake">
+              <div className="relative">
+                {/* Multiple glow layers for depth */}
+                <div className="absolute -inset-4 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 rounded-2xl blur-2xl opacity-40 group-hover:opacity-80 transition-all duration-300 group-hover:animate-pulse"></div>
+                <div className="absolute -inset-2 bg-gradient-to-r from-cyan-500 via-purple-600 to-pink-500 rounded-xl blur-lg opacity-60 group-hover:opacity-100 transition-all duration-300 animate-pulse group-hover:animate-bounce"></div>
+                <div className="relative transform transition-all duration-300 hover:scale-125 hover:-rotate-6 hover:rotate-3 group-hover:animate-spin-slow group-hover:animate-electric">
+                  <Image
+                    src="/01_navigation_bar.png"
+                    alt="01_navigation_bar image"
+                    width={100}
+                    height={100}
+                    className="filter drop-shadow-2xl group-hover:drop-shadow-3xl transition-all duration-300 group-hover:brightness-125 rounded-lg"
+                  />
+                </div>
+              </div>
+              <span className="relative text-white font-bold text-xl ml-3 tracking-wider">
+                <span className="absolute inset-0 bg-gradient-to-r from-cyan-400 via-purple-500 to-pink-500 bg-clip-text text-transparent animate-gradient bg-300% group-hover:from-red-600 group-hover:via-yellow-400 group-hover:to-green-500 transition-all duration-300 group-hover:animate-pulse neon-glow"></span>
+                <span className="relative drop-shadow-2xl group-hover:drop-shadow-3xl transform transition-all duration-300 hover:scale-110 hover:tracking-widest group-hover:animate-bounce font-black">OneArcade</span>
+              </span>
+              {/* Additional impact elements */}
+              <div className="absolute inset-0 pointer-events-none">
+                <div className="absolute top-0 left-0 w-2 h-2 bg-cyan-400 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 animate-ping"></div>
+                <div className="absolute top-0 right-0 w-2 h-2 bg-pink-400 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 animate-ping animation-delay-200"></div>
+                <div className="absolute bottom-0 left-0 w-2 h-2 bg-purple-400 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 animate-ping animation-delay-400"></div>
+              </div>
             </a>
             
             {/* Mobile menu button */}
             <button 
-              className="md:hidden text-white p-1 rounded-lg hover:bg-purple-500/20 transition-colors"
+              className="md:hidden text-white p-1 rounded-lg hover:bg-blue-500/20 transition-colors"
               onClick={() => setShowMobileMenu(!showMobileMenu)}
               aria-label="Toggle mobile menu"
             >
@@ -724,6 +746,9 @@ export default function Navbar() {
               <Link
                   className={`${path === pathname ? "text-transparent bg-clip-text bg-gradient-to-r from-red-magic to-blue-magic font-semibold" : classes} flex items-center gap-1 text-lg font-medium transition-all duration-200 hover:scale-105`}
                 href={path}
+                style={{
+                  textShadow: path === pathname ? '0 0 15px rgba(255, 255, 255, 0.3)' : '0 0 5px rgba(0, 102, 255, 0.2)'
+                }}
               >
                 {name}
               </Link>
@@ -735,7 +760,7 @@ export default function Navbar() {
             {/* Search Icon */}
             <div className="relative">
               <button 
-                className="p-2 text-white/70 hover:text-white transition-colors rounded-full hover:bg-purple-500/20"
+                className="p-2 text-white/70 hover:text-white transition-colors rounded-full hover:bg-blue-500/20"
                 onClick={handleSearchIconClick}
                 aria-label="Search"
               >
@@ -748,7 +773,7 @@ export default function Navbar() {
               {/* Search Panel */}
               {showSearch && (
                 <div 
-                  className="absolute right-0 mt-2 w-80 md:w-96 bg-[#1A0015]/95 backdrop-blur-md border border-purple-500/30 rounded-lg shadow-xl z-40 animate-fadeIn"
+                  className="absolute right-0 mt-2 w-80 md:w-96 bg-gradient-to-b from-[#001F3F]/95 to-[#003366]/95 backdrop-blur-md border border-[#00A3FF]/30 rounded-lg shadow-xl shadow-blue-500/20 z-40 animate-fadeIn"
                   ref={searchPanelRef}
                 >
                   <div className="p-3">
@@ -759,7 +784,7 @@ export default function Navbar() {
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         placeholder="Search games, tournaments..."
-                        className="w-full py-2 px-3 pr-10 bg-[#250020] border border-purple-500/20 rounded-md text-white focus:outline-none focus:border-purple-500"
+                        className="w-full py-2 px-3 pr-10 bg-[#001F3F]/50 border border-[#00A3FF]/30 rounded-md text-white focus:outline-none focus:border-[#00A3FF]"
                       />
                       <svg 
                         className="absolute right-3 top-2.5 text-white/50" 
@@ -795,11 +820,11 @@ export default function Navbar() {
                               {searchResults.games.map(game => (
                                 <div 
                                   key={game.id}
-                                  className="p-2 hover:bg-purple-500/10 rounded-md cursor-pointer mx-1"
+                                  className="p-2 hover:bg-blue-500/10 rounded-md cursor-pointer mx-1"
                                   onClick={() => handleSearchItemClick(game.path)}
                                 >
                                   <div className="flex items-center">
-                                    <div className="w-8 h-8 rounded-md bg-purple-800/30 flex items-center justify-center mr-3">
+                                    <div className="w-8 h-8 rounded-md bg-[#0066FF]/30 flex items-center justify-center mr-3">
                                       <span className="text-sm">{game.name.charAt(0)}</span>
                                     </div>
                                     <div>
@@ -819,11 +844,11 @@ export default function Navbar() {
                               {searchResults.tournaments.map(tournament => (
                                 <div 
                                   key={tournament.id}
-                                  className="p-2 hover:bg-purple-500/10 rounded-md cursor-pointer mx-1"
+                                  className="p-2 hover:bg-blue-500/10 rounded-md cursor-pointer mx-1"
                                   onClick={() => handleSearchItemClick(tournament.path)}
                                 >
                                   <div className="flex items-center">
-                                    <div className="w-8 h-8 rounded-md bg-red-800/30 flex items-center justify-center mr-3">
+                                    <div className="w-8 h-8 rounded-md bg-[#0066FF]/30 flex items-center justify-center mr-3">
                                       <span className="text-sm">🏆</span>
                                     </div>
                                     <div>
@@ -843,7 +868,7 @@ export default function Navbar() {
                               {searchResults.pages.map(page => (
                                 <div 
                                   key={page.id}
-                                  className="p-2 hover:bg-purple-500/10 rounded-md cursor-pointer mx-1"
+                                  className="p-2 hover:bg-blue-500/10 rounded-md cursor-pointer mx-1"
                                   onClick={() => handleSearchItemClick(page.path)}
                                 >
                                   <div className="flex items-center">
@@ -867,7 +892,7 @@ export default function Navbar() {
                   )}
                   
                   {searchQuery.length > 0 && (
-                    <div className="p-2 border-t border-purple-500/20 text-center">
+                    <div className="p-2 border-t border-[#00A3FF]/30 text-center">
                       <span className="text-xs text-white/50">
                         Press Enter to search for "{searchQuery}"
                 </span>
@@ -878,9 +903,9 @@ export default function Navbar() {
             </div>
           
             {/* Theme Toggle */}
-            <button 
+            {/* <button 
               onClick={toggleDarkMode}
-              className="p-2 text-white/70 hover:text-white transition-colors hidden md:block rounded-full hover:bg-purple-500/20"
+              className="p-2 text-white/70 hover:text-white transition-colors hidden md:block rounded-full hover:bg-blue-500/20"
               aria-label={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
             >
               {isDarkMode ? (
@@ -900,13 +925,13 @@ export default function Navbar() {
                   <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
                 </svg>
               )}
-            </button>
+            </button> */}
             
             {/* Notifications */}
             <div className="relative hidden md:block">
               <button 
                 onClick={() => setShowNotificationsPanel(!showNotificationsPanel)}
-                className="p-2 text-white/70 hover:text-white transition-colors relative rounded-full hover:bg-purple-500/20"
+                className="p-2 text-white/70 hover:text-white transition-colors relative rounded-full hover:bg-blue-500/20"
                 aria-label="Notifications"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -922,8 +947,8 @@ export default function Navbar() {
               
               {/* Notifications Panel */}
               {showNotificationsPanel && (
-                <div className="absolute right-0 mt-2 w-80 bg-[#1A0015]/95 backdrop-blur-md border border-purple-500/30 rounded-lg shadow-xl z-30 animate-fadeIn">
-                  <div className="p-3 border-b border-purple-500/20 flex justify-between items-center">
+                <div className="absolute right-0 mt-2 w-80 bg-gradient-to-b from-[#001F3F]/95 to-[#003366]/95 backdrop-blur-md border border-[#00A3FF]/30 rounded-lg shadow-xl shadow-blue-500/20 z-30 animate-fadeIn">
+                  <div className="p-3 border-b border-[#00A3FF]/30 flex justify-between items-center">
                     <h3 className="font-medium text-white">Notifications</h3>
                     <button 
                       onClick={clearAllNotifications}
@@ -942,7 +967,7 @@ export default function Navbar() {
                       notifications.map(notification => (
                         <div 
                           key={notification.id}
-                          className={`p-3 border-b border-purple-500/10 hover:bg-purple-500/5 cursor-pointer ${!notification.isRead ? 'bg-purple-900/10' : ''}`}
+                          className={`p-3 border-b border-[#00A3FF]/20 hover:bg-blue-500/10 cursor-pointer ${!notification.isRead ? 'bg-[#0066FF]/20' : ''}`}
                           onClick={() => markNotificationAsRead(notification.id)}
                         >
                           <div className="flex justify-between">
@@ -958,7 +983,7 @@ export default function Navbar() {
                     )}
                   </div>
                   
-                  <div className="p-2 border-t border-purple-500/20 text-center">
+                  <div className="p-2 border-t border-[#00A3FF]/30 text-center">
                     <a href="/notifications" className="text-xs text-white/70 hover:text-white">
                       View all notifications
                     </a>
@@ -1008,14 +1033,20 @@ export default function Navbar() {
         
         {/* Mobile Navigation Menu */}
         {showMobileMenu && (
-          <div className="md:hidden bg-[#0A0008]/95 backdrop-blur-md p-4 border-t border-purple-500/20 animate-slideDown">
+          <div className="md:hidden backdrop-blur-md p-4 border-t border-[#00A3FF]/30 animate-slideDown"
+               style={{
+                 background: 'linear-gradient(to bottom, rgba(0, 102, 255, 0.15), rgba(0, 51, 102, 0.2))'
+               }}>
             <div className="flex flex-col space-y-3">
               {navLinks.map(({ name, path, classes }, index) => (
                 <div key={index}>
                   <Link
-                    className={`${path === pathname ? 'text-white font-semibold' : 'text-white/80'} py-2 px-3 rounded-md hover:bg-purple-500/10 flex items-center w-full text-lg`}
+                    className={`${path === pathname ? 'text-transparent bg-clip-text bg-gradient-to-r from-red-magic to-blue-magic font-semibold' : 'text-white/80'} py-2 px-3 rounded-md hover:bg-blue-500/10 flex items-center w-full text-lg`}
                     href={path}
                     onClick={() => setShowMobileMenu(false)}
+                    style={{
+                      textShadow: path === pathname ? '0 0 10px rgba(255, 255, 255, 0.3)' : 'none'
+                    }}
                   >
                     {name}
                   </Link>
@@ -1026,7 +1057,7 @@ export default function Navbar() {
                 <span className="text-white/70">Dark Mode</span>
                 <button 
                   onClick={toggleDarkMode}
-                  className="p-2 text-white/70 hover:text-white bg-purple-500/10 rounded-full flex items-center justify-center h-8 w-8"
+                  className="p-2 text-white/70 hover:text-white bg-blue-500/10 rounded-full flex items-center justify-center h-8 w-8"
                 >
                   {isDarkMode ? (
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -1050,7 +1081,7 @@ export default function Navbar() {
               
               {/* User Balance in Mobile Menu */}
               {isWalletReady && (
-                <div className="pt-2 mt-2 border-t border-purple-500/10">
+                <div className="pt-2 mt-2 border-t border-[#00A3FF]/30">
                   <div className="p-3 bg-gradient-to-r from-green-900/20 to-green-800/10 rounded-lg border border-green-800/30">
                     <div className="flex justify-between items-center mb-2">
                       <span className="text-sm text-gray-300">House Balance:</span>
@@ -1071,10 +1102,10 @@ export default function Navbar() {
                 </div>
               )}
               
-              <div className="pt-2 mt-2 border-t border-purple-500/10">
+              <div className="pt-2 mt-2 border-t border-[#00A3FF]/30">
                 <a 
                   href="#support" 
-                  className="block py-2 px-3 text-white/80 hover:text-white hover:bg-purple-500/10 rounded-md"
+                  className="block py-2 px-3 text-white/80 hover:text-white hover:bg-blue-500/10 rounded-md"
                   onClick={() => setShowMobileMenu(false)}
                 >
                   Support
@@ -1091,7 +1122,7 @@ export default function Navbar() {
             onClick={() => setShowBalanceModal(false)}
           >
             <div
-              className="bg-[#0A0008] border border-purple-500/20 rounded-lg p-6 w-full max-w-md mx-4 shadow-xl"
+              className="bg-gradient-to-b from-[#001F3F] to-[#003366] border border-[#00A3FF]/30 rounded-lg p-6 w-full max-w-md mx-4 shadow-xl shadow-blue-500/20"
               onClick={(e) => e.stopPropagation()}
               role="dialog"
               aria-modal="true"
@@ -1150,7 +1181,7 @@ export default function Navbar() {
                     value={depositAmount}
                     onChange={(e) => setDepositAmount(e.target.value)}
                     placeholder="Enter OCT amount"
-                    className="flex-1 px-3 py-2 bg-gray-800/50 border border-gray-600/50 rounded text-white placeholder-gray-400 focus:outline-none focus:border-purple-500/50 focus:ring-1 focus:ring-purple-500/25"
+                    className="flex-1 px-3 py-2 bg-[#001F3F]/50 border border-[#00A3FF]/30 rounded text-white placeholder-gray-400 focus:outline-none focus:border-[#00A3FF] focus:ring-1 focus:ring-[#00A3FF]/25"
                     min="0"
                     step="0.00000001"
                     disabled={isDepositing}
@@ -1246,7 +1277,7 @@ export default function Navbar() {
           document.body
         )}
         
-        <div className="w-full h-[2px] magic-gradient overflow-hidden"></div>
+        <div className="w-full h-[2px] bg-gradient-to-r from-[#0066FF] via-[#00A3FF] to-[#0066FF] overflow-hidden shadow-lg shadow-blue-500/50"></div>
       </nav>
       
       {/* Pyth Entropy handles randomness generation */}

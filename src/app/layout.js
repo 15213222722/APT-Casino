@@ -10,8 +10,8 @@ import NetworkSwitcher from "@/components/NetworkSwitcher";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "APT Casino",
-  description: "APT Casino",
+  title: "OneArcade",
+  description: "OneArcade",
 };
 
 export default function RootLayout({ children }) {
@@ -42,7 +42,7 @@ export default function RootLayout({ children }) {
           <NetworkSwitcher />
           <Navbar />
           {children}
-          <Footer />
+          {/* <Footer /> */}
         </Providers>
       </body>
     </html>

@@ -17,7 +17,7 @@ const StrategyGuide = () => {
       difficulty: 'Beginner',
       effectiveness: 4,
       risk: 'High',
-      color: '#d82633',
+      color: '#00d4ff',
       description: 'The Martingale strategy involves doubling your bet after each loss, so when you eventually win, you recover all previous losses plus a small profit equal to your original bet.',
       pros: ['Simple to understand and execute', 'Can be effective in short sessions', 'Works with even-money bets (Red/Black, Odd/Even)'],
       cons: ['Requires a large bankroll', 'Table limits can prevent doubling after several losses', 'A losing streak can deplete your funds quickly'],
@@ -29,7 +29,7 @@ const StrategyGuide = () => {
       difficulty: 'Intermediate',
       effectiveness: 3,
       risk: 'Medium',
-      color: '#681DDB',
+      color: '#0066ff',
       description: 'A gentler progression system where you increase your bet by one unit after a loss and decrease it by one unit after a win. This approach is less aggressive than Martingale.',
       pros: ['Lower risk than Martingale', 'Doesn\'t require large bankroll', 'More sustainable for longer sessions'],
       cons: ['Slower recovery from losses', 'Still vulnerable to long losing streaks', 'Lower potential short-term gains'],
@@ -79,13 +79,13 @@ const StrategyGuide = () => {
       sx={{
         p: { xs: 2, md: 3 },
         borderRadius: 3,
-        background: 'linear-gradient(135deg, rgba(9, 0, 5, 0.9) 0%, rgba(25, 5, 30, 0.85) 100%)',
+        background: 'linear-gradient(135deg, rgba(0, 20, 60, 0.9) 0%, rgba(0, 40, 80, 0.85) 100%)',
         backdropFilter: 'blur(15px)',
-        border: '1px solid rgba(104, 29, 219, 0.2)',
+        border: '1px solid rgba(0, 200, 255, 0.2)',
         mb: 5,
         position: 'relative',
         overflow: 'hidden',
-        boxShadow: '0 10px 30px rgba(0,0,0,0.5)',
+        boxShadow: '0 10px 30px rgba(0, 150, 255, 0.3)',
         height: '100%',
         '&::before': {
           content: '""',
@@ -94,7 +94,7 @@ const StrategyGuide = () => {
           left: 0,
           width: '100%',
           height: '5px',
-          background: 'linear-gradient(90deg, #FFA500, #681DDB)',
+          background: 'linear-gradient(90deg, #00d4ff, #0066ff)',
         }
       }}
     >
@@ -103,7 +103,7 @@ const StrategyGuide = () => {
         fontWeight="bold" 
         gutterBottom
         sx={{ 
-          borderBottom: '1px solid rgba(104, 29, 219, 0.3)',
+          borderBottom: '1px solid rgba(0, 200, 255, 0.3)',
           pb: 1.5,
           display: 'flex',
           alignItems: 'center',
@@ -112,9 +112,9 @@ const StrategyGuide = () => {
           textShadow: '0 2px 4px rgba(0,0,0,0.5)'
         }}
       >
-        <FaBookOpen color="#FFA500" size={22} />
-        <span style={{ background: 'linear-gradient(90deg, #FFFFFF, #FFA500)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-          Roulette Strategy Guide
+        <FaBookOpen color="#00d4ff" size={22} />
+        <span style={{ background: 'linear-gradient(90deg, #FFFFFF, #00d4ff)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+          Cosmic Strategy Guide
         </span>
       </Typography>
       
@@ -227,7 +227,7 @@ const StrategyGuide = () => {
                         <FaStar 
                           key={i} 
                           size={12} 
-                          color={i < strategy.effectiveness ? '#FFA500' : 'rgba(255,255,255,0.2)'} 
+                          color={i < strategy.effectiveness ? '#00a8cc' : 'rgba(255,255,255,0.2)'} 
                         />
                       ))}
                     </Box>
@@ -235,14 +235,14 @@ const StrategyGuide = () => {
                       label={`Risk: ${strategy.risk}`} 
                       size="small" 
                       sx={{ 
-                        bgcolor: strategy.risk === 'High' ? 'rgba(216, 38, 51, 0.2)' : 
-                                strategy.risk === 'Medium' ? 'rgba(255, 165, 0, 0.2)' : 
-                                'rgba(20, 216, 84, 0.2)', 
-                        color: strategy.risk === 'High' ? '#d82633' : 
-                               strategy.risk === 'Medium' ? '#FFA500' : 
+                        bgcolor: strategy.risk === 'High' ? 'rgba(0, 200, 255, 0.2)' : 
+                                strategy.risk === 'Medium' ? 'rgba(0, 160, 180, 0.2)' : 
+                                'rgba(0, 180, 216, 0.2)', 
+                        color: strategy.risk === 'High' ? '#00d4ff' : 
+                               strategy.risk === 'Medium' ? '#00a8cc' : 
                                '#14D854',
-                        border: `1px solid ${strategy.risk === 'High' ? '#d8263340' : 
-                                          strategy.risk === 'Medium' ? '#FFA50040' : 
+                        border: `1px solid ${strategy.risk === 'High' ? '#00d4ff40' : 
+                                          strategy.risk === 'Medium' ? '#00a8cc40' : 
                                           '#14D85440'}`,
                         height: 24
                       }} 
@@ -262,8 +262,8 @@ const StrategyGuide = () => {
                     flex: 1, 
                     p: 2, 
                     borderRadius: 2, 
-                    backgroundColor: 'rgba(20, 216, 84, 0.1)', 
-                    border: '1px solid rgba(20, 216, 84, 0.2)'
+                    backgroundColor: 'rgba(0, 180, 216, 0.1)', 
+                    border: '1px solid rgba(0, 180, 216, 0.2)'
                   }}
                 >
                   <Typography variant="subtitle2" color="#14D854" sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
@@ -284,12 +284,12 @@ const StrategyGuide = () => {
                     flex: 1, 
                     p: 2, 
                     borderRadius: 2, 
-                    backgroundColor: 'rgba(216, 38, 51, 0.1)', 
-                    border: '1px solid rgba(216, 38, 51, 0.2)'
+                    backgroundColor: 'rgba(0, 200, 255, 0.1)', 
+                    border: '1px solid rgba(0, 200, 255, 0.2)'
                   }}
                 >
-                  <Typography variant="subtitle2" color="#d82633" sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
-                    <FaTimes color="#d82633" />
+                  <Typography variant="subtitle2" color="#00d4ff" sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
+                    <FaTimes color="#00d4ff" />
                     Disadvantages
                   </Typography>
                   <Box component="ul" sx={{ pl: 2, m: 0 }}>
@@ -306,16 +306,16 @@ const StrategyGuide = () => {
                 sx={{ 
                   p: 2, 
                   borderRadius: 2, 
-                  backgroundColor: 'rgba(255, 165, 0, 0.1)', 
-                  border: '1px solid rgba(255, 165, 0, 0.2)',
+                  backgroundColor: 'rgba(0, 160, 180, 0.1)', 
+                  border: '1px solid rgba(0, 160, 180, 0.2)',
                   display: 'flex',
                   alignItems: 'flex-start',
                   gap: 2
                 }}
               >
-                <FaCalculator color="#FFA500" style={{ marginTop: '3px' }} />
+                <FaCalculator color="#00a8cc" style={{ marginTop: '3px' }} />
                 <Box>
-                  <Typography variant="subtitle2" color="#FFA500" sx={{ mb: 1 }}>
+                  <Typography variant="subtitle2" color="#00a8cc" sx={{ mb: 1 }}>
                     Example:
                   </Typography>
                   <Typography variant="body2" color="rgba(255,255,255,0.8)">
@@ -333,15 +333,15 @@ const StrategyGuide = () => {
           mt: 2, 
           p: 2, 
           borderRadius: 2, 
-          background: 'linear-gradient(135deg, rgba(216, 38, 51, 0.05) 0%, rgba(216, 38, 51, 0.15) 100%)',
-          border: '1px solid rgba(216, 38, 51, 0.1)',
+          background: 'linear-gradient(135deg, rgba(0, 150, 255, 0.05) 0%, rgba(0, 200, 255, 0.15) 100%)',
+          border: '1px solid rgba(0, 200, 255, 0.1)',
           display: 'flex',
           alignItems: 'center',
           gap: 2,
           boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.2)'
         }}
       >
-        <FaExclamationTriangle color="#d82633" size={20} style={{ flexShrink: 0 }} />
+        <FaExclamationTriangle color="#00d4ff" size={20} style={{ flexShrink: 0 }} />
         <Typography variant="body2" color="rgba(255,255,255,0.8)">
           <strong>Important:</strong> These strategies can enhance entertainment. Always gamble responsibly and set clear limits for your play.
         </Typography>

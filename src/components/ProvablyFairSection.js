@@ -1,6 +1,5 @@
 'use client';
 import { useState } from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
 
 const ProvablyFairSection = () => {
@@ -38,29 +37,229 @@ const ProvablyFairSection = () => {
   ];
   
   return (
-    <section className="py-16 px-4 md:px-8 lg:px-16 relative">
-      {/* Background accents */}
-      <div className="absolute -top-40 -right-40 w-80 h-80 rounded-full bg-red-magic/5 blur-[100px] z-0"></div>
-      <div className="absolute -bottom-40 -left-40 w-80 h-80 rounded-full bg-blue-magic/5 blur-[100px] z-0"></div>
+    <section className="py-16 px-4 md:px-8 lg:px-16 relative overflow-hidden">
+      {/* Blockchain Security & Verification background */}
+      <div className="absolute inset-0 w-full h-full opacity-90">
+        {/* Deep security grid background matching GameCarousel colors */}
+        <div 
+          className="absolute inset-0 w-full h-full"
+          style={{
+            background: `
+              radial-gradient(ellipse 20% 30% at 20% 20%, #FF006E 0%, transparent 50%),
+              radial-gradient(ellipse 25% 35% at 80% 80%, #8338EC 0%, transparent 50%),
+              radial-gradient(ellipse 30% 40% at 50% 50%, #3A86FF 0%, transparent 40%),
+              linear-gradient(135deg, #0a0118 0%, #1a0033 40%, #2d1b69 70%, #0a0118 100%),
+              repeating-linear-gradient(
+                90deg,
+                transparent,
+                transparent 2px,
+                rgba(131, 56, 236, 0.03) 2px,
+                rgba(131, 56, 236, 0.03) 4px
+              ),
+              repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(58, 134, 255, 0.03) 2px,
+                rgba(58, 134, 255, 0.03) 4px
+              )
+            `
+          }}
+        />
+        
+        {/* Blockchain network visualization */}
+        <div className="absolute inset-0 w-full h-full">
+          {[...Array(15)].map((_, i) => (
+            <div
+              key={`blockchain-${i}`}
+              className="absolute"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                width: `${60 + Math.random() * 80}px`,
+                height: `${60 + Math.random() * 80}px`,
+                animation: `blockchainPulse ${6 + Math.random() * 4}s infinite ease-in-out ${Math.random() * 3}s`,
+              }}
+            >
+              <svg
+                viewBox="0 0 100 100"
+                className="w-full h-full"
+                style={{ opacity: 0.3 }}
+              >
+                <rect
+                  x="10"
+                  y="10"
+                  width="80"
+                  height="80"
+                  fill="none"
+                  stroke="url(#blockchainGradient)"
+                  strokeWidth="2"
+                  rx="8"
+                />
+                <line
+                  x1="30"
+                  y1="10"
+                  x2="30"
+                  y2="90"
+                  stroke="url(#blockchainGradient)"
+                  strokeWidth="1"
+                />
+                <line
+                  x1="70"
+                  y1="10"
+                  x2="70"
+                  y2="90"
+                  stroke="url(#blockchainGradient)"
+                  strokeWidth="1"
+                />
+                <line
+                  x1="10"
+                  y1="30"
+                  x2="90"
+                  y2="30"
+                  stroke="url(#blockchainGradient)"
+                  strokeWidth="1"
+                />
+                <line
+                  x1="10"
+                  y1="70"
+                  x2="90"
+                  y2="70"
+                  stroke="url(#blockchainGradient)"
+                  strokeWidth="1"
+                />
+                <circle cx="30" cy="30" r="3" fill="url(#blockchainGradient)" />
+                <circle cx="70" cy="30" r="3" fill="url(#blockchainGradient)" />
+                <circle cx="30" cy="70" r="3" fill="url(#blockchainGradient)" />
+                <circle cx="70" cy="70" r="3" fill="url(#blockchainGradient)" />
+                <defs>
+                  <linearGradient id="blockchainGradient">
+                    <stop offset="0%" stopColor="#FF006E" />
+                    <stop offset="100%" stopColor="#8338EC" />
+                  </linearGradient>
+                </defs>
+              </svg>
+            </div>
+          ))}
+        </div>
+        
+        {/* Floating security shields */}
+        <div className="absolute inset-0 w-full h-full">
+          {[...Array(12)].map((_, i) => (
+            <div
+              key={`shield-${i}`}
+              className="absolute text-3xl opacity-40"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                animation: `shieldFloat ${18 + Math.random() * 10}s infinite ease-in-out ${Math.random() * 8}s`,
+                transform: `scale(${0.3 + Math.random() * 0.4})`,
+                color: ['#FF006E', '#8338EC', '#3A86FF', '#00FF88'][i % 4],
+              }}
+            >
+              🛡️
+            </div>
+          ))}
+        </div>
+        
+        {/* Verification checkmarks */}
+        <div className="absolute inset-0 w-full h-full">
+          {[...Array(16)].map((_, i) => (
+            <div
+              key={`check-${i}`}
+              className="absolute text-2xl opacity-35"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                animation: `checkPulse ${8 + Math.random() * 6}s infinite ease-in-out ${Math.random() * 5}s`,
+                color: ['#00FF88', '#00D4FF', '#FFD700'][i % 3],
+                transform: `scale(${0.4 + Math.random() * 0.3})`,
+              }}
+            >
+              ✓
+            </div>
+          ))}
+        </div>
+        
+        {/* Lock icons */}
+        <div className="absolute inset-0 w-full h-full">
+          {[...Array(10)].map((_, i) => (
+            <div
+              key={`lock-${i}`}
+              className="absolute text-2xl opacity-30"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                animation: `lockFloat ${20 + Math.random() * 12}s infinite ease-in-out ${Math.random() * 10}s`,
+                color: ['#FF006E', '#8338EC', '#3A86FF'][i % 3],
+                transform: `scale(${0.5 + Math.random() * 0.3})`,
+              }}
+            >
+              🔒
+            </div>
+          ))}
+        </div>
+        
+        {/* Transaction hash streams */}
+        <div className="absolute inset-0 w-full h-full">
+          {[...Array(8)].map((_, i) => (
+            <div
+              key={`hash-${i}`}
+              className="absolute text-xs font-mono opacity-25"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                color: ['#FF006E', '#8338EC', '#3A86FF'][i % 3],
+                animation: `hashFlow ${15 + Math.random() * 10}s infinite linear ${Math.random() * 10}s`,
+              }}
+            >
+              {Math.random().toString(16).substring(2, 10)}...{Math.random().toString(16).substring(2, 6)}
+            </div>
+          ))}
+        </div>
+        
+        {/* Security field overlay */}
+        <div 
+          className="absolute inset-0 w-full h-full opacity-50"
+          style={{
+            background: `
+              repeating-radial-gradient(
+                circle at 20% 30%,
+                transparent 0,
+                transparent 10px,
+                rgba(0, 255, 136, 0.05) 10px,
+                rgba(0, 255, 136, 0.05) 20px
+              ),
+              repeating-radial-gradient(
+                circle at 80% 70%,
+                transparent 0,
+                transparent 15px,
+                rgba(255, 0, 110, 0.05) 15px,
+                rgba(255, 0, 110, 0.05) 30px
+              )
+            `
+          }}
+        />
+      </div>
       
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="flex items-center mb-8">
-          <div className="w-1 h-6 bg-gradient-to-r from-red-magic to-blue-magic rounded-full mr-3"></div>
+          <div className="w-1 h-6 bg-gradient-to-r from-blue-500 to-cyan-400 rounded-full mr-3"></div>
           <h2 className="text-2xl font-display font-bold text-white">Pyth Entropy Powered Fairness</h2>
         </div>
         
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           {/* Left explanation column */}
           <div className="lg:col-span-5">
-            <div className="p-[1px] bg-gradient-to-r from-red-magic to-blue-magic rounded-xl h-full">
-              <div className="bg-[#1A0015] rounded-xl p-6 h-full">
+            <div className="p-[1px] bg-gradient-to-r from-blue-500 to-cyan-400 rounded-xl h-full">
+              <div className="bg-[#0f172a] rounded-xl p-6 h-full">
                 <h3 className="text-white text-xl font-medium mb-4">What is Pyth Entropy?</h3>
                 <p className="text-white/80 mb-6">
                   Pyth Entropy is a decentralized randomness service that provides cryptographically secure random numbers on-chain.
                   It aggregates randomness from multiple sources and makes it available to smart contracts on One Chain Network.
                 </p>
                 
-                <div className="bg-[#250020] p-4 rounded-lg mb-6 border-l-2 border-red-magic">
+                <div className="bg-[#1e293b] p-4 rounded-lg mb-6 border-l-2 border-blue-500">
                   <h4 className="text-white font-medium mb-2">Why Pyth Entropy matters</h4>
                   <ul className="text-white/70 text-sm space-y-2 list-disc pl-4">
                     <li>Cryptographically secure randomness from multiple sources</li>
@@ -71,10 +270,10 @@ const ProvablyFairSection = () => {
                   </ul>
                 </div>
                 
-                <Link href="/provably-fair">
+                <Link href="https://onescan.cc/">
                   <div className="inline-block">
-                    <div className="p-[1px] bg-gradient-to-r from-red-magic to-blue-magic rounded-md inline-block">
-                      <button className="bg-[#1A0015] hover:bg-[#250020] transition-colors text-white px-6 py-2 rounded-md flex items-center">
+                    <div className="p-[1px] bg-gradient-to-r from-blue-500 to-cyan-400 rounded-md inline-block">
+                      <button className="bg-[#0f172a] hover:bg-[#1e293b] transition-colors text-white px-6 py-2 rounded-md flex items-center">
                         Verify On-Chain
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-2" viewBox="0 0 20 20" fill="currentColor">
                           <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
@@ -89,8 +288,8 @@ const ProvablyFairSection = () => {
           
           {/* Right steps column */}
           <div className="lg:col-span-7">
-            <div className="p-[1px] bg-gradient-to-r from-red-magic/40 to-blue-magic/40 rounded-xl">
-              <div className="bg-[#1A0015] rounded-xl p-6">
+            <div className="p-[1px] bg-gradient-to-r from-blue-500/40 to-cyan-400/40 rounded-xl">
+              <div className="bg-[#0f172a] rounded-xl p-6">
                 <h3 className="text-white text-xl font-medium mb-4">How Pyth Entropy Works</h3>
                 
                 {/* Steps tabs */}
@@ -100,8 +299,8 @@ const ProvablyFairSection = () => {
                       key={step.id}
                       className={`p-2 rounded-md text-sm font-medium transition-all text-center ${
                         activeTab === step.id
-                          ? 'bg-gradient-to-r from-red-magic/80 to-blue-magic/80 text-white'
-                          : 'bg-[#250020] text-white/70 hover:text-white'
+                          ? 'bg-gradient-to-r from-blue-500/80 to-cyan-400/80 text-white'
+                          : 'bg-[#1e293b] text-white/70 hover:text-white'
                       }`}
                       onClick={() => setActiveTab(step.id)}
                     >
@@ -115,7 +314,7 @@ const ProvablyFairSection = () => {
                   <div>
                     <div className="flex items-center mb-4">
                       {/* Step icon placeholder - would be actual icons in production */}
-                      <div className="w-12 h-12 rounded-full bg-gradient-to-r from-red-magic/60 to-blue-magic/60 flex items-center justify-center mr-4">
+                      <div className="w-12 h-12 rounded-full bg-gradient-to-r from-blue-500/60 to-cyan-400/60 flex items-center justify-center mr-4">
                         <span className="text-white font-bold">{activeTab}</span>
                       </div>
                       <h4 className="text-white text-lg font-medium">{steps[activeTab-1].title}</h4>
@@ -127,8 +326,8 @@ const ProvablyFairSection = () => {
                   </div>
                   
                   {/* Pyth Entropy */}
-                  <div className="bg-[#0D0D0D] rounded-lg p-4 overflow-x-auto">
-                    <pre className="text-sm text-green-400 font-mono">
+                  <div className="bg-[#1e293b] rounded-lg p-4 overflow-x-auto">
+                    <pre className="text-sm text-cyan-400 font-mono">
                       {steps[activeTab-1].code}
                     </pre>
                   </div>
@@ -138,6 +337,43 @@ const ProvablyFairSection = () => {
           </div>
         </div>
       </div>
+      
+      {/* Custom styles for animations */}
+      <style jsx>{`
+        @keyframes blockchainPulse {
+          0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.2; }
+          25% { transform: scale(1.1) rotate(90deg); opacity: 0.4; }
+          50% { transform: scale(1.2) rotate(180deg); opacity: 0.6; }
+          75% { transform: scale(1.1) rotate(270deg); opacity: 0.3; }
+        }
+        
+        @keyframes shieldFloat {
+          0% { transform: translateY(0) translateX(0) rotate(0deg) scale(1); opacity: 0.3; }
+          25% { transform: translateY(-25px) translateX(15px) rotate(90deg) scale(1.1); opacity: 0.5; }
+          50% { transform: translateY(-40px) translateX(-10px) rotate(180deg) scale(1.2); opacity: 0.7; }
+          75% { transform: translateY(-20px) translateX(5px) rotate(270deg) scale(1.1); opacity: 0.4; }
+          100% { transform: translateY(0) translateX(0) rotate(360deg) scale(1); opacity: 0.3; }
+        }
+        
+        @keyframes checkPulse {
+          0%, 100% { transform: scale(1); opacity: 0.2; box-shadow: 0 0 5px currentColor; }
+          50% { transform: scale(1.3); opacity: 0.6; box-shadow: 0 0 15px currentColor; }
+        }
+        
+        @keyframes lockFloat {
+          0% { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0.2; }
+          33% { transform: translateY(-20px) translateX(10px) rotate(120deg); opacity: 0.4; }
+          66% { transform: translateY(-35px) translateX(-5px) rotate(240deg); opacity: 0.3; }
+          100% { transform: translateY(0) translateX(0) rotate(360deg); opacity: 0.2; }
+        }
+        
+        @keyframes hashFlow {
+          0% { transform: translateY(-20px) translateX(0); opacity: 0; }
+          10% { opacity: 0.4; }
+          90% { opacity: 0.4; }
+          100% { transform: translateY(120vh) translateX(20px); opacity: 0; }
+        }
+      `}</style>
     </section>
   );
 };

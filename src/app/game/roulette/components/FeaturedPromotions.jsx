@@ -9,7 +9,7 @@ const promotions = [
     id: 1,
     title: "Weekly Cashback",
     description: "Get 5% cashback on all your roulette losses every week",
-    color: "linear-gradient(135deg, #681DDB, #4A148C)",
+    color: "linear-gradient(135deg, #0066ff, #4A148C)",
     icon: <FaCoins size={24} />,
     buttonText: "Claim Now"
   },
@@ -17,7 +17,7 @@ const promotions = [
     id: 2,
     title: "Double Win Tuesday",
     description: "Every Tuesday: Double your winnings on 3 consecutive wins",
-    color: "linear-gradient(135deg, #d82633, #8E0000)",
+    color: "linear-gradient(135deg, #00d4ff, #8E0000)",
     icon: <FaGift size={24} />,
     buttonText: "Learn More"
   },
@@ -77,7 +77,7 @@ const FeaturedPromotions = () => {
         borderRadius: 3,
         backgroundColor: 'rgba(9, 0, 5, 0.8)',
         backdropFilter: 'blur(15px)',
-        border: '1px solid rgba(104, 29, 219, 0.2)',
+        border: '1px solid rgba(0, 150, 255, 0.2)',
         mb: 5,
         overflow: 'hidden',
         position: 'relative'
@@ -86,17 +86,17 @@ const FeaturedPromotions = () => {
       <Typography 
         variant="h5" 
         fontWeight="bold" 
-        color="#d82633" 
+        color="#00d4ff" 
         gutterBottom
         sx={{ 
-          borderBottom: '1px solid rgba(104, 29, 219, 0.3)',
+          borderBottom: '1px solid rgba(0, 150, 255, 0.3)',
           pb: 1.5,
           display: 'flex',
           alignItems: 'center',
           gap: 1.5
         }}
       >
-        <FaGift color="#681DDB" />
+        <FaGift color="#0066ff" />
         Featured Promotions
       </Typography>
       
@@ -224,7 +224,7 @@ const FeaturedPromotions = () => {
               width: 10,
               height: 10,
               borderRadius: '50%',
-              backgroundColor: current === index ? '#681DDB' : 'rgba(255,255,255,0.3)',
+              backgroundColor: current === index ? '#0066ff' : 'rgba(255,255,255,0.3)',
               mx: 0.5,
               cursor: 'pointer',
               transition: 'all 0.3s ease'

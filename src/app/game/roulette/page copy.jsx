@@ -26,7 +26,7 @@ import { FaVolumeMute, FaVolumeUp, FaChartLine, FaCoins, FaTrophy, FaDice, FaBal
 import { GiCardRandom, GiDiceTarget, GiRollingDices, GiPokerHand, GiSpaceship } from "react-icons/gi";
 import { Shield, Stars, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
-// import RouletteLeaderboard from './components/RouletteLeaderboard';
+import RouletteLeaderboard from './components/RouletteLeaderboard';
 import StrategyGuide from './components/StrategyGuide';
 import RoulettePayout from './components/RoulettePayout';
 import WinProbabilities from './components/WinProbabilities';
@@ -4097,10 +4097,13 @@ export default function GameRoulette() {
 
           {/* Third row - Roulette History and Leaderboard */}
           <Grid container spacing={4} sx={{ mb: 6, pt: 4 }}>
-            <Grid xs={12} md={12}>
+            <Grid xs={12} md={7}>
               <div id="history" className="scroll-mt-16">
                 <RouletteHistory bettingHistory={bettingHistory} />
               </div>
+            </Grid>
+            <Grid xs={12} md={5}>
+              <RouletteLeaderboard />
             </Grid>
           </Grid>
 

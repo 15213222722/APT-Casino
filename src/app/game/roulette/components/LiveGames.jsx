@@ -91,7 +91,7 @@ const LiveGames = () => {
         return {
           text: `Betting Open (${timeRemaining}s)`,
           color: '#14D854',
-          bgColor: 'rgba(20, 216, 84, 0.15)'
+          bgColor: 'rgba(0, 180, 216, 0.15)'
         };
       case 'spinning':
         return {
@@ -102,8 +102,8 @@ const LiveGames = () => {
       case 'announcing':
         return {
           text: `Results (${timeRemaining}s)`,
-          color: '#d82633',
-          bgColor: 'rgba(216, 38, 51, 0.15)'
+          color: '#00d4ff',
+          bgColor: 'rgba(0, 200, 255, 0.15)'
         };
       default:
         return {
@@ -122,7 +122,7 @@ const LiveGames = () => {
         borderRadius: 3,
         backgroundColor: 'rgba(9, 0, 5, 0.8)',
         backdropFilter: 'blur(15px)',
-        border: '1px solid rgba(104, 29, 219, 0.2)',
+        border: '1px solid rgba(0, 150, 255, 0.2)',
         mb: 5,
         overflow: 'hidden',
         position: 'relative'
@@ -131,17 +131,17 @@ const LiveGames = () => {
       <Typography 
         variant="h5" 
         fontWeight="bold" 
-        color="#d82633" 
+        color="#00d4ff" 
         gutterBottom
         sx={{ 
-          borderBottom: '1px solid rgba(104, 29, 219, 0.3)',
+          borderBottom: '1px solid rgba(0, 150, 255, 0.3)',
           pb: 1.5,
           display: 'flex',
           alignItems: 'center',
           gap: 1.5
         }}
       >
-        <FaTv color="#681DDB" />
+        <FaTv color="#0066ff" />
         Live Roulette Tables
       </Typography>
       
@@ -164,7 +164,7 @@ const LiveGames = () => {
                   backgroundColor: 'rgba(9, 0, 5, 0.4)',
                   borderRadius: 3,
                   overflow: 'hidden',
-                  border: game.isVIP ? '1px solid rgba(255, 215, 0, 0.3)' : '1px solid rgba(104, 29, 219, 0.15)',
+                  border: game.isVIP ? '1px solid rgba(255, 215, 0, 0.3)' : '1px solid rgba(0, 150, 255, 0.15)',
                   height: '100%',
                   display: 'flex',
                   flexDirection: 'column',
@@ -186,7 +186,7 @@ const LiveGames = () => {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
-                    borderBottom: '1px solid rgba(104, 29, 219, 0.1)'
+                    borderBottom: '1px solid rgba(0, 150, 255, 0.1)'
                   }}
                 >
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
@@ -259,7 +259,7 @@ const LiveGames = () => {
                         width: 40, 
                         height: 40,
                         mr: 1.5,
-                        border: '2px solid rgba(104, 29, 219, 0.3)'
+                        border: '2px solid rgba(0, 150, 255, 0.3)'
                       }}
                     >
                       {game.dealer.charAt(0)}
@@ -313,7 +313,7 @@ const LiveGames = () => {
                             alignItems: 'center',
                             justifyContent: 'center',
                             backgroundColor: number === 0 ? '#14D854' : 
-                              [1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36].includes(number) ? '#d82633' : '#333',
+                              [1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36].includes(number) ? '#d82633' : '#000',
                             fontSize: '0.75rem',
                             fontWeight: 'bold',
                             border: '1px solid rgba(255,255,255,0.1)'
@@ -332,9 +332,9 @@ const LiveGames = () => {
                       startIcon={<FaPlay />}
                       disabled={game.status !== 'betting'}
                       sx={{ 
-                        backgroundColor: game.status === 'betting' ? '#681DDB' : 'rgba(104, 29, 219, 0.3)',
+                        backgroundColor: game.status === 'betting' ? '#0066ff' : 'rgba(0, 150, 255, 0.3)',
                         '&:hover': {
-                          backgroundColor: game.status === 'betting' ? '#5a17c9' : 'rgba(104, 29, 219, 0.3)',
+                          backgroundColor: game.status === 'betting' ? '#5a17c9' : 'rgba(0, 150, 255, 0.3)',
                         }
                       }}
                     >

@@ -9,13 +9,13 @@ const probabilityData = [
     type: 'Red/Black',
     probability: 48.6,
     odds: '1:1',
-    color: '#d82633'
+    color: '#00d4ff'
   },
   {
     type: 'Odd/Even',
     probability: 48.6,
     odds: '1:1',
-    color: '#681DDB'
+    color: '#0066ff'
   },
   {
     type: 'High/Low',
@@ -87,13 +87,13 @@ const WinProbabilities = () => {
       sx={{
         p: { xs: 2, md: 3 },
         borderRadius: 3,
-        background: 'linear-gradient(135deg, rgba(9, 0, 5, 0.9) 0%, rgba(25, 5, 30, 0.85) 100%)',
+        background: 'linear-gradient(135deg, rgba(0, 20, 60, 0.9) 0%, rgba(0, 40, 80, 0.85) 100%)',
         backdropFilter: 'blur(15px)',
-        border: '1px solid rgba(104, 29, 219, 0.2)',
+        border: '1px solid rgba(0, 200, 255, 0.2)',
         mb: 5,
         position: 'relative',
         overflow: 'hidden',
-        boxShadow: '0 10px 30px rgba(0,0,0,0.5)',
+        boxShadow: '0 10px 30px rgba(0, 150, 255, 0.3)',
         height: '100%',
         '&::before': {
           content: '""',
@@ -102,7 +102,7 @@ const WinProbabilities = () => {
           left: 0,
           width: '100%',
           height: '5px',
-          background: 'linear-gradient(90deg, #681DDB, #14D854)',
+          background: 'linear-gradient(90deg, #00d4ff, #0066ff)',
         }
       }}
     >
@@ -111,7 +111,7 @@ const WinProbabilities = () => {
         fontWeight="bold" 
         gutterBottom
         sx={{ 
-          borderBottom: '1px solid rgba(104, 29, 219, 0.3)',
+          borderBottom: '1px solid rgba(0, 200, 255, 0.3)',
           pb: 1.5,
           display: 'flex',
           alignItems: 'center',
@@ -120,9 +120,9 @@ const WinProbabilities = () => {
           textShadow: '0 2px 4px rgba(0,0,0,0.5)'
         }}
       >
-        <FaChartPie color="#681DDB" size={22} />
-        <span style={{ background: 'linear-gradient(90deg, #FFFFFF, #14D854)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-          Win Probabilities
+        <FaChartPie color="#00d4ff" size={22} />
+        <span style={{ background: 'linear-gradient(90deg, #FFFFFF, #00d4ff)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+          Cosmic Win Probabilities
         </span>
       </Typography>
       
@@ -141,7 +141,7 @@ const WinProbabilities = () => {
             backgroundColor: 'rgba(0,0,0,0.2)',
             borderRadius: '20px',
             padding: '2px',
-            border: '1px solid rgba(104, 29, 219, 0.2)'
+            border: '1px solid rgba(0, 150, 255, 0.2)'
           }}
         >
           <Button 
@@ -150,14 +150,14 @@ const WinProbabilities = () => {
             sx={{ 
               fontSize: '0.75rem', 
               color: sortBy === 'probability' ? 'white' : 'rgba(255,255,255,0.6)',
-              backgroundColor: sortBy === 'probability' ? 'rgba(104, 29, 219, 0.3)' : 'transparent',
+              backgroundColor: sortBy === 'probability' ? 'rgba(0, 150, 255, 0.3)' : 'transparent',
               borderRadius: '18px',
               minWidth: 'auto',
               p: 0.5,
               px: 1.5,
               transition: 'all 0.2s ease',
               '&:hover': {
-                backgroundColor: sortBy === 'probability' ? 'rgba(104, 29, 219, 0.4)' : 'rgba(104, 29, 219, 0.1)',
+                backgroundColor: sortBy === 'probability' ? 'rgba(0, 150, 255, 0.4)' : 'rgba(0, 150, 255, 0.1)',
               }
             }}
           >
@@ -169,14 +169,14 @@ const WinProbabilities = () => {
             sx={{ 
               fontSize: '0.75rem', 
               color: sortBy === 'odds' ? 'white' : 'rgba(255,255,255,0.6)',
-              backgroundColor: sortBy === 'odds' ? 'rgba(104, 29, 219, 0.3)' : 'transparent',
+              backgroundColor: sortBy === 'odds' ? 'rgba(0, 150, 255, 0.3)' : 'transparent',
               borderRadius: '18px',
               minWidth: 'auto',
               p: 0.5,
               px: 1.5,
               transition: 'all 0.2s ease',
               '&:hover': {
-                backgroundColor: sortBy === 'odds' ? 'rgba(104, 29, 219, 0.4)' : 'rgba(104, 29, 219, 0.1)',
+                backgroundColor: sortBy === 'odds' ? 'rgba(0, 150, 255, 0.4)' : 'rgba(0, 150, 255, 0.1)',
               }
             }}
           >
@@ -246,7 +246,7 @@ const WinProbabilities = () => {
                         gap: 0.5 
                       }}
                     >
-                      <span style={{ color: '#d82633', fontWeight: 'bold' }}>{item.odds}</span>
+                      <span style={{ color: '#00d4ff', fontWeight: 'bold' }}>{item.odds}</span>
                       payout ratio
                     </Typography>
                   </Box>
@@ -281,7 +281,7 @@ const WinProbabilities = () => {
                       backgroundColor: 'rgba(0,0,0,0.2)',
                       transition: 'all 0.2s ease',
                       '&:hover': {
-                        backgroundColor: 'rgba(104, 29, 219, 0.2)',
+                        backgroundColor: 'rgba(0, 150, 255, 0.2)',
                       }
                     }}>
                       <FaInfoCircle color="rgba(255,255,255,0.6)" size={14} />
@@ -350,13 +350,13 @@ const WinProbabilities = () => {
                     
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
                       {item.probability > 40 && <FaThumbsUp color="#14D854" />}
-                      {item.probability > 15 && item.probability <= 40 && <FaThumbsUp color="#FFA500" />}
-                      {item.probability <= 15 && <FaQuestion color="#d82633" />}
+                      {item.probability > 15 && item.probability <= 40 && <FaThumbsUp color="#00a8cc" />}
+                      {item.probability <= 15 && <FaQuestion color="#00d4ff" />}
                       
                       <Typography 
                         variant="body2" 
                         fontWeight="medium"
-                        color={item.probability > 40 ? '#14D854' : item.probability > 15 ? '#FFA500' : '#d82633'}
+                        color={item.probability > 40 ? '#14D854' : item.probability > 15 ? '#00a8cc' : '#00d4ff'}
                       >
                         {item.probability > 40 && 'Best odds'}
                         {item.probability > 15 && item.probability <= 40 && 'Medium odds'}
@@ -390,12 +390,12 @@ const WinProbabilities = () => {
           mt: 3, 
           p: 2, 
           borderRadius: 2,
-          background: 'linear-gradient(135deg, rgba(104, 29, 219, 0.05) 0%, rgba(104, 29, 219, 0.15) 100%)',
-          border: '1px solid rgba(104, 29, 219, 0.15)',
+          background: 'linear-gradient(135deg, rgba(0, 150, 255, 0.05) 0%, rgba(0, 200, 255, 0.15) 100%)',
+          border: '1px solid rgba(0, 150, 255, 0.15)',
           boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.2)'
         }}
       >
-        <FaInfoCircle color="#681DDB" style={{ flexShrink: 0 }} />
+        <FaInfoCircle color="#0066ff" style={{ flexShrink: 0 }} />
         <Typography variant="body2" color="rgba(255,255,255,0.8)">
           Higher probability bets offer more frequent wins but lower payouts. Riskier bets have higher rewards but less chance of winning.
         </Typography>

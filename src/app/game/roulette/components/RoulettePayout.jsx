@@ -75,7 +75,7 @@ const payoutData = [
     probability: 48.6, 
     houseEdge: 2.7,
     examples: ['Red', 'Black'],
-    color: '#d82633'
+    color: '#00d4ff'
   },
   { 
     betType: 'Odd/Even', 
@@ -84,7 +84,7 @@ const payoutData = [
     probability: 48.6, 
     houseEdge: 2.7,
     examples: ['Odd', 'Even'],
-    color: '#681DDB'
+    color: '#0066ff'
   },
   { 
     betType: 'High/Low', 
@@ -104,13 +104,13 @@ const RoulettePayout = () => {
       sx={{
         p: { xs: 2, md: 3 },
         borderRadius: 3,
-        background: 'linear-gradient(135deg, rgba(9, 0, 5, 0.9) 0%, rgba(25, 5, 30, 0.85) 100%)',
+        background: 'linear-gradient(135deg, rgba(0, 20, 60, 0.9) 0%, rgba(0, 40, 80, 0.85) 100%)',
         backdropFilter: 'blur(15px)',
-        border: '1px solid rgba(104, 29, 219, 0.2)',
+        border: '1px solid rgba(0, 200, 255, 0.2)',
         mb: 5,
         position: 'relative',
         overflow: 'hidden',
-        boxShadow: '0 10px 30px rgba(0,0,0,0.5)',
+        boxShadow: '0 10px 30px rgba(0, 150, 255, 0.3)',
         '&::before': {
           content: '""',
           position: 'absolute',
@@ -118,7 +118,7 @@ const RoulettePayout = () => {
           left: 0,
           width: '100%',
           height: '5px',
-          background: 'linear-gradient(90deg, #d82633, #681DDB)',
+          background: 'linear-gradient(90deg, #00d4ff, #0066ff)',
         }
       }}
     >
@@ -127,7 +127,7 @@ const RoulettePayout = () => {
         fontWeight="bold" 
         gutterBottom
         sx={{ 
-          borderBottom: '1px solid rgba(104, 29, 219, 0.3)',
+          borderBottom: '1px solid rgba(0, 200, 255, 0.3)',
           pb: 1.5,
           display: 'flex',
           alignItems: 'center',
@@ -136,9 +136,9 @@ const RoulettePayout = () => {
           textShadow: '0 2px 4px rgba(0,0,0,0.5)'
         }}
       >
-        <FaCoins color="#681DDB" size={22} />
-        <span style={{ background: 'linear-gradient(90deg, #FFFFFF, #d82633)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-          Roulette Payouts
+        <FaCoins color="#00d4ff" size={22} />
+        <span style={{ background: 'linear-gradient(90deg, #FFFFFF, #00d4ff)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+          Cosmic Payouts
         </span>
       </Typography>
       
@@ -156,7 +156,7 @@ const RoulettePayout = () => {
             py: 1, 
             px: 2, 
             borderRadius: '8px 8px 0 0',
-            background: 'linear-gradient(90deg, rgba(104, 29, 219, 0.2), rgba(216, 38, 51, 0.2))',
+            background: 'linear-gradient(90deg, rgba(0, 150, 255, 0.2), rgba(0, 200, 255, 0.2))',
             mb: 1
           }}>
             <Grid xs={2.5}>
@@ -176,7 +176,7 @@ const RoulettePayout = () => {
             </Grid>
           </Grid>
           
-          <Divider sx={{ borderColor: 'rgba(104, 29, 219, 0.15)', mb: 1 }} />
+          <Divider sx={{ borderColor: 'rgba(0, 150, 255, 0.15)', mb: 1 }} />
           
           {payoutData.map((item, index) => (
             <React.Fragment key={index}>
@@ -186,7 +186,7 @@ const RoulettePayout = () => {
                 borderRadius: '4px',
                 transition: 'all 0.2s ease',
                 '&:hover': {
-                  backgroundColor: 'rgba(104, 29, 219, 0.1)',
+                  backgroundColor: 'rgba(0, 150, 255, 0.1)',
                   transform: 'translateX(4px)'
                 }
               }}>
@@ -221,10 +221,10 @@ const RoulettePayout = () => {
                     size="small"
                     sx={{ 
                       fontWeight: 'bold',
-                      backgroundColor: 'rgba(216, 38, 51, 0.15)',
-                      color: '#d82633',
+                      backgroundColor: 'rgba(0, 200, 255, 0.15)',
+                      color: '#00d4ff',
                       minWidth: '55px',
-                      border: '1px solid rgba(216, 38, 51, 0.2)',
+                      border: '1px solid rgba(0, 200, 255, 0.2)',
                       boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
                     }}
                   />
@@ -234,7 +234,7 @@ const RoulettePayout = () => {
                     variant="body2" 
                     fontWeight="medium"
                     sx={{
-                      color: item.probability > 30 ? '#14D854' : item.probability > 10 ? '#FFA500' : '#d82633',
+                      color: item.probability > 30 ? '#14D854' : item.probability > 10 ? '#00a8cc' : '#00d4ff',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
@@ -264,7 +264,7 @@ const RoulettePayout = () => {
                 </Grid>
               </Grid>
               {index !== payoutData.length - 1 && (
-                <Divider sx={{ borderColor: 'rgba(104, 29, 219, 0.05)' }} />
+                <Divider sx={{ borderColor: 'rgba(0, 150, 255, 0.05)' }} />
               )}
             </React.Fragment>
           ))}
@@ -279,12 +279,12 @@ const RoulettePayout = () => {
           mt: 3, 
           p: 2,
           borderRadius: 2,
-          background: 'linear-gradient(135deg, rgba(216, 38, 51, 0.05) 0%, rgba(216, 38, 51, 0.15) 100%)',
-          border: '1px solid rgba(216, 38, 51, 0.1)',
+          background: 'linear-gradient(135deg, rgba(0, 150, 255, 0.05) 0%, rgba(0, 200, 255, 0.15) 100%)',
+          border: '1px solid rgba(0, 200, 255, 0.1)',
           boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.2)'
         }}
       >
-        <FaExclamationTriangle color="#d82633" size={16} style={{ flexShrink: 0 }} />
+        <FaExclamationTriangle color="#00d4ff" size={16} style={{ flexShrink: 0 }} />
         <Typography variant="body2" color="rgba(255,255,255,0.8)">
           European Roulette (single zero) offers a no house edge compared to American Roulette's 5.26% edge (double zero).
         </Typography>

@@ -49,6 +49,219 @@ body {
   }
 }
 
+/* Enhanced animations for logo impact effects */
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes shockwave {
+  0% {
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.8);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 30px 10px rgba(147, 51, 234, 0.6);
+    transform: scale(1.05);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+    transform: scale(1);
+  }
+}
+
+@keyframes glow-pulse {
+  0%, 100% {
+    filter: drop-shadow(0 0 15px rgba(59, 130, 246, 0.8)) drop-shadow(0 0 30px rgba(147, 51, 234, 0.4));
+  }
+  50% {
+    filter: drop-shadow(0 0 30px rgba(236, 72, 153, 0.9)) drop-shadow(0 0 60px rgba(147, 51, 234, 0.6));
+  }
+}
+
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes bounce-strong {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+  25% {
+    transform: translateY(-8px) scale(1.1);
+  }
+  75% {
+    transform: translateY(4px) scale(0.95);
+  }
+}
+
+@keyframes electric {
+  0%, 100% {
+    opacity: 1;
+    filter: brightness(1);
+  }
+  50% {
+    opacity: 0.8;
+    filter: brightness(1.5);
+  }
+}
+
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-2px);
+  }
+  20%, 40%, 60%, 80% {
+    transform: translateX(2px);
+  }
+}
+
+/* Utility classes for animations */
+.bg-300\% {
+  background-size: 300% 300%;
+}
+
+.animate-gradient {
+  animation: gradient 2s ease infinite;
+}
+
+.animate-shockwave:hover {
+  animation: shockwave 0.8s ease-out;
+}
+
+.animate-glow-pulse {
+  animation: glow-pulse 1.5s ease-in-out infinite;
+}
+
+.animate-spin-slow {
+  animation: spin-slow 4s linear infinite;
+}
+
+.animate-bounce {
+  animation: bounce-strong 1s ease-in-out infinite;
+}
+
+.animate-electric {
+  animation: electric 0.5s ease-in-out infinite;
+}
+
+.animate-shake:hover {
+  animation: shake 0.3s ease-in-out;
+}
+
+/* Enhanced hover effects */
+.group:hover .group-hover\:\-rotate-6:hover {
+  transform: scale(1.25) rotate(-6deg);
+}
+
+.group:hover .group-hover\:\-rotate-6 {
+  transform: scale(1.25) rotate(-6deg);
+}
+
+.group:hover .group-hover\:brightness-125 {
+  filter: brightness(1.25) drop-shadow(0 25px 25px rgba(59, 130, 246, 0.5));
+}
+
+/* 3D transformation effects */
+.group:hover .group-hover\:perspective-1000 {
+  transform: perspective(1000px) rotateY(15deg) rotateX(5deg);
+}
+
+/* Neon glow effects */
+.neon-glow {
+  text-shadow: 
+    0 0 10px currentColor,
+    0 0 20px currentColor,
+    0 0 30px currentColor,
+    0 0 40px rgba(59, 130, 246, 0.8);
+}
+
+.neon-glow:hover {
+  text-shadow: 
+    0 0 15px currentColor,
+    0 0 30px currentColor,
+    0 0 45px currentColor,
+    0 0 60px rgba(236, 72, 153, 0.9);
+}
+
+/* Animation delays for staggered effects */
+.animation-delay-200 {
+  animation-delay: 200ms;
+}
+
+.animation-delay-400 {
+  animation-delay: 400ms;
+}
+
+/* Custom shadow classes */
+.drop-shadow-3xl {
+  filter: drop-shadow(0 35px 35px rgba(59, 130, 246, 0.4));
+}
+
+/* Enhanced blur effects */
+.blur-2xl {
+  filter: blur(40px);
+}
+
+/* Stronger scale effects */
+.hover\:scale-125:hover {
+  transform: scale(1.25);
+}
+
+/* Logo hover impact effects */
+.group:hover .group-hover\:scale-110 {
+  transform: scale(1.1);
+}
+
+.group:hover .group-hover\:rotate-3 {
+  transform: rotate(3deg);
+}
+
+.group:hover .group-hover\:drop-shadow-2xl {
+  filter: drop-shadow(0 25px 25px rgba(59, 130, 246, 0.3));
+}
+
+.group:hover .group-hover\:tracking-widest {
+  letter-spacing: 0.125em;
+}
+
+.group:hover .group-hover\:from-red-500 {
+  --tw-gradient-from: #ef4444;
+}
+
+.group:hover .group-hover\:via-yellow-500 {
+  --tw-gradient-via: #eab308;
+}
+
+.group:hover .group-hover\:to-green-500 {
+  --tw-gradient-to: #22c55e;
+}
+
+/* Enhanced logo container effects */
+.logo-container:hover .logo-glow {
+  opacity: 1;
+  transform: scale(1.2);
+}
+
+.logo-glow {
+  transition: all 0.3s ease;
+  opacity: 0.75;
+}
+
 @keyframes slideDown {
   from {
     opacity: 0;
@@ -161,4 +374,91 @@ body {
 .animate-gradient-background {
   background-size: 200% 200%;
   animation: gradient-background 3s ease infinite;
+}
+
+/* Casino and Starfield themed animations */
+@keyframes shooting-star {
+  0% {
+    transform: translateX(0) translateY(0);
+    opacity: 1;
+    box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.8);
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(300px) translateY(300px);
+    opacity: 0;
+    box-shadow: 0 0 20px 5px rgba(255, 255, 255, 0);
+  }
+}
+
+@keyframes grid-move {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 50px 50px;
+  }
+}
+
+@keyframes casino-pulse {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(255, 0, 100, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(255, 0, 100, 0.8), 0 0 60px rgba(0, 100, 255, 0.4);
+  }
+}
+
+@keyframes neon-flicker {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+@keyframes cosmic-glow {
+  0%, 100% {
+    filter: brightness(1) hue-rotate(0deg);
+  }
+  33% {
+    filter: brightness(1.2) hue-rotate(120deg);
+  }
+  66% {
+    filter: brightness(1.1) hue-rotate(240deg);
+  }
+}
+
+.animate-shooting-star {
+  animation: shooting-star 3s linear infinite;
+}
+
+.animate-grid-move {
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+  background-size: 50px 50px;
+  animation: grid-move 10s linear infinite;
+}
+
+.animate-casino-pulse {
+  animation: casino-pulse 2s ease-in-out infinite;
+}
+
+.animate-neon-flicker {
+  animation: neon-flicker 0.15s ease-in-out infinite alternate;
+}
+
+.animate-cosmic-glow {
+  animation: cosmic-glow 8s ease-in-out infinite;
+}
+
+/* Grid pattern utility */
+.bg-grid-pattern {
+  background-image: 
+    radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.15) 1px, transparent 1px);
+  background-size: 30px 30px;
 }

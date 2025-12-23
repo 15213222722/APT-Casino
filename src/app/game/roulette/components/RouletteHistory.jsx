@@ -13,149 +13,7 @@ const formatMONAmount = (amount) => {
   return parseFloat(amount.toFixed(6));
 };
 
-// Sample data for demonstration - would be fetched from API in real app
-const sampleBets = [
-  { 
-    id: 1, 
-    time: '2025-09-27T14:35:22Z', 
-    betType: 'Multiple Bets (3)', 
-    amount: 10, 
-    result: 23, 
-    win: true, 
-    payout: 20,
-    vrfProof: {
-      requestId: '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef',
-      transactionHash: '0xabcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890',
-      logIndex: 42
-    },
-    details: {
-      winningBets: ['Red: 5 × 2.0x', 'Odd: 3 × 2.0x'],
-      losingBets: ['Number 17: -2']
-    }
-  },
-  { 
-    id: 2, 
-    time: '2025-09-27T14:32:19Z', 
-    betType: 'Multiple Bets (2)', 
-    amount: 15, 
-    result: 16, 
-    win: true, 
-    payout: 30,
-    vrfProof: {
-      requestId: '0x2345678901bcdef12345678901bcdef12345678901bcdef12345678901bcdef',
-      transactionHash: '0xbcdef12345678901bcdef12345678901bcdef12345678901bcdef12345678901',
-      logIndex: 15
-    },
-    details: {
-      winningBets: ['Even: 10 × 2.0x', 'Low (1-18): 5 × 2.0x'],
-      losingBets: []
-    }
-  },
-  { 
-    id: 3, 
-    time: '2025-09-27T14:30:05Z', 
-    betType: 'Multiple Bets (2)', 
-    amount: 20, 
-    result: 15, 
-    win: false, 
-    payout: 0,
-    details: {
-      winningBets: [],
-      losingBets: ['Black: -15', 'High (19-36): -5']
-    }
-  },
-  { 
-    id: 4, 
-    time: '2025-09-27T14:25:45Z', 
-    betType: 'Multiple Bets (1)', 
-    amount: 5, 
-    result: 17, 
-    win: true, 
-    payout: 175,
-    details: {
-      winningBets: ['Number 17: 5 × 35.0x'],
-      losingBets: []
-    }
-  },
-  { 
-    id: 5, 
-    time: '2025-09-27T14:22:10Z', 
-    betType: 'Multiple Bets (2)', 
-    amount: 10, 
-    result: 22, 
-    win: false, 
-    payout: 0,
-    details: {
-      winningBets: [],
-      losingBets: ['Split 4/7: -8', 'Corner 4-5-7-8: -2']
-    }
-  },
-  { 
-    id: 6, 
-    time: '2025-09-27T14:18:33Z', 
-    betType: 'Multiple Bets (3)', 
-    amount: 15, 
-    result: 22, 
-    win: true, 
-    payout: 120,
-    details: {
-      winningBets: ['Corner 22-25: 10 × 8.0x', 'Red: 3 × 2.0x', 'Even: 2 × 2.0x'],
-      losingBets: []
-    }
-  },
-  { 
-    id: 7, 
-    time: '2025-09-27T14:15:21Z', 
-    betType: 'Multiple Bets (2)', 
-    amount: 25, 
-    result: 5, 
-    win: true, 
-    payout: 75,
-    details: {
-      winningBets: ['Dozen 1: 20 × 3.0x', 'Low (1-18): 5 × 2.0x'],
-      losingBets: []
-    }
-  },
-  { 
-    id: 8, 
-    time: '2025-09-27T14:12:08Z', 
-    betType: 'Multiple Bets (2)', 
-    amount: 20, 
-    result: 12, 
-    win: false, 
-    payout: 0,
-    details: {
-      winningBets: [],
-      losingBets: ['High (19-36): -15', 'Dozen 2: -5']
-    }
-  },
-  { 
-    id: 9, 
-    time: '2025-09-27T14:08:55Z', 
-    betType: 'Multiple Bets (2)', 
-    amount: 10, 
-    result: 8, 
-    win: false, 
-    payout: 0,
-    details: {
-      winningBets: [],
-      losingBets: ['Column 2: -8', 'Even: -2']
-    }
-  },
-  { 
-    id: 10, 
-    time: '2025-09-27T14:05:42Z', 
-    betType: 'Multiple Bets (1)', 
-    amount: 15, 
-    result: 33, 
-    win: false, 
-    payout: 0,
-    details: {
-      winningBets: [],
-      losingBets: ['Odd: -15']
-    }
-  },
-];
+
 
 // Function to calculate statistics from bet history
 const calculateStats = (bets) => {
@@ -205,9 +63,7 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
   React.useEffect(() => {
     if (bettingHistory && bettingHistory.length > 0) {
       setBets(bettingHistory);
-    } else {
-      setBets(sampleBets);
-    }
+    } 
   }, [bettingHistory]);
   
   const stats = calculateStats(bets);
@@ -248,7 +104,7 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
   const getNumberColor = (num) => {
     if (num === 0) return '#14D854'; // Green for zero
     const redNumbers = [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36];
-    return redNumbers.includes(num) ? '#d82633' : '#333'; // Red or black
+    return redNumbers.includes(num) ? '#d82633' : '#000'; // Traditional red or black
   };
 
   /**
@@ -279,13 +135,13 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
       sx={{
         p: { xs: 2, md: 3 },
         borderRadius: 3,
-        background: 'linear-gradient(135deg, rgba(9, 0, 5, 0.9) 0%, rgba(25, 5, 30, 0.85) 100%)',
+        background: 'linear-gradient(135deg, rgba(0, 20, 60, 0.9) 0%, rgba(0, 40, 80, 0.85) 100%)',
         backdropFilter: 'blur(15px)',
-        border: '1px solid rgba(104, 29, 219, 0.2)',
+        border: '1px solid rgba(0, 200, 255, 0.2)',
         mb: 5,
         position: 'relative',
         overflow: 'hidden',
-        boxShadow: '0 10px 30px rgba(0,0,0,0.5)',
+        boxShadow: '0 10px 30px rgba(0, 150, 255, 0.3)',
         '&::before': {
           content: '""',
           position: 'absolute',
@@ -293,7 +149,7 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
           left: 0,
           width: '100%',
           height: '5px',
-          background: 'linear-gradient(90deg, #14D854, #d82633)',
+          background: 'linear-gradient(90deg, #00d4ff, #0066ff)',
         }
       }}
     >
@@ -302,7 +158,7 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
         fontWeight="bold" 
         gutterBottom
         sx={{ 
-          borderBottom: '1px solid rgba(104, 29, 219, 0.3)',
+          borderBottom: '1px solid rgba(0, 200, 255, 0.3)',
           pb: 1.5,
           display: 'flex',
           alignItems: 'center',
@@ -311,9 +167,9 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
           textShadow: '0 2px 4px rgba(0,0,0,0.5)'
         }}
       >
-        <FaHistory color="#681DDB" size={22} />
-        <span style={{ background: 'linear-gradient(90deg, #FFFFFF, #FFA500)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-          Your Roulette History
+        <FaHistory color="#00d4ff" size={22} />
+        <span style={{ background: 'linear-gradient(90deg, #FFFFFF, #00d4ff)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+          Your Space History
         </span>
       </Typography>
       
@@ -323,7 +179,7 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
         sx={{ 
           mb: 3,
           '& .MuiTabs-indicator': {
-            backgroundColor: '#681DDB',
+            backgroundColor: '#00d4ff',
             height: '3px',
             borderRadius: '3px'
           }
@@ -359,18 +215,18 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
       
       {loading ? (
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '200px' }}>
-          <CircularProgress size={40} sx={{ color: '#681DDB' }} />
+          <CircularProgress size={40} sx={{ color: '#0066ff' }} />
         </Box>
       ) : (
         <>
           {tabValue === 0 && (
             <Fade in={true}>
-              <TableContainer sx={{ maxHeight: 400, borderRadius: 2, overflow: 'hidden', border: '1px solid rgba(104, 29, 219, 0.2)' }}>
+              <TableContainer sx={{ maxHeight: 400, borderRadius: 2, overflow: 'hidden', border: '1px solid rgba(0, 150, 255, 0.2)' }}>
                 <Table stickyHeader>
                   <TableHead>
                     <TableRow sx={{ 
                       '& th': { 
-                        background: 'linear-gradient(90deg, rgba(104, 29, 219, 0.3), rgba(104, 29, 219, 0.2))',
+                        background: 'linear-gradient(90deg, rgba(0, 150, 255, 0.3), rgba(0, 200, 255, 0.2))',
                         color: 'white',
                         fontWeight: 'bold',
                         fontSize: '0.85rem',
@@ -390,10 +246,10 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
                       <TableRow 
                         key={bet.id}
                         sx={{ 
-                          '&:hover': { backgroundColor: 'rgba(104, 29, 219, 0.1)' },
+                          '&:hover': { backgroundColor: 'rgba(0, 150, 255, 0.1)' },
                           '& td': { 
                             color: 'rgba(255,255,255,0.8)', 
-                            borderColor: 'rgba(104, 29, 219, 0.1)',
+                            borderColor: 'rgba(0, 150, 255, 0.1)',
                             transition: 'all 0.2s ease'
                           },
                           transition: 'all 0.2s ease',
@@ -416,9 +272,9 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
                               size="small"
                               sx={{ 
                                 fontSize: '0.75rem',
-                                bgcolor: 'rgba(104, 29, 219, 0.1)',
+                                bgcolor: 'rgba(0, 150, 255, 0.1)',
                                 color: 'white',
-                                border: '1px solid rgba(104, 29, 219, 0.2)',
+                                border: '1px solid rgba(0, 150, 255, 0.2)',
                                 mb: 1
                               }}
                             />
@@ -444,7 +300,7 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
                                     {bet.details.winningBets.length > 2 && (
                                       <Typography 
                                         variant="caption" 
-                                        color="rgba(20, 216, 84, 0.7)" 
+                                        color="rgba(0, 180, 216, 0.7)" 
                                         sx={{ fontSize: '0.65rem' }}
                                       >
                                         +{bet.details.winningBets.length - 2} more
@@ -458,7 +314,7 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
                                       <Typography 
                                         key={idx} 
                                         variant="caption" 
-                                        color="#d82633" 
+                                        color="#00d4ff" 
                                         sx={{ 
                                           display: 'block', 
                                           fontSize: '0.7rem',
@@ -471,7 +327,7 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
                                     {bet.details.losingBets.length > 2 && (
                                       <Typography 
                                         variant="caption" 
-                                        color="rgba(216, 38, 51, 0.7)" 
+                                        color="rgba(0, 200, 255, 0.7)" 
                                         sx={{ fontSize: '0.65rem' }}
                                       >
                                         +{bet.details.losingBets.length - 2} more
@@ -591,38 +447,13 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
                                     </Typography>
                                   </Box>
                                 )}
-                                {/* Pyth Entropy Explorer Link */}
-                                {bet.entropyProof?.explorerUrl && (
-                                  <Box
-                                    onClick={() => window.open(bet.entropyProof.explorerUrl, '_blank')}
-                                    sx={{
-                                      display: 'flex',
-                                      alignItems: 'center',
-                                      gap: 0.5,
-                                      cursor: 'pointer',
-                                      padding: '2px 6px',
-                                      borderRadius: '4px',
-                                      backgroundColor: 'rgba(104, 29, 219, 0.1)',
-                                      border: '1px solid rgba(104, 29, 219, 0.3)',
-                                      transition: 'all 0.2s ease',
-                                      '&:hover': {
-                                        backgroundColor: 'rgba(104, 29, 219, 0.2)',
-                                        transform: 'scale(1.05)'
-                                      }
-                                    }}
-                                  >
-                                    <FaExternalLinkAlt size={10} color="#681DDB" />
-                                    <Typography variant="caption" sx={{ color: '#681DDB', fontSize: '0.7rem', fontWeight: 'bold' }}>
-                                      Pyth
-                                    </Typography>
-                                  </Box>
-                                )}
+                               
                               </Box>
                             </Box>
                           ) : (
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                              <CircularProgress size={16} sx={{ color: '#681DDB' }} />
-                              <Typography variant="caption" sx={{ color: '#681DDB' }}>
+                              <CircularProgress size={16} sx={{ color: '#0066ff' }} />
+                              <Typography variant="caption" sx={{ color: '#0066ff' }}>
                                 Generating...
                               </Typography>
                             </Box>
@@ -646,8 +477,8 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
                       minWidth: '150px', 
                       p: 2, 
                       borderRadius: 2, 
-                      background: 'linear-gradient(135deg, rgba(0,0,0,0.3) 0%, rgba(104, 29, 219, 0.1) 100%)',
-                      border: '1px solid rgba(104, 29, 219, 0.2)',
+                      background: 'linear-gradient(135deg, rgba(0,0,0,0.3) 0%, rgba(0, 150, 255, 0.1) 100%)',
+                      border: '1px solid rgba(0, 150, 255, 0.2)',
                       boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
                       transition: 'all 0.3s ease',
                       '&:hover': {
@@ -665,11 +496,11 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
                           display: 'flex', 
                           alignItems: 'center', 
                           justifyContent: 'center',
-                          backgroundColor: 'rgba(104, 29, 219, 0.2)',
+                          backgroundColor: 'rgba(0, 150, 255, 0.2)',
                           boxShadow: '0 3px 6px rgba(0,0,0,0.2)',
                         }}
                       >
-                        <FaChartLine color="#681DDB" size={16} />
+                        <FaChartLine color="#0066ff" size={16} />
                       </Box>
                       <Typography variant="body2" color="rgba(255,255,255,0.7)">Total Bets</Typography>
                     </Box>
@@ -682,8 +513,8 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
                       minWidth: '150px', 
                       p: 2, 
                       borderRadius: 2, 
-                      background: 'linear-gradient(135deg, rgba(0,0,0,0.3) 0%, rgba(255, 165, 0, 0.1) 100%)',
-                      border: '1px solid rgba(255, 165, 0, 0.2)',
+                      background: 'linear-gradient(135deg, rgba(0,0,0,0.3) 0%, rgba(0, 160, 180, 0.1) 100%)',
+                      border: '1px solid rgba(0, 160, 180, 0.2)',
                       boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
                       transition: 'all 0.3s ease',
                       '&:hover': {
@@ -701,11 +532,11 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
                           display: 'flex', 
                           alignItems: 'center', 
                           justifyContent: 'center',
-                          backgroundColor: 'rgba(255, 165, 0, 0.2)',
+                          backgroundColor: 'rgba(0, 160, 180, 0.2)',
                           boxShadow: '0 3px 6px rgba(0,0,0,0.2)',
                         }}
                       >
-                        <FaFire color="#FFA500" size={16} />
+                        <FaFire color="#00a8cc" size={16} />
                       </Box>
                       <Typography variant="body2" color="rgba(255,255,255,0.7)">Win Rate</Typography>
                     </Box>
@@ -718,8 +549,8 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
                       minWidth: '150px', 
                       p: 2, 
                       borderRadius: 2, 
-                      background: 'linear-gradient(135deg, rgba(0,0,0,0.3) 0%, rgba(216, 38, 51, 0.1) 100%)',
-                      border: '1px solid rgba(216, 38, 51, 0.2)',
+                      background: 'linear-gradient(135deg, rgba(0,0,0,0.3) 0%, rgba(0, 200, 255, 0.1) 100%)',
+                      border: '1px solid rgba(0, 200, 255, 0.2)',
                       boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
                       transition: 'all 0.3s ease',
                       '&:hover': {
@@ -737,11 +568,11 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
                           display: 'flex', 
                           alignItems: 'center', 
                           justifyContent: 'center',
-                          backgroundColor: 'rgba(216, 38, 51, 0.2)',
+                          backgroundColor: 'rgba(0, 200, 255, 0.2)',
                           boxShadow: '0 3px 6px rgba(0,0,0,0.2)',
                         }}
                       >
-                        <FaCoins color="#d82633" size={16} />
+                        <FaCoins color="#00d4ff" size={16} />
                       </Box>
                       <Typography variant="body2" color="rgba(255,255,255,0.7)">Total Wagered</Typography>
                     </Box>
@@ -754,8 +585,8 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
                       minWidth: '150px', 
                       p: 2, 
                       borderRadius: 2, 
-                      background: 'linear-gradient(135deg, rgba(0,0,0,0.3) 0%, rgba(20, 216, 84, 0.1) 100%)',
-                      border: '1px solid rgba(20, 216, 84, 0.2)',
+                      background: 'linear-gradient(135deg, rgba(0,0,0,0.3) 0%, rgba(0, 180, 216, 0.1) 100%)',
+                      border: '1px solid rgba(0, 180, 216, 0.2)',
                       boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
                       transition: 'all 0.3s ease',
                       '&:hover': {
@@ -773,7 +604,7 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
                           display: 'flex', 
                           alignItems: 'center', 
                           justifyContent: 'center',
-                          backgroundColor: 'rgba(20, 216, 84, 0.2)',
+                          backgroundColor: 'rgba(0, 180, 216, 0.2)',
                           boxShadow: '0 3px 6px rgba(0,0,0,0.2)',
                         }}
                       >
@@ -784,7 +615,7 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
                     <Typography 
                       variant="h4" 
                       fontWeight="bold" 
-                      color={stats.netProfit >= 0 ? '#14D854' : '#d82633'}
+                      color={stats.netProfit >= 0 ? '#14D854' : '#00d4ff'}
                       sx={{ textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}
                     >
                       {stats.netProfit >= 0 ? '+' : ''}{formatMONAmount(stats.netProfit)} OCT
@@ -799,7 +630,7 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
                       p: 3, 
                       borderRadius: 2, 
                       backgroundColor: 'rgba(0,0,0,0.2)',
-                      border: '1px solid rgba(104, 29, 219, 0.15)',
+                      border: '1px solid rgba(0, 150, 255, 0.15)',
                       position: 'relative',
                       overflow: 'hidden',
                       boxShadow: '0 4px 15px rgba(0,0,0,0.1)',
@@ -810,7 +641,7 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
                         left: 0,
                         width: '4px',
                         height: '100%',
-                        backgroundColor: '#FFA500',
+                        backgroundColor: '#00a8cc',
                       }
                     }}
                   >
@@ -841,7 +672,7 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
                                   width: '22px',
                                   height: '22px',
                                   borderRadius: '50%',
-                                  backgroundColor: '#FFA500',
+                                  backgroundColor: '#00a8cc',
                                   display: 'flex',
                                   alignItems: 'center',
                                   justifyContent: 'center',
@@ -875,7 +706,7 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
                       p: 3, 
                       borderRadius: 2, 
                       backgroundColor: 'rgba(0,0,0,0.2)',
-                      border: '1px solid rgba(104, 29, 219, 0.15)',
+                      border: '1px solid rgba(0, 150, 255, 0.15)',
                       position: 'relative',
                       overflow: 'hidden',
                       boxShadow: '0 4px 15px rgba(0,0,0,0.1)',
@@ -891,7 +722,7 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
                     }}
                   >
                     <Typography variant="subtitle1" fontWeight="bold" color="white" sx={{ mb: 2, display: 'flex', alignItems: 'center', gap: 1 }}>
-                      <FaTrophy color="#FFA500" size={16} />
+                      <FaTrophy color="#00a8cc" size={16} />
                       Biggest Win
                     </Typography>
                     
@@ -928,7 +759,7 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
                       </Box>
                     ) : (
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                        <FaExclamationCircle color="#FFA500" />
+                        <FaExclamationCircle color="#00a8cc" />
                         <Typography variant="body2" color="rgba(255,255,255,0.7)">
                           No wins recorded yet. Keep playing!
                         </Typography>
@@ -942,15 +773,15 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
                     mt: 3, 
                     p: 2, 
                     borderRadius: 2, 
-                    background: 'linear-gradient(135deg, rgba(104, 29, 219, 0.05) 0%, rgba(104, 29, 219, 0.15) 100%)',
-                    border: '1px solid rgba(104, 29, 219, 0.15)',
+                    background: 'linear-gradient(135deg, rgba(0, 150, 255, 0.05) 0%, rgba(0, 150, 255, 0.15) 100%)',
+                    border: '1px solid rgba(0, 150, 255, 0.15)',
                     boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.2)',
                     display: 'flex',
                     alignItems: 'center',
                     gap: 1
                   }}
                 >
-                  <FaInfoCircle color="#681DDB" style={{ flexShrink: 0 }} />
+                  <FaInfoCircle color="#0066ff" style={{ flexShrink: 0 }} />
                   <Typography variant="body2" color="rgba(255,255,255,0.8)">
                     These statistics cover your most recent {stats.totalBets} bets with a lifetime ROI of {stats.roi.toFixed(1)}%.
                   </Typography>
