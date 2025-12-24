@@ -24,13 +24,13 @@ const calculateStats = (bets) => {
   const winRate = totalBets > 0 ? (winCount / totalBets) * 100 : 0;
   const netProfit = totalWon - totalWagered;
   const roi = totalWagered > 0 ? (netProfit / totalWagered) * 100 : 0;
-  
+
   // Get most common results
   const resultCounts = {};
   bets.forEach(bet => {
     resultCounts[bet.result] = (resultCounts[bet.result] || 0) + 1;
   });
-  
+
   const mostCommonResults = Object.entries(resultCounts)
     .sort((a, b) => b[1] - a[1])
     .slice(0, 3)
@@ -38,10 +38,10 @@ const calculateStats = (bets) => {
       number: parseInt(number),
       count: count
     }));
-    
+
   // Find biggest win
   const biggestWin = bets.reduce((max, bet) => bet.payout > max.payout ? bet : max, { payout: 0 });
-  
+
   return {
     totalBets,
     totalWagered,
@@ -58,20 +58,20 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
   const [tabValue, setTabValue] = useState(0);
   const [loading, setLoading] = useState(false);
   const [bets, setBets] = useState([]);
-  
+
   // Update bets when bettingHistory prop changes
   React.useEffect(() => {
     if (bettingHistory && bettingHistory.length > 0) {
       setBets(bettingHistory);
-    } 
+    }
   }, [bettingHistory]);
-  
+
   const stats = calculateStats(bets);
-  
+
   const handleTabChange = (event, newValue) => {
     setTabValue(newValue);
   };
-  
+
   const formatTime = (timeString) => {
     let date;
     if (timeString instanceof Date) {
@@ -96,7 +96,7 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
     }
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   };
-  
+
   const formatDate = (timeString) => {
     let date;
     if (timeString instanceof Date) {
@@ -150,7 +150,7 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
       window.open(explorerUrl, '_blank');
     }
   };
-  
+
   return (
     <Paper
       elevation={5}
@@ -175,11 +175,11 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
         }
       }}
     >
-      <Typography 
-        variant="h5" 
-        fontWeight="bold" 
+      <Typography
+        variant="h5"
+        fontWeight="bold"
         gutterBottom
-        sx={{ 
+        sx={{
           borderBottom: '1px solid rgba(0, 200, 255, 0.3)',
           pb: 1.5,
           display: 'flex',
@@ -194,11 +194,11 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
           Your Space History
         </span>
       </Typography>
-      
-      <Tabs 
-        value={tabValue} 
+
+      <Tabs
+        value={tabValue}
         onChange={handleTabChange}
-        sx={{ 
+        sx={{
           mb: 3,
           '& .MuiTabs-indicator': {
             backgroundColor: '#00d4ff',
@@ -207,11 +207,11 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
           }
         }}
       >
-        <Tab 
-          label="Recent Bets" 
+        <Tab
+          label="Recent Bets"
           icon={<FaDice size={16} />}
           iconPosition="start"
-          sx={{ 
+          sx={{
             color: tabValue === 0 ? 'white' : 'rgba(255,255,255,0.6)',
             textTransform: 'none',
             fontWeight: tabValue === 0 ? 'bold' : 'normal',
@@ -220,11 +220,11 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
             }
           }}
         />
-        <Tab 
-          label="Statistics" 
+        <Tab
+          label="Statistics"
           icon={<FaChartLine size={16} />}
           iconPosition="start"
-          sx={{ 
+          sx={{
             color: tabValue === 1 ? 'white' : 'rgba(255,255,255,0.6)',
             textTransform: 'none',
             fontWeight: tabValue === 1 ? 'bold' : 'normal',
@@ -234,7 +234,7 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
           }}
         />
       </Tabs>
-      
+
       {loading ? (
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '200px' }}>
           <CircularProgress size={40} sx={{ color: '#0066ff' }} />
@@ -243,11 +243,11 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
         <>
           {tabValue === 0 && (
             <Fade in={true}>
-              <TableContainer 
-                sx={{ 
-                  maxHeight: 400, 
-                  borderRadius: 2, 
-                  overflow: 'auto', 
+              <TableContainer
+                sx={{
+                  maxHeight: 400,
+                  borderRadius: 2,
+                  overflow: 'auto',
                   border: '1px solid rgba(0, 150, 255, 0.2)',
                   '&::-webkit-scrollbar': {
                     width: '8px',
@@ -263,18 +263,18 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
                   '&::-webkit-scrollbar-thumb:hover': {
                     background: 'rgba(0, 150, 255, 0.6)',
                   }
-                }} 
+                }}
               >
                 <Table stickyHeader>
                   <TableHead>
-                    <TableRow sx={{ 
-                      '& th': { 
+                    <TableRow sx={{
+                      '& th': {
                         background: 'linear-gradient(90deg, rgba(0, 150, 255, 0.3), rgba(0, 200, 255, 0.2))',
                         color: 'white',
                         fontWeight: 'bold',
                         fontSize: '0.85rem',
                         borderBottom: 'none',
-                      } 
+                      }
                     }}>
                       <TableCell>Time</TableCell>
                       <TableCell>Bet Type</TableCell>
@@ -286,12 +286,12 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
                   </TableHead>
                   <TableBody>
                     {bets.map((bet) => (
-                      <TableRow 
+                      <TableRow
                         key={bet.id}
-                        sx={{ 
+                        sx={{
                           '&:hover': { backgroundColor: 'rgba(0, 150, 255, 0.1)' },
-                          '& td': { 
-                            color: 'rgba(255,255,255,0.8)', 
+                          '& td': {
+                            color: 'rgba(255,255,255,0.8)',
                             borderColor: 'rgba(0, 150, 255, 0.1)',
                             transition: 'all 0.2s ease'
                           },
@@ -310,10 +310,10 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
                         </TableCell>
                         <TableCell>
                           <Box>
-                            <Chip 
-                              label={bet.betType || bet.type || 'Unknown'} 
+                            <Chip
+                              label={bet.betType || bet.type || 'Unknown'}
                               size="small"
-                              sx={{ 
+                              sx={{
                                 fontSize: '0.75rem',
                                 bgcolor: 'rgba(0, 150, 255, 0.1)',
                                 color: 'white',
@@ -327,12 +327,12 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
                                 {bet.details.winningBets && bet.details.winningBets.length > 0 && (
                                   <Box sx={{ mb: 0.5 }}>
                                     {bet.details.winningBets.slice(0, 2).map((winBet, idx) => (
-                                      <Typography 
-                                        key={idx} 
-                                        variant="caption" 
-                                        color="#14D854" 
-                                        sx={{ 
-                                          display: 'block', 
+                                      <Typography
+                                        key={idx}
+                                        variant="caption"
+                                        color="#14D854"
+                                        sx={{
+                                          display: 'block',
                                           fontSize: '0.7rem',
                                           fontWeight: 'medium'
                                         }}
@@ -341,9 +341,9 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
                                       </Typography>
                                     ))}
                                     {bet.details.winningBets.length > 2 && (
-                                      <Typography 
-                                        variant="caption" 
-                                        color="rgba(0, 180, 216, 0.7)" 
+                                      <Typography
+                                        variant="caption"
+                                        color="rgba(0, 180, 216, 0.7)"
                                         sx={{ fontSize: '0.65rem' }}
                                       >
                                         +{bet.details.winningBets.length - 2} more
@@ -354,12 +354,12 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
                                 {bet.details.losingBets && bet.details.losingBets.length > 0 && (
                                   <Box>
                                     {bet.details.losingBets.slice(0, 2).map((loseBet, idx) => (
-                                      <Typography 
-                                        key={idx} 
-                                        variant="caption" 
-                                        color="#00d4ff" 
-                                        sx={{ 
-                                          display: 'block', 
+                                      <Typography
+                                        key={idx}
+                                        variant="caption"
+                                        color="#00d4ff"
+                                        sx={{
+                                          display: 'block',
                                           fontSize: '0.7rem',
                                           fontWeight: 'medium'
                                         }}
@@ -368,9 +368,9 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
                                       </Typography>
                                     ))}
                                     {bet.details.losingBets.length > 2 && (
-                                      <Typography 
-                                        variant="caption" 
-                                        color="rgba(0, 200, 255, 0.7)" 
+                                      <Typography
+                                        variant="caption"
+                                        color="rgba(0, 200, 255, 0.7)"
                                         sx={{ fontSize: '0.65rem' }}
                                       >
                                         +{bet.details.losingBets.length - 2} more
@@ -384,11 +384,11 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
                         </TableCell>
                         <TableCell align="center">{formatMONAmount(bet.amount || bet.totalBetAmount || 0)} OCT</TableCell>
                         <TableCell align="center">
-                          <Box 
-                            sx={{ 
-                              width: 28, 
-                              height: 28, 
-                              borderRadius: '50%', 
+                          <Box
+                            sx={{
+                              width: 28,
+                              height: 28,
+                              borderRadius: '50%',
                               backgroundColor: getNumberColor(bet.result || bet.winningNumber),
                               display: 'flex',
                               alignItems: 'center',
@@ -399,13 +399,13 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
                             }}
                           >
                             <Typography variant="body2" fontWeight="bold" color="white">
-                              {bet.result || bet.winningNumber || '?'}
+                              {bet.result !== undefined ? bet.result : bet.winningNumber !== undefined ? bet.winningNumber : '?'}
                             </Typography>
                           </Box>
                         </TableCell>
                         <TableCell align="right">
-                          <Typography 
-                            variant="body2" 
+                          <Typography
+                            variant="body2"
                             fontWeight="bold"
                             sx={{
                               color: bet.win ? '#14D854' : 'rgba(255,255,255,0.6)',
@@ -415,10 +415,15 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
                               gap: 0.5
                             }}
                           >
-                            {bet.win ? (
+                            {bet.payout >= 0 ? (
                               <>
                                 <FaCoins size={12} color="#14D854" />
                                 +{formatMONAmount(bet.payout || bet.netResult || 0)} OCT
+                              </>
+                            ) : bet.payout < 0 ? (
+                              <>
+                                <FaCoins size={12} color="#ff4d4d" />
+                                {formatMONAmount(bet.payout || bet.netResult || 0)} OCT
                               </>
                             ) : '-'}
                           </Typography>
@@ -490,7 +495,7 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
                                     </Typography>
                                   </Box>
                                 )}
-                               
+
                               </Box>
                             </Box>
                           ) : (
@@ -509,17 +514,17 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
               </TableContainer>
             </Fade>
           )}
-          
+
           {tabValue === 1 && (
             <Fade in={true}>
               <Box>
                 <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, mb: 4 }}>
-                  <Box 
-                    sx={{ 
-                      flex: 1, 
-                      minWidth: '150px', 
-                      p: 2, 
-                      borderRadius: 2, 
+                  <Box
+                    sx={{
+                      flex: 1,
+                      minWidth: '150px',
+                      p: 2,
+                      borderRadius: 2,
                       background: 'linear-gradient(135deg, rgba(0,0,0,0.3) 0%, rgba(0, 150, 255, 0.1) 100%)',
                       border: '1px solid rgba(0, 150, 255, 0.2)',
                       boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
@@ -531,13 +536,13 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
                     }}
                   >
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1.5 }}>
-                      <Box 
-                        sx={{ 
-                          width: 36, 
-                          height: 36, 
-                          borderRadius: '50%', 
-                          display: 'flex', 
-                          alignItems: 'center', 
+                      <Box
+                        sx={{
+                          width: 36,
+                          height: 36,
+                          borderRadius: '50%',
+                          display: 'flex',
+                          alignItems: 'center',
                           justifyContent: 'center',
                           backgroundColor: 'rgba(0, 150, 255, 0.2)',
                           boxShadow: '0 3px 6px rgba(0,0,0,0.2)',
@@ -549,13 +554,13 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
                     </Box>
                     <Typography variant="h4" fontWeight="bold" color="white" sx={{ textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>{stats.totalBets}</Typography>
                   </Box>
-                  
-                  <Box 
-                    sx={{ 
-                      flex: 1, 
-                      minWidth: '150px', 
-                      p: 2, 
-                      borderRadius: 2, 
+
+                  <Box
+                    sx={{
+                      flex: 1,
+                      minWidth: '150px',
+                      p: 2,
+                      borderRadius: 2,
                       background: 'linear-gradient(135deg, rgba(0,0,0,0.3) 0%, rgba(0, 160, 180, 0.1) 100%)',
                       border: '1px solid rgba(0, 160, 180, 0.2)',
                       boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
@@ -567,13 +572,13 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
                     }}
                   >
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1.5 }}>
-                      <Box 
-                        sx={{ 
-                          width: 36, 
-                          height: 36, 
-                          borderRadius: '50%', 
-                          display: 'flex', 
-                          alignItems: 'center', 
+                      <Box
+                        sx={{
+                          width: 36,
+                          height: 36,
+                          borderRadius: '50%',
+                          display: 'flex',
+                          alignItems: 'center',
                           justifyContent: 'center',
                           backgroundColor: 'rgba(0, 160, 180, 0.2)',
                           boxShadow: '0 3px 6px rgba(0,0,0,0.2)',
@@ -585,13 +590,13 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
                     </Box>
                     <Typography variant="h4" fontWeight="bold" color="white" sx={{ textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>{stats.winRate.toFixed(1)}%</Typography>
                   </Box>
-                  
-                  <Box 
-                    sx={{ 
-                      flex: 1, 
-                      minWidth: '150px', 
-                      p: 2, 
-                      borderRadius: 2, 
+
+                  <Box
+                    sx={{
+                      flex: 1,
+                      minWidth: '150px',
+                      p: 2,
+                      borderRadius: 2,
                       background: 'linear-gradient(135deg, rgba(0,0,0,0.3) 0%, rgba(0, 200, 255, 0.1) 100%)',
                       border: '1px solid rgba(0, 200, 255, 0.2)',
                       boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
@@ -603,13 +608,13 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
                     }}
                   >
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1.5 }}>
-                      <Box 
-                        sx={{ 
-                          width: 36, 
-                          height: 36, 
-                          borderRadius: '50%', 
-                          display: 'flex', 
-                          alignItems: 'center', 
+                      <Box
+                        sx={{
+                          width: 36,
+                          height: 36,
+                          borderRadius: '50%',
+                          display: 'flex',
+                          alignItems: 'center',
                           justifyContent: 'center',
                           backgroundColor: 'rgba(0, 200, 255, 0.2)',
                           boxShadow: '0 3px 6px rgba(0,0,0,0.2)',
@@ -621,13 +626,13 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
                     </Box>
                     <Typography variant="h4" fontWeight="bold" color="white" sx={{ textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>{formatMONAmount(stats.totalWagered)} OCT</Typography>
                   </Box>
-                  
-                  <Box 
-                    sx={{ 
-                      flex: 1, 
-                      minWidth: '150px', 
-                      p: 2, 
-                      borderRadius: 2, 
+
+                  <Box
+                    sx={{
+                      flex: 1,
+                      minWidth: '150px',
+                      p: 2,
+                      borderRadius: 2,
                       background: 'linear-gradient(135deg, rgba(0,0,0,0.3) 0%, rgba(0, 180, 216, 0.1) 100%)',
                       border: '1px solid rgba(0, 180, 216, 0.2)',
                       boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
@@ -639,13 +644,13 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
                     }}
                   >
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1.5 }}>
-                      <Box 
-                        sx={{ 
-                          width: 36, 
-                          height: 36, 
-                          borderRadius: '50%', 
-                          display: 'flex', 
-                          alignItems: 'center', 
+                      <Box
+                        sx={{
+                          width: 36,
+                          height: 36,
+                          borderRadius: '50%',
+                          display: 'flex',
+                          alignItems: 'center',
                           justifyContent: 'center',
                           backgroundColor: 'rgba(0, 180, 216, 0.2)',
                           boxShadow: '0 3px 6px rgba(0,0,0,0.2)',
@@ -655,9 +660,9 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
                       </Box>
                       <Typography variant="body2" color="rgba(255,255,255,0.7)">Net Profit</Typography>
                     </Box>
-                    <Typography 
-                      variant="h4" 
-                      fontWeight="bold" 
+                    <Typography
+                      variant="h4"
+                      fontWeight="bold"
                       color={stats.netProfit >= 0 ? '#14D854' : '#00d4ff'}
                       sx={{ textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}
                     >
@@ -665,13 +670,13 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
                     </Typography>
                   </Box>
                 </Box>
-                
+
                 <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 3 }}>
-                  <Box 
-                    sx={{ 
+                  <Box
+                    sx={{
                       flex: 1,
-                      p: 3, 
-                      borderRadius: 2, 
+                      p: 3,
+                      borderRadius: 2,
                       backgroundColor: 'rgba(0,0,0,0.2)',
                       border: '1px solid rgba(0, 150, 255, 0.15)',
                       position: 'relative',
@@ -689,16 +694,16 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
                     }}
                   >
                     <Typography variant="subtitle1" fontWeight="bold" color="white" sx={{ mb: 2 }}>Hot Numbers</Typography>
-                    
+
                     {stats.mostCommonResults.length > 0 ? (
                       <Box sx={{ display: 'flex', gap: 3 }}>
                         {stats.mostCommonResults.map((result, index) => (
                           <Box key={index} sx={{ textAlign: 'center' }}>
-                            <Box 
-                              sx={{ 
-                                width: 48, 
-                                height: 48, 
-                                borderRadius: '50%', 
+                            <Box
+                              sx={{
+                                width: 48,
+                                height: 48,
+                                borderRadius: '50%',
                                 backgroundColor: getNumberColor(result.number),
                                 display: 'flex',
                                 alignItems: 'center',
@@ -742,12 +747,12 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
                       </Typography>
                     )}
                   </Box>
-                  
-                  <Box 
-                    sx={{ 
+
+                  <Box
+                    sx={{
                       flex: 1,
-                      p: 3, 
-                      borderRadius: 2, 
+                      p: 3,
+                      borderRadius: 2,
                       backgroundColor: 'rgba(0,0,0,0.2)',
                       border: '1px solid rgba(0, 150, 255, 0.15)',
                       position: 'relative',
@@ -768,28 +773,28 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
                       <FaTrophy color="#00a8cc" size={16} />
                       Biggest Win
                     </Typography>
-                    
+
                     {stats.biggestWin ? (
                       <Box sx={{ position: 'relative' }}>
-                        <Typography 
-                          variant="h3" 
-                          fontWeight="bold" 
-                          color="#14D854" 
-                          sx={{ 
+                        <Typography
+                          variant="h3"
+                          fontWeight="bold"
+                          color="#14D854"
+                          sx={{
                             textShadow: '0 2px 5px rgba(0,0,0,0.5)',
                             position: 'relative',
-                            zIndex: 2 
+                            zIndex: 2
                           }}
                         >
                           {stats.biggestWin.payout} OCT
                         </Typography>
-                        <Box 
-                          sx={{ 
-                            position: 'absolute', 
-                            top: -10, 
-                            right: -10, 
-                            width: 80, 
-                            height: 80, 
+                        <Box
+                          sx={{
+                            position: 'absolute',
+                            top: -10,
+                            right: -10,
+                            width: 80,
+                            height: 80,
                             opacity: 0.2,
                             zIndex: 1
                           }}
@@ -810,12 +815,12 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
                     )}
                   </Box>
                 </Box>
-                
-                <Box 
-                  sx={{ 
-                    mt: 3, 
-                    p: 2, 
-                    borderRadius: 2, 
+
+                <Box
+                  sx={{
+                    mt: 3,
+                    p: 2,
+                    borderRadius: 2,
                     background: 'linear-gradient(135deg, rgba(0, 150, 255, 0.05) 0%, rgba(0, 150, 255, 0.15) 100%)',
                     border: '1px solid rgba(0, 150, 255, 0.15)',
                     boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.2)',
