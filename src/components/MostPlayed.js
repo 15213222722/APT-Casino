@@ -1,5 +1,5 @@
 'use client';
-
+import { useTranslation } from 'react-i18next';
 import { useState, useEffect } from "react";
 import HeaderText from "@/components/HeaderText";
 import Image from "next/image";
@@ -8,6 +8,7 @@ import Link from "next/link";
 import { FaFire, FaUsers, FaTrophy, FaStar, FaBolt, FaChevronRight } from "react-icons/fa";
 
 const MostPlayed = () => {
+  const { t } = useTranslation();
   const [activeFilter, setActiveFilter] = useState("all");
   const [visibleGames, setVisibleGames] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -15,7 +16,7 @@ const MostPlayed = () => {
   
   const games = [
     { 
-      name: "Roulette", 
+      name: t('most_played.game_roulette'), 
       img: "/images/games/roulette.png", 
       link: "/game/roulette",
       players: 842,
@@ -24,7 +25,7 @@ const MostPlayed = () => {
       winRate: "97.3%",
     },
     { 
-      name: "Plinko", 
+      name: t('most_played.game_plinko'), 
       img: "/images/games/plinko.png", 
       link: "/game/plinko",
       players: 534,
@@ -33,7 +34,7 @@ const MostPlayed = () => {
       winRate: "97.1%",
     },
     { 
-      name: "Mines", 
+      name: t('most_played.game_mines'), 
       img: "/images/games/mines.png", 
       link: "/game/mines",
       players: 456,
@@ -42,7 +43,7 @@ const MostPlayed = () => {
       winRate: "97.1%",
     },
     { 
-      name: "Spin Wheel", 
+      name: t('most_played.game_spin_wheel'), 
       img: "/images/games/spin_the_wheel.png", 
       link: "/game/wheel",
       players: 398,
@@ -50,18 +51,16 @@ const MostPlayed = () => {
       isHot: true,
       winRate: "96.8%",
     },
-   
-   
   ];
   
   const filters = [
-    { id: "all", label: "All Games" },
-    { id: "featured", label: "Featured" },
-    { id: "table", label: "Table Games" },
-    { id: "slots", label: "Slots" },
-    { id: "card", label: "Card Games" },
-    { id: "instant", label: "Instant Win" },
-    { id: "jackpot", label: "Jackpot" },
+    { id: "all", label: t('most_played.filter_all') },
+    { id: "featured", label: t('most_played.filter_featured') },
+    { id: "table", label: t('most_played.filter_table') },
+    { id: "slots", label: t('most_played.filter_slots') },
+    { id: "card", label: t('most_played.filter_card') },
+    { id: "instant", label: t('most_played.filter_instant') },
+    { id: "jackpot", label: t('most_played.filter_jackpot') },
   ];
   
   // Filter games when active filter changes
@@ -274,8 +273,8 @@ const MostPlayed = () => {
       <div className="mb-12 text-center max-w-3xl mx-auto relative z-10">
         <div className="bg-black/40 backdrop-blur-md rounded-2xl p-8 border border-[#0066FF]/30 shadow-2xl">
           <HeaderText
-            header="Popular Casino Games"
-            description="Experience our most played games with the highest win rates and biggest payouts"
+            header={t('most_played.header_title')}
+            description={t('most_played.header_description')}
           />
         </div>
       </div>
@@ -299,7 +298,7 @@ const MostPlayed = () => {
                           style={{ objectFit: 'cover' }}
                         />
                         <div className="absolute top-2 right-2 bg-gradient-to-r from-[#0066FF] to-[#00A3FF] text-white text-xs font-bold py-1 px-2 rounded-full flex items-center gap-1 border border-[#00A3FF]/50 shadow-lg shadow-[#00A3FF]/30">
-                          <FaFire className="text-yellow-300" /> TOP PICK
+                          <FaFire className="text-yellow-300" /> {t('most_played.top_pick')}
                         </div>
                       </div>
                     </MagicBorder>
@@ -314,7 +313,7 @@ const MostPlayed = () => {
                       {(currentFeaturedGame.name === 'Roulette' || currentFeaturedGame.name === 'Plinko' || currentFeaturedGame.name === 'Mines' || currentFeaturedGame.name === 'Spin Wheel') && (
                         <div className="flex items-center gap-1.5 bg-green-900/30 border border-green-500/30 px-2 py-0.5 rounded-full">
                           <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
-                          <span className="text-green-400 text-xs font-medium">LIVE</span>
+                          <span className="text-green-400 text-xs font-medium">{t('most_played.live')}</span>
                         </div>
                       )}
                     </div>
@@ -322,22 +321,21 @@ const MostPlayed = () => {
                     <div className="flex flex-wrap justify-center md:justify-start gap-4 mb-6">
                       <div className="flex items-center gap-1.5 bg-white/10 px-4 py-2 rounded-full text-sm">
                         <FaUsers className="text-green-400" />
-                        <span>{currentFeaturedGame.players} Players</span>
+                        <span>{t('most_played.players', { count: currentFeaturedGame.players })}</span>
                       </div>
                       <div className="flex items-center gap-1.5 bg-white/10 px-4 py-2 rounded-full text-sm">
                         <FaTrophy className="text-yellow-400" />
-                        <span>{currentFeaturedGame.winRate} Win Rate</span>
+                        <span>{t('most_played.win_rate', { rate: currentFeaturedGame.winRate })}</span>
                       </div>
                     </div>
                     
                     <p className="text-white/80 mb-8 max-w-3xl text-lg">
-                      Experience the thrill of {currentFeaturedGame.name} - one of our most popular games. 
-                      Join hundreds of players who are winning big with provably fair gameplay.
+                      {t('most_played.featured_game_description', { gameName: currentFeaturedGame.name })}
                     </p>
                     
                     <Link href={typeof currentFeaturedGame.link === 'string' ? currentFeaturedGame.link : `/game/${currentFeaturedGame.name.toLowerCase().replace(/\s+/g, '-')}`}>
                       <button className="bg-gradient-to-r from-[#0066FF] to-[#00A3FF] hover:from-[#00A3FF] hover:to-[#0066FF] transition-all duration-300 text-white px-8 py-4 rounded-lg font-medium flex items-center gap-2 border border-[#00A3FF]/50 shadow-lg shadow-[#00A3FF]/30">
-                        Play {currentFeaturedGame.name} Now <FaChevronRight />
+                        {t('most_played.play_game_now', { gameName: currentFeaturedGame.name })} <FaChevronRight />
                       </button>
                     </Link>
                   </div>
@@ -395,17 +393,17 @@ const MostPlayed = () => {
                       
                       {game.isHot && (
                         <div className="absolute top-2 right-2 bg-gradient-to-r from-[#0066FF] to-[#00A3FF] text-white text-xs py-1 px-2 rounded-full flex items-center gap-1.5 border border-[#00A3FF]/50">
-                          <FaFire className="text-yellow-300" /> HOT
+                          <FaFire className="text-yellow-300" /> {t('most_played.hot')}
                         </div>
                       )}
                       
                       <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                         <div className="absolute bottom-3 left-3 right-3 flex justify-between items-center">
                           <span className="text-xs bg-black/60 backdrop-blur-sm border border-[#00A3FF]/40 px-2 py-1 rounded-full">
-                            {game.winRate} RTP
+                            {t('most_played.rtp', { rate: game.winRate })}
                           </span>
                           <span className="bg-gradient-to-r from-[#0066FF] to-[#00A3FF] px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1.5 border border-[#00A3FF]/50">
-                            <FaBolt /> PLAY
+                            <FaBolt /> {t('most_played.play')}
                           </span>
                         </div>
                       </div>
@@ -421,7 +419,7 @@ const MostPlayed = () => {
                       {(game.name === 'Roulette' || game.name === 'Plinko' || game.name === 'Mines' || game.name === 'Spin Wheel') && (
                         <div className="flex items-center gap-1 bg-green-900/30 border border-green-500/30 px-1.5 py-0.5 rounded-full">
                           <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></div>
-                          <span className="text-green-400 text-[10px] font-medium">LIVE</span>
+                          <span className="text-green-400 text-[10px] font-medium">{t('most_played.live')}</span>
                         </div>
                       )}
                     </div>
@@ -431,7 +429,7 @@ const MostPlayed = () => {
                       ))}
                     </div>
                     <span className="mt-2 inline-block py-1 px-2 text-xs rounded-full bg-gradient-to-r from-red-magic to-blue-magic text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                      Play Now
+                      {t('most_played.play_now')}
                     </span>
                   </div>
                 </Link>
@@ -445,13 +443,13 @@ const MostPlayed = () => {
       {!isLoading && visibleGames.length === 0 && (
         <div className="text-center py-12 bg-black/40 backdrop-blur-md rounded-xl border border-[#0066FF]/30 relative z-10">
           <div className="text-white/50 mb-4 text-6xl">🎮</div>
-          <h3 className="text-xl text-white mb-2">No games found</h3>
-          <p className="text-white/70 mb-4">Try selecting a different category</p>
+          <h3 className="text-xl text-white mb-2">{t('most_played.no_games_found')}</h3>
+          <p className="text-white/70 mb-4">{t('most_played.try_another_category')}</p>
           <button
             onClick={() => setActiveFilter("all")}
             className="bg-gradient-to-r from-[#0066FF] to-[#00A3FF] text-white px-4 py-2 rounded-full text-sm border border-[#00A3FF]/50"
           >
-            View All Games
+            {t('most_played.view_all_games')}
           </button>
         </div>
       )}

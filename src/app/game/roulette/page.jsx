@@ -1,4 +1,5 @@
 "use client";
+import { useTranslation } from 'react-i18next';
 import React, { useState, useReducer, useMemo, useEffect, useRef, useCallback } from "react";
 import { Box, Typography, IconButton, CircularProgress } from "@mui/material";
 import Tooltip, { tooltipClasses } from "@mui/material/Tooltip";
@@ -16,7 +17,6 @@ import { muiStyles } from "./styles";
 import Image from "next/image";
 import MuiAlert from "@mui/material/Alert";
 import Snackbar from "@mui/material/Snackbar";
-
 import { gameData, bettingTableData } from "./config/gameDetail";
 import { useToken } from "@/hooks/useToken";
 
@@ -41,6 +41,9 @@ import { useOneChainCasino } from '@/hooks/useOneChainCasino';
 
 // Casino module address for Ethereum
 const CASINO_MODULE_ADDRESS = process.env.NEXT_PUBLIC_CASINO_MODULE_ADDRESS || "0x0000000000000000000000000000000000000000";
+
+
+
 
 const parseOCTAmount = (amount) => {
   // Parse OCT amount
@@ -89,6 +92,8 @@ const enhancedTooltip = {
     background: 'linear-gradient(135deg, rgba(0, 20, 60, 0.95) 0%, rgba(0, 40, 80, 0.95) 100%)'
   }
 };
+
+
 
 const BetType = {
   NUMBER: 0,    // Single number (35:1) - bahsinizi 36'ya katlar
@@ -242,9 +247,9 @@ function GridInside({
 
     const cornerNumbers = cornerMap[insideNumber];
     if (cornerNumbers) {
-      return `Corner ${cornerNumbers.replace(/,/g, '-')}`;
+      return t('corner_bet', {numbers: cornerNumbers.replace(/,/g, '-')});
     }
-    return `Corner ${insideNumber}`;
+    return t('corner_bet', {numbers: insideNumber});
   };
 
   // Get split bet numbers from predefined map
@@ -296,9 +301,9 @@ function GridInside({
     const splitNumbers = splitMap[insideNumber];
     if (splitNumbers) {
       // Show only the numbers, not the split number
-      return `Split ${splitNumbers.replace(',', '-')}`;
+      return t('split_bet', {numbers: splitNumbers.replace(',', '-')});
     }
-    return `Split ${insideNumber}`;
+    return t('split_bet', {numbers: insideNumber});
   };
 
   // Get bottom bet numbers - can be either street bet or bottom split bet
@@ -310,7 +315,7 @@ function GridInside({
     if (isBottomRow) {
       // Bottom row: street bet [n, n+1, n+2]
       const streetNumbers = [insideNumber, insideNumber + 1, insideNumber + 2];
-      return `Street ${streetNumbers.join('-')}`;
+      return t('street_bet', {numbers: streetNumbers.join('-')});
     } else {
       // Middle/Top row: bottom split bet - use predefined values
       const bottomSplitMap = {
@@ -342,12 +347,12 @@ function GridInside({
       
       const splitNumbers = bottomSplitMap[insideNumber];
       if (splitNumbers) {
-        return `Split ${splitNumbers.replace(',', '-')}`;
+        return t('split_bet', {numbers: splitNumbers.replace(',', '-')});
       }
       
       // Fallback to old calculation if not in map
       const bottomNumber = insideNumber + 3;
-      return `Split ${insideNumber}-${bottomNumber}`;
+      return t('split_bet', {numbers: `${insideNumber}-${bottomNumber}`});
     }
   };
 
@@ -385,9 +390,9 @@ function GridInside({
     const horizontalSplitNumbers = horizontalSplitMap[insideNumber];
     if (horizontalSplitNumbers) {
       // Show only the numbers, not the split number
-      return `Split ${horizontalSplitNumbers.replace(',', '-')}`;
+      return t('split_bet', {numbers: horizontalSplitNumbers.replace(',', '-')});
     }
-    return `Split ${insideNumber}`;
+    return t('split_bet', {numbers: insideNumber});
   };
 
   return (
@@ -606,7 +611,7 @@ function GridInside({
               {straightup > 0 && (
                 <BetBox
                   betValue={straightup}
-                  betType={"Straight up"}
+                  betType={t("roulette_page.bet_name_straight_up")}
                   position="top-right"
                   onClick={(e) =>
                     placeBet(e, "inside", (insideNumber - 1) * 4 + 1)
@@ -987,7 +992,7 @@ const safeNow = () => {
 };
 
 // Add betting statistics tracking
-const BettingStats = ({ history }) => {
+const BettingStats = ({ history, t }) => {
   const stats = useMemo(() => {
     console.log("BettingStats - history:", history); // Debug log
     if (!history || history.length === 0) return null;
@@ -1061,25 +1066,25 @@ const BettingStats = ({ history }) => {
       borderRadius: '8px',
       background: 'rgba(0,0,0,0.3)'
     }}>
-      <Typography variant="h6" color="white" sx={{ mb: 2 }}>Session Statistics</Typography>
+      <Typography variant="h6" color="white" sx={{ mb: 2 }}>{t('roulette_page.session_statistics')}</Typography>
       <Grid container spacing={2}>
         <Grid xs={6} md={4}>
-          <Typography variant="body2" color="text.secondary">Win Rate</Typography>
+          <Typography variant="body2" color="text.secondary">{t('roulette_page.win_rate')}</Typography>
           <Typography variant="h5">{stats.winRate}%</Typography>
         </Grid>
         <Grid xs={6} md={4}>
-          <Typography variant="body2" color="text.secondary">Total Bets</Typography>
+          <Typography variant="body2" color="text.secondary">{t('roulette_page.total_bets')}</Typography>
           <Typography variant="h5">{stats.statTotal}</Typography>
         </Grid>
         <Grid xs={6} md={4}>
-          <Typography variant="body2" color="text.secondary">P/L</Typography>
+          <Typography variant="body2" color="text.secondary">{t('roulette_page.pl')}</Typography>
           <Typography variant="h5" color={stats.profitLoss >= 0 ? 'success.main' : 'error.main'}>
             {stats.profitLoss >= 0 ? '+' : ''}{stats.profitLoss.toFixed(2)}
           </Typography>
         </Grid>
 
         <Grid xs={12}>
-          <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>Hot Numbers</Typography>
+          <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>{t('roulette_page.hot_numbers')}</Typography>
           <Box sx={{ display: 'flex', gap: 1, mt: 1 }}>
             {stats.mostCommonNumbers.map((item) => (
               <Box
@@ -1109,9 +1114,9 @@ const BettingStats = ({ history }) => {
 // Roulette Header Component moved inside the main component
 
 export default function GameRoulette() {
+  const { t } = useTranslation();
   // Add a ref for scrolling past navbar
   const contentRef = useRef(null);
-
   // Add development mode flag - set to true to bypass network check
   const [devMode, setDevMode] = useState(false);
 
@@ -1207,9 +1212,9 @@ export default function GameRoulette() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.3 }}
                   >
-                    <p className="text-sm text-cyan-300 font-sans">Space Casino / Roulette</p>
-                    <span className="text-xs px-2 py-0.5 bg-gradient-to-r from-blue-900/50 to-cyan-800/40 rounded-full text-cyan-200 font-display border border-cyan-600/30">Cosmic</span>
-                    <span className="text-xs px-2 py-0.5 bg-gradient-to-r from-indigo-900/50 to-purple-800/40 rounded-full text-purple-200 font-display border border-purple-600/30">Live</span>
+                    <p className="text-sm text-cyan-300 font-sans">{t('roulette_page.header_breadcrumb')}</p>
+                    <span className="text-xs px-2 py-0.5 bg-gradient-to-r from-blue-900/50 to-cyan-800/40 rounded-full text-cyan-200 font-display border border-cyan-600/30">{t('roulette_page.header_tag_cosmic')}</span>
+                    <span className="text-xs px-2 py-0.5 bg-gradient-to-r from-indigo-900/50 to-purple-800/40 rounded-full text-purple-200 font-display border border-purple-600/30">{t('roulette_page.header_tag_live')}</span>
                   </motion.div>
                   <motion.h1
                     className="text-3xl md:text-4xl font-bold font-display bg-gradient-to-r from-cyan-300 via-blue-400 to-purple-400 bg-clip-text text-transparent"
@@ -1217,7 +1222,7 @@ export default function GameRoulette() {
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.4, delay: 0.1 }}
                   >
-                    Cosmic Roulette
+                    {t('roulette_page.header_title')}
                   </motion.h1>
                 </div>
               </div>
@@ -1227,7 +1232,7 @@ export default function GameRoulette() {
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.5, delay: 0.2 }}
               >
-                Journey through the cosmos and place your bets on the stellar wheel. From simple constellation bets to complex nebula combinations, the universe is your playground.
+                {t('roulette_page.header_description')}
               </motion.p>
 
               {/* Game highlights */}
@@ -1239,15 +1244,15 @@ export default function GameRoulette() {
               >
                 <div className="flex items-center text-sm bg-gradient-to-r from-blue-900/50 to-cyan-800/30 px-3 py-1.5 rounded-full border border-cyan-600/30 backdrop-blur-sm">
                   <FaRocket className="mr-1.5 text-cyan-400" />
-                  <span className="font-sans">Zero gravity</span>
+                  <span className="font-sans">{t('roulette_page.highlight_zero_gravity')}</span>
                 </div>
                 <div className="flex items-center text-sm bg-gradient-to-r from-indigo-900/50 to-purple-800/30 px-3 py-1.5 rounded-full border border-purple-600/30 backdrop-blur-sm">
                   <GiCardRandom className="mr-1.5 text-purple-400" />
-                  <span className="font-sans">Stellar odds</span>
+                  <span className="font-sans">{t('roulette_page.highlight_stellar_odds')}</span>
                 </div>
                 <div className="flex items-center text-sm bg-gradient-to-r from-teal-900/50 to-blue-800/30 px-3 py-1.5 rounded-full border border-blue-600/30 backdrop-blur-sm">
                   <Shield className="mr-1.5 text-teal-400" />
-                  <span className="font-sans">Quantum fair</span>
+                  <span className="font-sans">{t('roulette_page.highlight_quantum_fair')}</span>
                 </div>
               </motion.div>
             </div>
@@ -1266,7 +1271,7 @@ export default function GameRoulette() {
                     <div className="flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-r from-blue-500/30 to-cyan-400/30 mb-1">
                       <FaChartLine className="text-cyan-300" />
                     </div>
-                    <div className="text-xs text-cyan-200/70 font-sans text-center">Total Bets</div>
+                    <div className="text-xs text-cyan-200/70 font-sans text-center">{t('roulette_page.stats_total_bets')}</div>
                     <div className="text-cyan-100 font-display text-sm md:text-base truncate w-full text-center" title={gameStatistics.totalBets}>
                       {gameStatistics.totalBets}
                     </div>
@@ -1276,7 +1281,7 @@ export default function GameRoulette() {
                     <div className="flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-r from-indigo-500/30 to-purple-400/30 mb-1">
                       <FaCoins className="text-purple-300" />
                     </div>
-                    <div className="text-xs text-purple-200/70 font-sans text-center">Volume</div>
+                    <div className="text-xs text-purple-200/70 font-sans text-center">{t('roulette_page.stats_volume')}</div>
                     <div className="text-purple-100 font-display text-sm md:text-base truncate w-full text-center" title={`${gameStatistics.totalVolume} OCT`}>
                       {gameStatistics.totalVolume} OCT
                     </div>
@@ -1286,7 +1291,7 @@ export default function GameRoulette() {
                     <div className="flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-r from-teal-500/30 to-blue-400/30 mb-1">
                       <FaTrophy className="text-teal-300" />
                     </div>
-                    <div className="text-xs text-teal-200/70 font-sans text-center">Max Win</div>
+                    <div className="text-xs text-teal-200/70 font-sans text-center">{t('roulette_page.stats_max_win')}</div>
                     <div className="text-teal-100 font-display text-sm md:text-base truncate w-full text-center" title={`${gameStatistics.maxWin} OCT`}>
                       {gameStatistics.maxWin} OCT
                     </div>
@@ -1305,21 +1310,21 @@ export default function GameRoulette() {
                     className="flex items-center justify-center px-4 py-2 bg-gradient-to-r from-blue-800/50 to-cyan-700/30 rounded-lg text-cyan-100 font-medium text-sm hover:from-blue-700/60 hover:to-cyan-600/40 transition-all duration-300 border border-cyan-600/30 shadow-lg shadow-blue-900/20"
                   >
                     <GiCardRandom className="mr-2 text-cyan-300" />
-                    Stellar Guide
+                    {t('roulette_page.button_stellar_guide')}
                   </button>
                   <button
                     onClick={() => scrollToElement('payouts')}
                     className="flex items-center justify-center px-4 py-2 bg-gradient-to-r from-indigo-800/50 to-purple-700/30 rounded-lg text-purple-100 font-medium text-sm hover:from-indigo-700/60 hover:to-purple-600/40 transition-all duration-300 border border-purple-600/30 shadow-lg shadow-indigo-900/20"
                   >
                     <FaCoins className="mr-2 text-purple-300" />
-                    Cosmic Payouts
+                    {t('roulette_page.button_cosmic_payouts')}
                   </button>
                   <button
                     onClick={() => scrollToElement('history')}
                     className="flex items-center justify-center px-4 py-2 bg-gradient-to-r from-teal-800/50 to-blue-700/30 rounded-lg text-teal-100 font-medium text-sm hover:from-teal-700/60 hover:to-blue-600/40 transition-all duration-300 border border-teal-600/30 shadow-lg shadow-teal-900/20"
                   >
                     <FaChartLine className="mr-2 text-teal-300" />
-                    Space History
+                    {t('roulette_page.button_space_history')}
                   </button>
                 </motion.div>
               </div>
@@ -1927,12 +1932,12 @@ export default function GameRoulette() {
   const lockBet = async () => {
     // Check if wallet is connected
     if (!isConnected) {
-      alert("Please connect your Ethereum wallet first to play Roulette!");
+      alert(t('roulette_page.alert_connect_wallet'));
       return;
     }
 
     if (total <= 0) {
-      alert("Please place a bet first");
+      alert(t('roulette_page.alert_place_bet_first'));
       return;
     }
 
@@ -1941,7 +1946,7 @@ export default function GameRoulette() {
     const totalBetAmount = total;
 
     if (currentBalance < totalBetAmount) {
-      alert(`Insufficient balance. You have ${currentBalance.toFixed(5)} OCT but need ${totalBetAmount.toFixed(5)} OCT`);
+      alert(t('roulette_page.alert_insufficient_balance', { balance: currentBalance.toFixed(5), needed: totalBetAmount.toFixed(5) }));
       return;
     }
 
@@ -1984,28 +1989,28 @@ export default function GameRoulette() {
 
       // Add outside bets
       if (red > 0) {
-        allBets.push({ type: BetType.COLOR, value: 0, amount: red, name: "Red" }); // Red = 0
+        allBets.push({ type: BetType.COLOR, value: 0, amount: red, name: t('roulette_page.bet_name_red') }); // Red = 0
       }
       if (black > 0) {
-        allBets.push({ type: BetType.COLOR, value: 1, amount: black, name: "Black" }); // Black = 1
+        allBets.push({ type: BetType.COLOR, value: 1, amount: black, name: t('roulette_page.bet_name_black') }); // Black = 1
       }
       if (odd > 0) {
-        allBets.push({ type: BetType.ODDEVEN, value: 1, amount: odd, name: "Odd" }); // Odd
+        allBets.push({ type: BetType.ODDEVEN, value: 1, amount: odd, name: t('roulette_page.bet_name_odd') }); // Odd
       }
       if (even > 0) {
-        allBets.push({ type: BetType.ODDEVEN, value: 0, amount: even, name: "Even" }); // Even
+        allBets.push({ type: BetType.ODDEVEN, value: 0, amount: even, name: t('roulette_page.bet_name_even') }); // Even
       }
       if (over > 0) {
-        allBets.push({ type: BetType.HIGHLOW, value: 1, amount: over, name: "High (19-36)" }); // High
+        allBets.push({ type: BetType.HIGHLOW, value: 1, amount: over, name: t('roulette_page.bet_name_high') }); // High
       }
       if (under > 0) {
-        allBets.push({ type: BetType.HIGHLOW, value: 0, amount: under, name: "Low (1-18)" }); // Low
+        allBets.push({ type: BetType.HIGHLOW, value: 0, amount: under, name: t('roulette_page.bet_name_low') }); // Low
       }
 
       // Add dozen bets
       dozens.forEach((amount, index) => {
         if (amount > 0) {
-          const dozenNames = ["1st Dozen (1-12)", "2nd Dozen (13-24)", "3rd Dozen (25-36)"];
+          const dozenNames = [t('roulette_page.bet_name_dozen_1'), t('roulette_page.bet_name_dozen_2'), t('roulette_page.bet_name_dozen_3')];
           allBets.push({ type: BetType.DOZEN, value: index, amount, name: dozenNames[index] });
         }
       });
@@ -2013,7 +2018,7 @@ export default function GameRoulette() {
       // Add column bets
       columns.forEach((amount, index) => {
         if (amount > 0) {
-          const columnNames = ["1st Column", "2nd Column", "3rd Column"];
+          const columnNames = [t('roulette_page.bet_name_column_1'), t('roulette_page.bet_name_column_2'), t('roulette_page.bet_name_column_3')];
           allBets.push({ type: BetType.COLUMN, value: index, amount, name: columnNames[index] });
         }
       });
@@ -2052,7 +2057,7 @@ export default function GameRoulette() {
           // FIXED: Use actualNumber instead of numberBase for better accuracy
           if (betPosition === 1) {
             // Straight up bet - actualNumber is the actual number (0-36)
-            allBets.push({ type: BetType.NUMBER, value: actualNumber, amount, name: `Number ${actualNumber}` });
+            allBets.push({ type: BetType.NUMBER, value: actualNumber, amount, name: t('roulette_page.bet_name_number', { number: actualNumber }) });
           } else if (betPosition === 2) {
             // Left split bet - predefined split positions
             const splitMap = {
@@ -2101,7 +2106,7 @@ export default function GameRoulette() {
             const splitNumbers = splitMap[actualNumber];
             if (splitNumbers) {
               // Use the actualNumber (where bet was placed) to get split definition
-              allBets.push({ type: BetType.SPLIT, value: splitNumbers, amount, name: `Split ${actualNumber} (${splitNumbers})` });
+              allBets.push({ type: BetType.SPLIT, value: splitNumbers, amount, name: t('roulette_page.bet_name_split', { number: actualNumber, splitNumbers: splitNumbers }) });
             }
           } else if (betPosition === 3) {
             // Bottom bet - can be either street bet or bottom split bet
@@ -2111,7 +2116,7 @@ export default function GameRoulette() {
               // Bottom row: street bet [n, n+1, n+2]
               const streetNumbers = [actualNumber, actualNumber + 1, actualNumber + 2];
               console.log(`🎯 STREET BET DETECTED: ${actualNumber} → [${streetNumbers.join(',')}] - Amount: ${amount}`);
-              allBets.push({ type: BetType.STREET, value: streetNumbers.join(','), amount, name: `Street ${streetNumbers.join('-')}` });
+              allBets.push({ type: BetType.STREET, value: streetNumbers.join(','), amount, name: t('roulette_page.bet_name_street', { numbers: streetNumbers.join('-')}) });
             } else {
               // Middle/Top row: bottom split bet - use predefined values
               const bottomSplitMap = {
@@ -2143,11 +2148,11 @@ export default function GameRoulette() {
               
               const splitNumbers = bottomSplitMap[actualNumber];
               if (splitNumbers) {
-                allBets.push({ type: BetType.SPLIT, value: splitNumbers, amount, name: `Split ${actualNumber} (${splitNumbers.replace(',', '-')})` });
+                allBets.push({ type: BetType.SPLIT, value: splitNumbers, amount, name: t('roulette_page.bet_name_split', { number: actualNumber, splitNumbers: splitNumbers.replace(',', '-') }) });
               } else {
                 // Fallback to old calculation if not in map
                 const bottomNumber = actualNumber + 3;
-                allBets.push({ type: BetType.SPLIT, value: `${actualNumber},${bottomNumber}`, amount, name: `Split ${actualNumber}/${bottomNumber}` });
+                allBets.push({ type: BetType.SPLIT, value: `${actualNumber},${bottomNumber}`, amount, name: t('bet_name_split_simple', { number1: actualNumber, number2: bottomNumber }) });
               }
             }
           } else if (betPosition === 5) {
@@ -2183,7 +2188,7 @@ export default function GameRoulette() {
             const horizontalSplitNumbers = horizontalSplitMap[actualNumber];
             if (horizontalSplitNumbers) {
               // Use the actualNumber (where bet was placed) to get split definition
-              allBets.push({ type: BetType.SPLIT, value: horizontalSplitNumbers, amount, name: `Split ${actualNumber} (${horizontalSplitNumbers})` });
+              allBets.push({ type: BetType.SPLIT, value: horizontalSplitNumbers, amount, name: t('bet_name_split_with_numbers', { number: actualNumber, splitNumbers: horizontalSplitNumbers }) });
             }
           } else if (betPosition === 4) {
             // Corner bet (4 numbers) - predefined corner positions
@@ -2220,7 +2225,7 @@ export default function GameRoulette() {
             const cornerNumbers = cornerMap[actualNumber];
             if (cornerNumbers) {
               // Use the actualNumber (where bet was placed) to get corner definition
-              allBets.push({ type: BetType.CORNER, value: cornerNumbers, amount, name: `Corner ${actualNumber} (${cornerNumbers})` });
+              allBets.push({ type: BetType.CORNER, value: cornerNumbers, amount, name: t('roulette_page.bet_name_corner', { number: actualNumber, cornerNumbers: cornerNumbers }) });
             }
           }
         }
@@ -2229,9 +2234,9 @@ export default function GameRoulette() {
       console.log("All bets to process:", allBets);
       console.log("Column bets:", columns);
       console.log("Column bet positions:");
-      console.log(`  Index 0 (Top "2 To 1"): ${columns[0] > 0 ? `$${columns[0]} bet` : 'No bet'} → 3rd Column (3,6,9,12,15,18,21,24,27,30,33,36)`);
-      console.log(`  Index 1 (Middle "2 To 1"): ${columns[1] > 0 ? `$${columns[1]} bet` : 'No bet'} → 2nd Column (2,5,8,11,14,17,20,23,26,29,32,35)`);
-      console.log(`  Index 2 (Bottom "2 To 1"): ${columns[2] > 0 ? `$${columns[2]} bet` : 'No bet'} → 1st Column (1,4,7,10,13,16,19,22,25,28,31,34)`);
+      console.log(`  Index 0 (Top "2 To 1"): ${columns[0] > 0 ? `$${columns[0]} bet` : t('no_bet')} → ${t('column_3')} (3,6,9,12,15,18,21,24,27,30,33,36)`);
+      console.log(`  Index 1 (Middle "2 To 1"): ${columns[1] > 0 ? `$${columns[1]} bet` : t('no_bet')} → ${t('column_2')} (2,5,8,11,14,17,20,23,26,29,32,35)`);
+      console.log(`  Index 2 (Bottom "2 To 1"): ${columns[2] > 0 ? `$${columns[2]} bet` : t('no_bet')} → ${t('column_1')} (1,4,7,10,13,16,19,22,25,28,31,34)`);
       console.log("Inside bets:", inside);
 
 
@@ -2255,15 +2260,15 @@ export default function GameRoulette() {
         if (winningNumber > 0) {
           const columnNumber = winningNumber % 3;
           let columnName = "";
-          if (columnNumber === 1) columnName = "1st Column";
-          else if (columnNumber === 2) columnName = "2nd Column";
-          else if (columnNumber === 0) columnName = "3rd Column";
+          if (columnNumber === 1) columnName = t("column_1");
+          else if (columnNumber === 2) columnName = t("column_2");
+          else if (columnNumber === 0) columnName = t("column_3");
 
           console.log(`🎯 WINNING NUMBER: ${winningNumber}`);
           console.log(`📊 COLUMN INFO: ${winningNumber} % 3 = ${columnNumber} → ${columnName}`);
           console.log(`🔢 COLUMN NUMBERS: ${columnName} contains: ${getColumnNumbers(columnNumber)}`);
         } else {
-          console.log(`🎯 WINNING NUMBER: 0 (Green - No column bet)`);
+          console.log(`🎯 WINNING NUMBER: 0 (${t("green_no_column")})`);
         }
 
         // Process ALL bets and calculate total winnings
@@ -2328,7 +2333,7 @@ export default function GameRoulette() {
         const newBet = {
           id: Date.now(),
           timestamp: new Date(),
-          betType: `Multiple Bets (${allBets.length})`,
+          betType: t('roulette_page.bet_name_multiple', { count: allBets.length }),
           amount: totalBetAmount,
           numbers: [],
           result: winningNumber,
@@ -2474,16 +2479,16 @@ export default function GameRoulette() {
         // Show result notification
         if (netResult > 0) {
           const winMessage = winningBets.length === 1
-                    ? `🎉 WINNER! ${winningBets[0].name} - You won ${(netResult - totalBetAmount).toFixed(5)} OCT!`
-                    : `🎉 MULTIPLE WINNERS! ${winningBets.length} bets won - Total: ${(netResult - totalBetAmount).toFixed(5)} OCT!`;
+                    ? t('roulette_page.notification_win_single', { betName: winningBets[0].name, amount: (netResult - totalBetAmount).toFixed(5) })
+                    : t('roulette_page.notification_win_multiple', { count: winningBets.length, amount: (netResult - totalBetAmount).toFixed(5) });
 
           setNotificationMessage(winMessage);
           setNotificationSeverity("success");
           setSnackbarMessage(winMessage);
         } else {
-          setNotificationMessage(`💸 Number ${winningNumber} - You lost ${totalBetAmount.toFixed(5)} OCT!`);
+          setNotificationMessage(t('roulette_page.notification_loss', { number: winningNumber, amount: totalBetAmount.toFixed(5) }));
           setNotificationSeverity("error");
-          setSnackbarMessage(`💸 Number ${winningNumber} - You lost ${totalBetAmount.toFixed(5)} OCT!`);
+          setSnackbarMessage(t('notification_loss_long', { winningNumber: winningNumber, totalBetAmount: totalBetAmount.toFixed(5) }));
         }
         setSnackbarOpen(true);
 
@@ -2498,7 +2503,7 @@ export default function GameRoulette() {
       setError(error.message || error.toString());
       setShowNotification(false);
       setWheelSpinning(false);
-      alert(`Error: ${error.message || error.toString()}`);
+      alert(t('roulette_page.notification_error', { errorMessage: error.message || error.toString() }));
 
       // No need to refund since we don't deduct balance upfront anymore
     } finally {
@@ -2510,31 +2515,31 @@ export default function GameRoulette() {
   const getBetTypeName = (betType, betValue) => {
     switch (betType) {
       case BetType.COLOR:
-        return betValue === 1 ? 'Red' : 'Black';
+        return betValue === 1 ? t('roulette_page.color_red') : t('roulette_page.color_black');
       case BetType.ODDEVEN:
-        return betValue === 1 ? 'Odd' : 'Even';
+        return betValue === 1 ? t('roulette_page.bet_name_odd') : t('roulette_page.bet_name_even');
       case BetType.HIGHLOW:
-        return betValue === 1 ? 'High (19-36)' : 'Low (1-18)';
+        return betValue === 1 ? t('roulette_page.bet_name_high') : t('roulette_page.bet_name_low');
       case BetType.DOZEN:
-        return `Dozen ${betValue + 1}`;
+        return t('roulette_page.bet_type_name_dozen', { number: betValue + 1 });
       case BetType.COLUMN:
-        return `Column ${betValue + 1}`;
+        return t('roulette_page.bet_type_name_column', { number: betValue + 1 });
       case BetType.NUMBER:
-        return `Straight ${betValue}`;
+        return t('roulette_page.bet_type_name_straight', { number: betValue });
       case BetType.SPLIT:
-        return `Split ${betValue}`;
+        return t('roulette_page.bet_type_name_split', { value: betValue });
       case BetType.STREET:
-        return `Street ${betValue}`;
+        return t('roulette_page.bet_type_name_street', { value: betValue });
       case BetType.CORNER:
         // For corner bets, betValue is already a string like "7,8,10,11"
         // Convert it to a more readable format like "7-8-10-11"
         if (typeof betValue === 'string' && betValue.includes(',')) {
           const cornerNumbers = betValue.split(',').map(n => n.trim());
-          return `Corner ${cornerNumbers.join('-')}`;
+          return t('roulette_page.bet_type_name_corner', { value: cornerNumbers.join('-') });
         }
-        return `Corner ${betValue}`;
+        return t('roulette_page.bet_type_name_corner', { value: betValue });
       default:
-        return 'Unknown';
+        return t('roulette_page.bet_type_name_unknown');
     }
   };
 
@@ -2544,7 +2549,7 @@ export default function GameRoulette() {
 
     if (!address) {
       console.error("Wallet not connected.");
-      alert("Please connect your wallet.");
+      alert(t('roulette_page.please_connect_wallet'));
       return;
     }
 
@@ -2575,13 +2580,13 @@ export default function GameRoulette() {
           withdrawResponse;
 
         console.log("Winnings withdrawn successfully:", responseHash);
-        alert("Winnings withdrawn successfully!");
+        alert(t('roulette_page.winnings_withdrawn'));
       } else {
         throw new Error("Withdrawal transaction failed.");
       }
     } catch (error) {
       console.error("Error withdrawing winnings:", error);
-      alert(`Failed to withdraw winnings: ${error.message}`);
+      alert(t('roulette_page.failed_to_withdraw', { errorMessage: error.message }));
     }
   }, [playSound, winnings, reset]);
 
@@ -2702,13 +2707,13 @@ export default function GameRoulette() {
       // Check if wallet is connected first
       if (!isConnected) {
         console.log("Wallet not connected, please connect wallet first");
-        alert("Please connect your wallet first using the connect button in the top right corner");
+        alert(t('roulette_page.connect_wallet_first_top_right'));
         return;
       }
 
       // Check if ethereum provider exists
       if (!window.ethereum || typeof window.ethereum.request !== 'function') {
-        alert("No Ethereum wallet detected. Please install a wallet like MetaMask.");
+        alert(t('roulette_page.no_eth_wallet_detected'));
         return;
       }
 
@@ -2805,18 +2810,18 @@ export default function GameRoulette() {
               }
             } catch (pharosError) {
               console.error("Failed to add Pharos Devnet:", pharosError);
-              alert("Unable to switch to required networks. Please try adding Mantle Sepolia manually.");
+              alert(t('roulette_page.unable_to_switch_network'));
             }
           }
         } else {
           // Handle other errors
           console.error("Failed to switch network:", switchError);
-          alert("Failed to switch network. Please try again or add Mantle Sepolia manually.");
+          alert(t('roulette_page.failed_to_switch_network'));
         }
       }
     } catch (error) {
       console.error("Error in switchNetwork:", error);
-      alert("An error occurred while switching networks. Please refresh and try again.");
+      alert(t('roulette_page.error_switching_network'));
     }
   };
 
@@ -3207,19 +3212,19 @@ export default function GameRoulette() {
               mx: 'auto'
             }}
           >
-            <Typography
-              variant="h6"
-              sx={{
-                color: 'white',
-                fontWeight: 'bold',
-                display: 'flex',
-                alignItems: 'center',
-                gap: 1
-              }}
-            >
-              <FaCoins className="text-yellow-400" />
-              Balance: {isConnected ? `${parseFloat(userBalance || '0').toFixed(5)} OCT` : 'Connect Wallet'}
-            </Typography>
+              <Typography
+                variant="h6"
+                sx={{
+                  color: 'white',
+                  fontWeight: 'bold',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 1
+                }}
+              >
+                <FaCoins className="text-yellow-400" />
+                {t('roulette_page.balance_label')} {isConnected ? t('roulette_page.balance_value', { balance: parseFloat(userBalance || '0').toFixed(5) }) : t('roulette_page.balance_connect_wallet')}
+              </Typography>
           </Box>
 
           {/* Recent Results Bar */}
@@ -3253,7 +3258,7 @@ export default function GameRoulette() {
                 fontWeight: 'bold'
               }}
             >
-              Recent Results:
+              {t('roulette_page.recent_results')}
             </Typography>
             {recentResults.length === 0 ? (
               <Typography
@@ -3267,7 +3272,7 @@ export default function GameRoulette() {
                   opacity: 0.8
                 }}
               >
-                No results yet
+                {t('roulette_page.no_results_yet')}
               </Typography>
             ) : (
               recentResults.map((num, idx) => (
@@ -3333,18 +3338,18 @@ export default function GameRoulette() {
             >
               <Box sx={{ fontSize: '48px', marginBottom: '20px' }}>📱 ↻</Box>
               <Typography variant="h4" sx={{ marginBottom: '16px', fontWeight: 'bold' }}>
-                For Better Gaming Experience
+                {t('roulette_page.rotate_device_title')}
               </Typography>
               <Typography variant="h6" sx={{ marginBottom: '12px' }}>
-                Please rotate your device
+                {t('roulette_page.rotate_device_subtitle')}
               </Typography>
               <Typography variant="body1" sx={{ opacity: 0.8, maxWidth: '300px' }}>
-                The roulette table is optimized for landscape mode on mobile devices for better visibility
+                {t('roulette_page.rotate_device_description')}
               </Typography>
 
               {/* Desktop Site Mode Instructions */}
               <Typography variant="body1" sx={{ opacity: 0.8, maxWidth: '300px', mt: 2, color: '#FFD700' }}>
-                💻 Please open your browser's desktop site mode for better experience
+                {t('roulette_page.desktop_mode_suggestion')}
               </Typography>
 
               <Box sx={{
@@ -3355,7 +3360,7 @@ export default function GameRoulette() {
                 backgroundColor: 'rgba(255,255,255,0.1)'
               }}>
                 <Typography variant="body2">
-                  💡 Tip: Make sure auto-rotation is enabled on your device
+                  {t('roulette_page.autorotate_tip')}
                 </Typography>
               </Box>
             </Box>
@@ -3490,11 +3495,11 @@ export default function GameRoulette() {
               <Grid md={1} />
               <Grid md={4}>
                 <GridOutsideBet onClick={(e) => placeBet(e, "dozens", 0)}>
-                  <Typography variant="h5">1st 12</Typography>
+                  <Typography variant="h5">{t('roulette_page.bet_1st_12')}</Typography>
                   {dozens[0] > 0 && (
                     <BetBox
                       betValue={dozens[0]}
-                      betType="1st 12"
+                      betType={t("bet_type_1st_12")}
                       onClick={(e) => placeBet(e, "dozens", 0)}
                     />
                   )}
@@ -3502,11 +3507,11 @@ export default function GameRoulette() {
               </Grid>
               <Grid md={4}>
                 <GridOutsideBet onClick={(e) => placeBet(e, "dozens", 1)}>
-                  <Typography variant="h5">2nd 12</Typography>
+                  <Typography variant="h5">{t('roulette_page.bet_2nd_12')}</Typography>
                   {dozens[1] > 0 && (
                     <BetBox
                       betValue={dozens[1]}
-                      betType="2nd 12"
+                      betType={t("bet_type_2nd_12")}
                       onClick={(e) => placeBet(e, "dozens", 1)}
                     />
                   )}
@@ -3517,11 +3522,11 @@ export default function GameRoulette() {
                   rightCard={true}
                   onClick={(e) => placeBet(e, "dozens", 2)}
                 >
-                  <Typography variant="h5">3rd 12</Typography>
+                  <Typography variant="h5">{t('roulette_page.bet_3rd_12')}</Typography>
                   {dozens[2] > 0 && (
                     <BetBox
                       betValue={dozens[2]}
-                      betType="3rd 12"
+                      betType={t("bet_type_3rd_12")}
                       onClick={(e) => placeBet(e, "dozens", 2)}
                     />
                   )}
@@ -3537,11 +3542,11 @@ export default function GameRoulette() {
               <Grid md={1} />
               <Grid md={2}>
                 <GridOutsideBet onClick={(e) => placeBet(e, "under")}>
-                  <Typography variant="h5">1-18</Typography>
+                  <Typography variant="h5">{t('roulette_page.bet_1_to_18')}</Typography>
                   {under > 0 && (
                     <BetBox
                       betValue={under}
-                      betType="Under (1-18)"
+                      betType={t("bet_type_under")}
                       onClick={(e) => placeBet(e, "under")}
                     />
                   )}
@@ -3549,11 +3554,11 @@ export default function GameRoulette() {
               </Grid>
               <Grid md={2}>
                 <GridOutsideBet onClick={(e) => placeBet(e, "even")}>
-                  <Typography variant="h5">Even</Typography>
+                  <Typography variant="h5">{t('roulette_page.bet_even')}</Typography>
                   {even > 0 && (
                     <BetBox
                       betValue={even}
-                      betType="Even"
+                      betType={t("bet_type_even")}
                       onClick={(e) => placeBet(e, "even")}
                     />
                   )}
@@ -3564,7 +3569,7 @@ export default function GameRoulette() {
                   {red > 0 && (
                     <BetBox
                       betValue={red}
-                      betType="Red"
+                      betType={t('roulette_page.bet_red')}
                       onClick={(e) => placeBet(e, "red")}
                     />
                   )}
@@ -3575,7 +3580,7 @@ export default function GameRoulette() {
                   {black > 0 && (
                     <BetBox
                       betValue={black}
-                      betType="Black"
+                      betType={t('roulette_page.bet_black')}
                       onClick={(e) => placeBet(e, "black")}
                     />
                   )}
@@ -3583,11 +3588,11 @@ export default function GameRoulette() {
               </Grid>
               <Grid md={2}>
                 <GridOutsideBet onClick={(e) => placeBet(e, "odd")}>
-                  <Typography variant="h5">Odd</Typography>
+                  <Typography variant="h5">{t('roulette_page.bet_odd')}</Typography>
                   {odd > 0 && (
                     <BetBox
                       betValue={odd}
-                      betType="Odd"
+                      betType={t("bet_type_odd")}
                       onClick={(e) => placeBet(e, "odd")}
                     />
                   )}
@@ -3598,11 +3603,11 @@ export default function GameRoulette() {
                   rightCard={true}
                   onClick={(e) => placeBet(e, "over")}
                 >
-                  <Typography variant="h5">19-36</Typography>
+                  <Typography variant="h5">{t('roulette_page.bet_19_to_36')}</Typography>
                   {over > 0 && (
                     <BetBox
                       betValue={over}
-                      betType="Over (19-36)"
+                      betType={t("bet_type_over")}
                       onClick={(e) => placeBet(e, "over")}
                     />
                   )}
@@ -3647,7 +3652,7 @@ export default function GameRoulette() {
                 color="text.accent"
                 sx={{ mb: isSmallScreen && !isPortrait ? 1 : 0 }}
               >
-                Roulette
+                {t('roulette_page.roulette_title')}
               </Typography>
               <Box sx={{ display: 'flex', gap: 2, mt: 1 }}>
                 <TooltipWide title={<Typography>{rouletteTutorial}</Typography>}>
@@ -3656,7 +3661,7 @@ export default function GameRoulette() {
                     color="text.secondary"
                     onClick={() => setShowHelp(!showHelp)}
                   >
-                    <Typography variant="h6">Tutorial</Typography>
+                    <Typography variant="h6">{t('roulette_page.tutorial')}</Typography>
                     <InfoIcon sx={{ ml: 1 }} />
                   </Box>
                 </TooltipWide>
@@ -3673,7 +3678,7 @@ export default function GameRoulette() {
                     sx={{ display: "flex", alignItems: "center", cursor: 'pointer' }}
                     color="text.secondary"
                   >
-                    <Typography variant="h6">Odds</Typography>
+                    <Typography variant="h6">{t('roulette_page.odds')}</Typography>
                     <InfoIcon sx={{ ml: 1 }} />
                   </Box>
                 </TooltipWide>
@@ -3707,7 +3712,7 @@ export default function GameRoulette() {
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
                 <Shield size={16} style={{ color: '#FFC107' }} />
                 <Typography variant="subtitle2" sx={{ color: '#FFC107', fontWeight: 'bold' }}>
-                  Pyth Entropy
+                  {t('roulette_page.pyth_entropy')}
                 </Typography>
               </Box>
               
@@ -3730,7 +3735,7 @@ export default function GameRoulette() {
                       }
                     }}
                   >
-                    Connect Wallet
+                    {t('roulette_page.connect_wallet_button')}
                   </Button>
                 </Box>
               ) : (
@@ -3740,7 +3745,7 @@ export default function GameRoulette() {
                     fontWeight: 'bold',
                     textAlign: 'center'
                   }}>
-                    Pyth Entropy
+                    {t('pyth_entropy_title')}
                   </Typography>
                   
                   <Typography variant="body2" sx={{ 
@@ -3749,7 +3754,7 @@ export default function GameRoulette() {
                     textAlign: 'center',
                     mt: 1
                   }}>
-                    On-chain randomness
+                    {t('roulette_page.on_chain_randomness')}
                   </Typography>
                 </Box>
               )}
@@ -3767,7 +3772,7 @@ export default function GameRoulette() {
               }}
             >
               <TextFieldCurrency
-                label="Bet Amount"
+                label={t('roulette_page.bet_amount')}
                 variant="standard"
                 value={bet}
                 handleChange={handleBetChange}
@@ -3776,7 +3781,7 @@ export default function GameRoulette() {
               />
 
               <Typography color="white" sx={{ opacity: 0.8 }}>
-                Current Bet Total: {total.toFixed(5)} OCT
+                {t('roulette_page.current_bet_total', { total: total.toFixed(5) })}
               </Typography>
 
               {/* Quick Bet Buttons */}
@@ -3818,7 +3823,7 @@ export default function GameRoulette() {
               }}
             >
               <Box sx={{ display: 'flex', gap: 2 }}>
-                <Tooltip title={<Typography>Undo last bet</Typography>}>
+                <Tooltip title={<Typography>{t('roulette_page.undo_last_bet')}</Typography>}>
                   <span>
                     <IconButton
                       disabled={events.length === 0 || submitDisabled}
@@ -3828,7 +3833,7 @@ export default function GameRoulette() {
                     </IconButton>
                   </span>
                 </Tooltip>
-                <Tooltip title={<Typography>Clear bet</Typography>}>
+                <Tooltip title={<Typography>{t('roulette_page.clear_bet')}</Typography>}>
                   <span>
                     <IconButton
                       disabled={submitDisabled}
@@ -3843,10 +3848,10 @@ export default function GameRoulette() {
               <Box sx={{ mt: 3 }}>
                 {rollResult >= 0 ? (
                   <Box>
-                    <Button onClick={handleGoAgain}>Go Again</Button>
+                    <Button onClick={handleGoAgain}>{t('roulette_page.go_again')}</Button>
                     <Box sx={{ mt: 1, textAlign: 'center' }}>
                       <Typography variant="h5">
-                        Result: <span style={{
+                        {t('roulette_page.result_label')} <span style={{
                           color: rollResult === 0 ? '#14D854' :
                             [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36].includes(rollResult) ? '#d82633' : 'white'
                         }}>{rollResult}</span>
@@ -3861,11 +3866,11 @@ export default function GameRoulette() {
                       loading={submitDisabled}
                       onClick={lockBet}
                     >
-                      {total > 0 ? `Place Bet (${total.toFixed(5)} OCT)` : 'Place Bet (OCT)'}
+                      {total > 0 ? t('roulette_page.place_bet_total', { total: total.toFixed(5) }) : t('roulette_page.place_bet_oct')}
                     </Button>
                     {submitDisabled && rollResult < 0 && (
                       <Typography color="white" sx={{ opacity: 0.8 }}>
-                        Die being rolled, please wait...
+                        {t('roulette_page.rolling_die')}
                       </Typography>
                     )}
                     {total > 0 && !submitDisabled && (
@@ -3876,8 +3881,8 @@ export default function GameRoulette() {
                             columns.filter(x => x > 0).length +
                             inside.filter(x => x > 0).length;
                           return activeBetCount > 1
-                            ? `${activeBetCount} bets selected`
-                            : `1 bet selected`;
+                            ? t('roulette_page.bets_selected', { count: activeBetCount })
+                            : t('roulette_page.one_bet_selected');
                         })()}
                       </Typography>
                     )}
@@ -3889,7 +3894,7 @@ export default function GameRoulette() {
             {/* Stats Only */}
             <Box sx={{ width: { xs: '100%', md: '300px' }, mt: { xs: 4, md: 0 } }}>
               <Typography variant="h6" color="white" sx={{ mb: 2, fontWeight: 'bold' }}>
-                Stats
+                {t('roulette_page.stats')}
               </Typography>
               <Box sx={{
                 backgroundColor: 'rgba(0,0,0,0.3)',
@@ -3898,7 +3903,7 @@ export default function GameRoulette() {
                 minHeight: 300,
                 border: '1px solid rgba(255,255,255,0.1)'
               }}>
-                <BettingStats history={bettingHistory} />
+                <BettingStats history={bettingHistory} t={t} />
               </Box>
             </Box>
           </Box>
@@ -3934,9 +3939,9 @@ export default function GameRoulette() {
               }}
               onClick={(e) => e.stopPropagation()}
             >
-              <Typography variant="h5" sx={{ mb: 2 }}>How to Play Roulette</Typography>
+              <Typography variant="h5" sx={{ mb: 2 }}>{t('roulette_page.how_to_play_roulette')}</Typography>
               <Typography paragraph>{rouletteTutorial}</Typography>
-              <Typography variant="h6" sx={{ mt: 3, mb: 1 }}>Payout Odds</Typography>
+              <Typography variant="h6" sx={{ mt: 3, mb: 1 }}>{t('roulette_page.payout_odds')}</Typography>
               {rouletteOdds.map((odd, index) => (
                 <Typography key={index} paragraph>
                   {odd}
@@ -3946,7 +3951,7 @@ export default function GameRoulette() {
                 onClick={() => setShowHelp(false)}
                 sx={{ mt: 2 }}
               >
-                Close
+                {t('roulette_page.close')}
               </Button>
             </Box>
           </Box>
@@ -3974,7 +3979,7 @@ export default function GameRoulette() {
               textShadow: '0 4px 8px rgba(0,0,0,0.5)'
             }}
           >
-            Master European Roulette
+            {t('roulette_page.master_european_roulette')}
           </Typography>
 
           {/* Video and Description Section */}
@@ -4036,7 +4041,7 @@ export default function GameRoulette() {
                 </Box>
                 <iframe
                   src={`https://www.youtube.com/embed/${gameData.youtube}?si=${gameData.youtube}`}
-                  title={`${gameData.title} Tutorial`}
+                  title={t('roulette_page.youtube_tutorial_title', { title: gameData.title })}
                   style={{
                     border: 'none',
                     position: 'absolute',
@@ -4091,7 +4096,7 @@ export default function GameRoulette() {
                     display: 'inline-block'
                   }}
                 >
-                  European Roulette
+                  {t('roulette_page.european_roulette')}
                 </Typography>
 
                 <Typography
@@ -4104,7 +4109,7 @@ export default function GameRoulette() {
                     textShadow: '0 1px 2px rgba(0,0,0,0.3)',
                   }}
                 >
-                  European Roulette with a single zero and just no house edge - better odds than traditional casinos. Provably fair and powered by Aptos on-chain randomness module blockchain technology.
+                  {t('roulette_page.european_roulette_description_1')}
                 </Typography>
 
                 <Typography
@@ -4117,7 +4122,7 @@ export default function GameRoulette() {
                     textShadow: '0 1px 2px rgba(0,0,0,0.3)',
                   }}
                 >
-                  Bet on numbers, colors, or combinations for payouts up to 35:1. Every spin is secure and transparent on the blockchain.
+                  {t('roulette_page.european_roulette_description_2')}
                 </Typography>
               </Box>
             </Grid>
@@ -4200,10 +4205,10 @@ export default function GameRoulette() {
             {notificationIndex === notificationSteps.RESULT_READY && (
               <Typography>
                 {winnings > 0
-                  ? `🎉 You won ${winnings.toFixed(4)} OCT!`
+                  ? t('roulette_page.notification_win', { amount: winnings.toFixed(4) })
                   : winnings < 0
-                  ? `💸 You lost ${Math.abs(winnings).toFixed(4)} OCT!`
-                  : "🤝 Break even!"}
+                  ? t('roulette_page.notification_lose', { amount: Math.abs(winnings).toFixed(4) })
+                  : t('roulette_page.notification_break_even')}
               </Typography>
             )}
           </MuiAlert>
@@ -4218,7 +4223,7 @@ export default function GameRoulette() {
               color: 'white',
               '&:hover': { backgroundColor: 'rgba(0,0,0,0.7)' }
             }}
-            aria-label={isMuted ? "Unmute sound" : "Mute sound"}
+            aria-label={isMuted ? t('roulette_page.unmute_sound') : t('roulette_page.mute_sound')}
           >
             {isMuted ? <FaVolumeMute /> : <FaVolumeUp />}
           </IconButton>
