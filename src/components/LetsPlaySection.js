@@ -1,14 +1,17 @@
+import { useTranslation } from 'react-i18next';
 import { useState, useEffect } from "react";
 import LaunchGameButton from "./LaunchGameButton";
 import EthereumConnectWalletButton from "./EthereumConnectWalletButton";
 import { FaUsers, FaTrophy, FaCoins } from "react-icons/fa";
 
 export default function LetsPlaySection() {
+  const { t } = useTranslation();
+
   // Stats with animation
   const [stats, setStats] = useState([
-    { icon: <FaUsers className="text-blue-400" />, value: 0, target: 12000, label: "Players" },
-    { icon: <FaTrophy className="text-cyan-400" />, value: 0, target: 25000, label: "Winners" },
-    { icon: <FaCoins className="text-yellow-400" />, value: 0, target: 1000000, label: "OCT Wagered" }
+    { icon: <FaUsers className="text-blue-400" />, value: 0, target: 12000, label: t('lets_play_section.players') },
+    { icon: <FaTrophy className="text-cyan-400" />, value: 0, target: 25000, label: t('lets_play_section.winners') },
+    { icon: <FaCoins className="text-yellow-400" />, value: 0, target: 1000000, label: t('lets_play_section.oct_wagered') }
   ]);
   
   // Animate stats when component mounts
@@ -87,14 +90,12 @@ export default function LetsPlaySection() {
         <div className="font-display flex text-white flex-col text-center items-center gap-6 md:gap-8">
           {/* Main heading with gradient text */}
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-blue-400 to-cyan-300">
-            OneArcade
+            {t('lets_play_section.title')}
           </h1>
           
           {/* Description with improved readability */}
           <h2 className="text-white/90 text-base sm:text-lg max-w-3xl leading-relaxed">
-            Join us in the realm of gaming where every click opens up a world of adventure 
-            and discovery. OneArcade isn&apos;t just a destination; it&apos;s a gateway to boundless 
-            entertainment with provably fair games and exciting rewards.
+            {t('lets_play_section.description')}
           </h2>
           
           {/* Stats section */}
@@ -119,7 +120,7 @@ export default function LetsPlaySection() {
           {/* Additional trust badge */}
           <div className="mt-8 bg-purple-800/30 px-6 py-3 rounded-full text-sm text-white/90 flex items-center gap-2 border border-purple-400/30">
             <span className="inline-block w-2 h-2 rounded-full bg-yellow-400 animate-pulse"></span>
-            Provably Fair Games • Secure Transactions • Instant Withdrawals
+            {t('lets_play_section.trust_badge')}
           </div>
         </div>
       </div>

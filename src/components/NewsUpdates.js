@@ -1,59 +1,61 @@
 'use client';
+import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 
 const NewsUpdates = () => {
+  const { t, i18n } = useTranslation();
   const newsItems = [
     {
       id: 1,
-      title: 'New Token Bridge Partnership with One Chain Network',
-      excerpt: 'OneArcade partners with One Chain Network to provide seamless cross-chain token transfers with lower fees.',
+      title: t('news_updates.bridge_partnership_title'),
+      excerpt: t('news_updates.bridge_partnership_excerpt'),
       date: '2025-05-08',
-      category: 'Partnership',
+      category: t('news_updates.category_partnership'),
       image: '/images/news/partnership.png',
       url: '/news/token-bridge-partnership'
     },
     {
       id: 2,
-      title: 'OCT Governance Proposal: Community Jackpots',
-      excerpt: 'Vote on the new proposal to allocate 5% of platform fees to community-controlled jackpot pools.',
+      title: t('news_updates.governance_proposal_title'),
+      excerpt: t('news_updates.governance_proposal_excerpt'),
       date: '2025-05-04',
-      category: 'Governance',
+      category: t('news_updates.category_governance'),
       image: '/images/news/governance.png',
       url: '/news/community-jackpots'
     },
     {
       id: 3,
-      title: 'New Games Added: Crash and Plinko',
-      excerpt: 'Two new provably fair games have been added to our collection with exclusive launch bonuses.',
+      title: t('news_updates.new_games_title'),
+      excerpt: t('news_updates.new_games_excerpt'),
       date: '2025-05-03',
-      category: 'Platform',
+      category: t('news_updates.category_platform'),
       image: '/images/news/new-games.png',
       url: '/news/new-games-crash-plinko'
     },
     {
       id: 4,
-      title: 'Security Audit Completed by Certik',
-      excerpt: 'OneArcade\'s smart contracts have passed rigorous security auditing by Certik with high scores.',
+      title: t('news_updates.security_audit_title'),
+      excerpt: t('news_updates.security_audit_excerpt'),
       date: '2025-05-02',
-      category: 'Security',
+      category: t('news_updates.category_security'),
       image: '/images/news/security.png',
       url: '/news/certik-audit'
     }
   ];
   
-  const [activeCategory, setActiveCategory] = useState('All');
+  const [activeCategory, setActiveCategory] = useState(t('news_updates.category_all'));
   
-  const categories = ['All', 'Platform', 'Governance', 'Partnership', 'Security'];
+  const categories = [t('news_updates.category_all'), t('news_updates.category_platform'), t('news_updates.category_governance'), t('news_updates.category_partnership'), t('news_updates.category_security')];
   
-  const filteredNews = activeCategory === 'All' 
+  const filteredNews = activeCategory === t('news_updates.category_all') 
     ? newsItems 
     : newsItems.filter(item => item.category === activeCategory);
   
   const formatDate = (dateString) => {
     const options = { year: 'numeric', month: 'short', day: 'numeric' };
-    return new Date(dateString).toLocaleDateString(undefined, options);
+    return new Date(dateString).toLocaleDateString(i18n.language, options);
   };
   
   return (
@@ -274,14 +276,14 @@ const NewsUpdates = () => {
         <div className="text-center mb-20">
           <div className="inline-flex items-center justify-center mb-6">
             <div className="w-16 h-[2px] bg-gradient-to-r from-indigo-400 via-blue-500 to-cyan-400 mr-4"></div>
-            <span className="text-indigo-400 font-semibold tracking-wider text-sm uppercase">News & Updates</span>
+            <span className="text-indigo-400 font-semibold tracking-wider text-sm uppercase">{t('news_updates.header_title')}</span>
             <div className="w-16 h-[2px] bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-400 ml-4"></div>
           </div>
           <h2 className="text-4xl md:text-5xl font-display font-bold text-white mb-6 bg-gradient-to-r from-white via-indigo-400/80 to-cyan-400/80 bg-clip-text text-transparent">
-            Latest Updates
+            {t('news_updates.header_subtitle')}
           </h2>
           <p className="text-white/60 text-lg max-w-3xl mx-auto leading-relaxed">
-            Stay informed with the latest developments, partnerships, and announcements from OneArcade
+            {t('news_updates.header_description')}
           </p>
         </div>
         
@@ -358,7 +360,7 @@ const NewsUpdates = () => {
                     {/* Read More */}
                     <div className="flex items-center justify-between">
                       <div className="flex items-center text-indigo-400 group-hover:text-cyan-400 transition-colors duration-300">
-                        <span className="text-sm font-semibold">Read More</span>
+                        <span className="text-sm font-semibold">{t('news_updates.read_more')}</span>
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-2 transform group-hover:translate-x-1 transition-transform duration-300" viewBox="0 0 20 20" fill="currentColor">
                           <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
                         </svg>
@@ -378,7 +380,7 @@ const NewsUpdates = () => {
               <div className="relative">
                 <div className="absolute -inset-1 bg-gradient-to-r from-indigo-500 via-blue-500 to-cyan-500 rounded-full opacity-75 group-hover:opacity-100 blur transition-all duration-300"></div>
                 <button className="relative px-8 py-4 bg-[#0F172A]/90 backdrop-blur-xl border border-indigo-500/30 rounded-full text-white font-semibold group-hover:border-indigo-400/50 transition-all duration-300 flex items-center gap-3">
-                  <span>View All News</span>
+                  <span>{t('news_updates.view_all_news')}</span>
                   <div className="w-8 h-8 rounded-full bg-gradient-to-r from-indigo-500 to-cyan-500 flex items-center justify-center group-hover:rotate-45 transition-transform duration-300">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-white" viewBox="0 0 20 20" fill="currentColor">
                       <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />

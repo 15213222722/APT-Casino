@@ -1,9 +1,11 @@
 'use client';
+import { useTranslation } from 'react-i18next';
 import { useState, useEffect } from 'react';
 import GradientBorderButton from './GradientBorderButton';
 import EthereumConnectWalletButton from './EthereumConnectWalletButton';
 
 const HowItWorksSection = () => {
+  const { t } = useTranslation();
   const [activeStep, setActiveStep] = useState(1);
   const [animating, setAnimating] = useState(false);
   
@@ -23,26 +25,26 @@ const HowItWorksSection = () => {
   const steps = [
     {
       id: 1,
-      title: 'Connect Your Wallet',
-      description: 'Link any wallet in seconds to unlock the full OneArcade experience. We support Keyless login Walets, MetaMask and all major Web3 wallets.',
+      title: t('how_it_works_section.step1_title'),
+      description: t('how_it_works_section.step1_description'),
       emoji: '👛'
     },
     {
       id: 2,
-      title: 'Get OCT tokens',
-      description: 'Power your gameplay with OCT tokens of One Chain Network.',
+      title: t('how_it_works_section.step2_title'),
+      description: t('how_it_works_section.step2_description'),
       emoji: '💰'
     },
     {
       id: 3,
-      title: 'Start Playing',
-      description: 'Dive into /games tab of provably fair games including Roulette, Plinko, Mines and Spin Wheel. Every game provides real-time stats and detailed history.',
+      title: t('how_it_works_section.step3_title'),
+      description: t('how_it_works_section.step3_description'),
       emoji: '🎮'
     },
     {
       id: 4,
-      title: 'Earn Rewards',
-      description: 'Win OCT tokens and unlock exclusive perks through our multi-tiered loyalty program. Earn cashback on losses and gain access to tournaments.',
+      title: t('how_it_works_section.step4_title'),
+      description: t('how_it_works_section.step4_description'),
       emoji: '🏆'
     },
   ];
@@ -312,14 +314,14 @@ const HowItWorksSection = () => {
         <div className="text-center mb-20">
           <div className="inline-flex items-center justify-center mb-6">
             <div className="w-16 h-[2px] bg-gradient-to-r from-indigo-400 via-blue-500 to-cyan-400 mr-4"></div>
-            <span className="text-indigo-400 font-semibold tracking-wider text-sm uppercase">Getting Started</span>
+            <span className="text-indigo-400 font-semibold tracking-wider text-sm uppercase">{t('how_it_works_section.header')}</span>
             <div className="w-16 h-[2px] bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-400 ml-4"></div>
           </div>
           <h2 className="text-4xl md:text-5xl font-display font-bold text-white mb-6 bg-gradient-to-r from-white via-indigo-400/80 to-cyan-400/80 bg-clip-text text-transparent">
-            How OneArcade Works
+            {t('how_it_works_section.title')}
           </h2>
           <p className="text-white/60 text-lg max-w-3xl mx-auto leading-relaxed">
-            Experience the future of decentralized gaming through our streamlined four-step process designed for both beginners and experienced players
+            {t('how_it_works_section.subtitle')}
           </p>
         </div>
         
@@ -409,7 +411,7 @@ const HowItWorksSection = () => {
                         : 'w-2 bg-white/20 hover:bg-indigo-400/50'
                     }`}
                     onClick={() => handleStepChange(step.id)}
-                    aria-label={`Go to step ${step.id}`}
+                    aria-label={t('how_it_works_section.go_to_step', { step: step.id })}
                   />
                 ))}
               </div>
@@ -445,7 +447,7 @@ const HowItWorksSection = () => {
                     
                     {/* Step counter */}
                     <div className="absolute top-6 right-6 px-3 py-1 bg-gradient-to-r from-indigo-500 to-cyan-500 text-white text-sm font-semibold rounded-full">
-                      Step {activeStep} of 4
+                      {t('how_it_works_section.step_counter', { activeStep })}
                     </div>
                     
                     {/* Animated content */}
@@ -488,8 +490,8 @@ const HowItWorksSection = () => {
                   <GradientBorderButton className="transform hover:scale-105 transition-all duration-300 group-hover:shadow-lg group-hover:shadow-indigo-500/25">
                     <div className="flex items-center gap-2">
                       <span className="relative">
-                        {activeStep === 2 ? 'Get OCT tokens' : 
-                         activeStep === 3 ? 'Browse Games' : 'View Rewards'}
+                        {activeStep === 2 ? t('how_it_works_section.button_step2') : 
+                         activeStep === 3 ? t('how_it_works_section.button_step3') : t('how_it_works_section.button_step4')}
                         <div className="absolute -bottom-1 left-0 w-full h-0.5 bg-gradient-to-r from-indigo-400 to-cyan-400 scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></div>
                       </span>
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 transform group-hover:translate-x-1 transition-transform duration-300" viewBox="0 0 20 20" fill="currentColor">

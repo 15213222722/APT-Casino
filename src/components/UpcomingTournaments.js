@@ -1,14 +1,16 @@
 'use client';
+import { useTranslation } from 'react-i18next';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import GradientBorderButton from './GradientBorderButton';
 
 const UpcomingTournaments = () => {
+  const { t } = useTranslation();
   const [tournaments, setTournaments] = useState([
     {
       id: 1,
-      name: 'Weekly Poker Championship',
-      game: 'Poker',
+      name: t('upcoming_tournaments.poker_championship'),
+      game: t('upcoming_tournaments.poker'),
       prizePool: 25000,
       entryFee: 50,
       startsIn: 172800, // 48 hours in seconds
@@ -18,8 +20,8 @@ const UpcomingTournaments = () => {
     },
     {
       id: 2,
-      name: 'Fortune Tiger Tournament',
-      game: 'Fortune Tiger',
+      name: t('upcoming_tournaments.fortune_tiger_tournament'),
+      game: t('upcoming_tournaments.fortune_tiger'),
       prizePool: 15000,
       entryFee: 25,
       startsIn: 86400, // 24 hours in seconds
@@ -29,8 +31,8 @@ const UpcomingTournaments = () => {
     },
     {
       id: 3,
-      name: 'Ultimate Roulette Challenge',
-      game: 'Roulette',
+      name: t('upcoming_tournaments.roulette_challenge'),
+      game: t('upcoming_tournaments.roulette'),
       prizePool: 10000,
       entryFee: 15,
       startsIn: 43200, // 12 hours in seconds
@@ -56,7 +58,7 @@ const UpcomingTournaments = () => {
   
   // Format time remaining
   const formatTimeRemaining = (seconds) => {
-    if (seconds <= 0) return 'Started';
+    if (seconds <= 0) return t('upcoming_tournaments.started');
     
     const days = Math.floor(seconds / 86400);
     const hours = Math.floor((seconds % 86400) / 3600);
@@ -64,11 +66,11 @@ const UpcomingTournaments = () => {
     const remainingSeconds = seconds % 60;
     
     if (days > 0) {
-      return `${days}d ${hours}h ${minutes}m`;
+      return `${t('upcoming_tournaments.day_format', { count: days })} ${t('upcoming_tournaments.hour_format', { count: hours })} ${t('upcoming_tournaments.minute_format', { count: minutes })}`;
     } else if (hours > 0) {
-      return `${hours}h ${minutes}m ${remainingSeconds}s`;
+      return `${t('upcoming_tournaments.hour_format', { count: hours })} ${t('upcoming_tournaments.minute_format', { count: minutes })} ${t('upcoming_tournaments.second_format', { count: remainingSeconds })}`;
     } else {
-      return `${minutes}m ${remainingSeconds}s`;
+      return `${t('upcoming_tournaments.minute_format', { count: minutes })} ${t('upcoming_tournaments.second_format', { count: remainingSeconds })}`;
     }
   };
   
@@ -242,14 +244,14 @@ const UpcomingTournaments = () => {
         <div className="text-center mb-16">
           <div className="inline-flex items-center justify-center mb-6">
             <div className="w-16 h-[2px] bg-gradient-to-r from-indigo-400 via-blue-500 to-cyan-400 mr-4"></div>
-            <span className="text-indigo-400 font-semibold tracking-wider text-sm uppercase">Compete & Win</span>
+            <span className="text-indigo-400 font-semibold tracking-wider text-sm uppercase">{t('upcoming_tournaments.compete_win')}</span>
             <div className="w-16 h-[2px] bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-400 ml-4"></div>
           </div>
           <h2 className="text-4xl md:text-5xl font-display font-bold text-white mb-6 bg-gradient-to-r from-white via-indigo-400/80 to-cyan-400/80 bg-clip-text text-transparent">
-            Upcoming Tournaments
+            {t('upcoming_tournaments.title')}
           </h2>
           <p className="text-white/60 text-lg max-w-2xl mx-auto leading-relaxed">
-            Join high-stakes competitions with massive prize pools and prove your skills
+            {t('upcoming_tournaments.subtitle')}
           </p>
         </div>
         
@@ -257,7 +259,7 @@ const UpcomingTournaments = () => {
         <div className="flex justify-center mb-12">
           <Link href="/tournaments">
             <div className="group inline-flex items-center gap-2 px-6 py-3 border border-indigo-500/30 rounded-full bg-indigo-500/10 backdrop-blur-sm hover:border-indigo-400/50 hover:bg-indigo-500/20 transition-all duration-300 cursor-pointer">
-              <span className="text-indigo-300 group-hover:text-white transition-colors">View All Tournaments</span>
+              <span className="text-indigo-300 group-hover:text-white transition-colors">{t('upcoming_tournaments.view_all')}</span>
               <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-indigo-300 group-hover:text-white group-hover:translate-x-1 transition-all duration-300" viewBox="0 0 20 20" fill="currentColor">
                 <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
               </svg>
@@ -309,18 +311,18 @@ const UpcomingTournaments = () => {
                   {/* Stats grid */}
                   <div className="grid grid-cols-2 gap-4">
                     <div className="bg-indigo-500/10 rounded-xl p-3 border border-indigo-500/20">
-                      <p className="text-indigo-400 text-xs font-medium mb-1">Prize Pool</p>
+                      <p className="text-indigo-400 text-xs font-medium mb-1">{t('upcoming_tournaments.prize_pool')}</p>
                       <p className="text-white font-bold text-lg">${tournament.prizePool.toLocaleString()}</p>
                     </div>
                     <div className="bg-cyan-500/10 rounded-xl p-3 border border-cyan-500/20">
-                      <p className="text-cyan-400 text-xs font-medium mb-1">Entry Fee</p>
+                      <p className="text-cyan-400 text-xs font-medium mb-1">{t('upcoming_tournaments.entry_fee')}</p>
                       <p className="text-white font-bold text-lg">{tournament.entryFee} OCT</p>
                     </div>
                   </div>
                   
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <p className="text-white/50 text-sm mb-1">Participants</p>
+                      <p className="text-white/50 text-sm mb-1">{t('upcoming_tournaments.participants')}</p>
                       <div className="flex items-center gap-2">
                         <p className="text-white font-semibold">
                           {tournament.participants}/{tournament.maxParticipants}
@@ -333,7 +335,7 @@ const UpcomingTournaments = () => {
                       </div>
                     </div>
                     <div>
-                      <p className="text-white/50 text-sm mb-1">Starts In</p>
+                      <p className="text-white/50 text-sm mb-1">{t('upcoming_tournaments.starts_in')}</p>
                       <p className="text-white font-bold text-lg">
                         {formatTimeRemaining(tournament.startsIn)}
                       </p>
@@ -343,7 +345,7 @@ const UpcomingTournaments = () => {
                   {/* Progress section */}
                   <div>
                     <div className="flex justify-between items-center mb-2">
-                      <p className="text-white/50 text-sm">Registration Progress</p>
+                      <p className="text-white/50 text-sm">{t('upcoming_tournaments.registration_progress')}</p>
                       <p className="text-indigo-400 text-sm font-medium">
                         {Math.round((tournament.participants / tournament.maxParticipants) * 100)}%
                       </p>
@@ -360,7 +362,7 @@ const UpcomingTournaments = () => {
                   <div className="pt-2">
                     <GradientBorderButton classes="w-full group/btn">
                       <div className="w-full text-center font-semibold group-hover/btn:scale-105 transition-transform">
-                        Register Now
+                        {t('upcoming_tournaments.register_now')}
                       </div>
                     </GradientBorderButton>
                   </div>

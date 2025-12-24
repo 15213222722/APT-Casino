@@ -1,43 +1,45 @@
 'use client';
+import { useTranslation } from 'react-i18next';
 import { useState, useEffect } from 'react';
 import { FaStar, FaQuoteLeft } from 'react-icons/fa';
 
 const TestimonialsSection = () => {
+  const { t } = useTranslation();
   const testimonials = [
     {
       id: 1,
-      name: 'Michael T.',
+      name: t('testimonials_section.testimonial1_name'),
       avatar: '/images/avatars/avatar1.png',
       rating: 5,
-              text: 'OneArcade offers the most transparent gaming experience I\'ve found on One Chain Network. The provably fair system gives me confidence that games are legitimate, and I\'ve already won over 500 OCT tokens!',
-      game: 'Roulette',
+      text: t('testimonials_section.testimonial1_text'),
+      game: t('testimonials_section.testimonial1_game'),
       amount: 520
     },
     {
       id: 2,
-      name: '0x63...a94b',
+      name: t('testimonials_section.testimonial2_name'),
       avatar: '/images/avatars/avatar2.png',
       rating: 4,
-      text: 'I love the token staking feature. Being able to earn passive income while also playing games creates a unique dual-earning opportunity that other platforms don\'t offer.',
-      game: 'Poker',
+      text: t('testimonials_section.testimonial2_text'),
+      game: t('testimonials_section.testimonial2_game'),
       amount: 1240
     },
     {
       id: 3,
-      name: 'CryptoQueen',
+      name: t('testimonials_section.testimonial3_name'),
       avatar: '/images/avatars/avatar3.png',
       rating: 5,
-      text: 'The DeFi lending integration is brilliant. I was able to use my collateral to borrow OCT for games, and when I won big, I paid back the loan and kept the profits. Smart financial gaming!',
-      game: 'Fortune Tiger',
+      text: t('testimonials_section.testimonial3_text'),
+      game: t('testimonials_section.testimonial3_game'),
       amount: 876
     },
     {
       id: 4,
-      name: 'BlockchainGamer',
+      name: t('testimonials_section.testimonial4_name'),
       avatar: '/images/avatars/avatar4.png',
       rating: 4,
-      text: 'Weekly tournaments are extremely fun and well organized. The prize pools are generous, and the community is friendly and competitive in a good way.',
-      game: 'Dice',
+      text: t('testimonials_section.testimonial4_text'),
+      game: t('testimonials_section.testimonial4_game'),
       amount: 340
     }
   ];
@@ -594,14 +596,14 @@ const TestimonialsSection = () => {
         <div className="text-center mb-20">
           <div className="inline-flex items-center justify-center mb-6">
             <div className="w-12 h-[2px] bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-500 mr-4"></div>
-            <span className="text-cyan-400 font-semibold tracking-wider text-sm uppercase">Player Reviews</span>
+            <span className="text-cyan-400 font-semibold tracking-wider text-sm uppercase">{t('testimonials_section.header')}</span>
             <div className="w-12 h-[2px] bg-gradient-to-r from-indigo-500 via-blue-500 to-cyan-400 ml-4"></div>
           </div>
           <h2 className="text-4xl md:text-5xl font-display font-bold text-white mb-6 bg-gradient-to-r from-white via-cyan-400/80 to-blue-500/80 bg-clip-text text-transparent">
-            What Our Winners Say
+            {t('testimonials_section.title')}
           </h2>
           <p className="text-white/60 text-lg max-w-2xl mx-auto leading-relaxed">
-            Real stories from real players winning big on the most transparent blockchain casino platform
+            {t('testimonials_section.subtitle')}
           </p>
         </div>
         
@@ -651,11 +653,11 @@ const TestimonialsSection = () => {
                 
                 <div className="grid grid-cols-2 gap-6 pt-6 border-t border-cyan-500/20">
                   <div className="bg-cyan-500/10 rounded-xl p-4 backdrop-blur-sm border border-cyan-500/20">
-                    <p className="text-cyan-400/80 text-xs uppercase tracking-wider mb-1">Favorite Game</p>
+                    <p className="text-cyan-400/80 text-xs uppercase tracking-wider mb-1">{t('testimonials_section.favorite_game')}</p>
                     <p className="text-white font-bold text-lg">{testimonials[activeIndex].game}</p>
                   </div>
                   <div className="bg-gradient-to-r from-blue-500/20 to-indigo-500/20 rounded-xl p-4 backdrop-blur-sm border border-blue-500/20">
-                    <p className="text-blue-400/80 text-xs uppercase tracking-wider mb-1">Biggest Win</p>
+                    <p className="text-blue-400/80 text-xs uppercase tracking-wider mb-1">{t('testimonials_section.biggest_win')}</p>
                     <p className="text-white font-bold text-xl">{testimonials[activeIndex].amount} OCT</p>
                   </div>
                 </div>
@@ -666,10 +668,8 @@ const TestimonialsSection = () => {
           {/* Testimonial list */}
           <div className="space-y-6">
             <div className="mb-8">
-              <h3 className="text-white text-2xl font-bold mb-3">Success Stories</h3>
-              <p className="text-white/60 leading-relaxed">
-                Join thousands of players experiencing fair gaming with provably random outcomes and instant withdrawals.
-              </p>
+              <h3 className="text-white text-2xl font-bold mb-3">{t('testimonials_section.success_stories_title')}</h3>
+              <p className="text-white/60 leading-relaxed">{t('testimonials_section.success_stories_subtitle')}</p>
             </div>
             
             <div className="space-y-3">
@@ -709,7 +709,7 @@ const TestimonialsSection = () => {
                               activeIndex === index ? 'text-white text-lg' : 'text-white/80'
                             }`}>{testimonial.name}</p>
                             {activeIndex === index && (
-                              <span className="px-2 py-1 bg-cyan-500/20 text-cyan-400 text-xs rounded-full border border-cyan-500/30">Featured</span>
+                              <span className="px-2 py-1 bg-cyan-500/20 text-cyan-400 text-xs rounded-full border border-cyan-500/30">{t('testimonials_section.featured')}</span>
                             )}
                           </div>
                           <div className="flex items-center gap-2">
@@ -730,7 +730,7 @@ const TestimonialsSection = () => {
                         <p className={`font-bold transition-all duration-300 ${
                           activeIndex === index ? 'text-white text-xl' : 'text-white/60'
                         }`}>{testimonial.amount} OCT</p>
-                        <p className="text-white/40 text-xs">Won</p>
+                        <p className="text-white/40 text-xs">{t('testimonials_section.won')}</p>
                       </div>
                     </div>
                   </div>
@@ -752,7 +752,7 @@ const TestimonialsSection = () => {
                     ? 'w-8 h-2 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full' 
                     : 'w-2 h-2 bg-white/30 rounded-full hover:bg-cyan-400/50'
                 }`}
-                aria-label={`Go to testimonial ${index + 1}`}
+                aria-label={t('testimonials_section.go_to_testimonial', { index: index + 1 })}
               />
             ))}
           </div>

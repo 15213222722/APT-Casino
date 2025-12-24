@@ -13,10 +13,10 @@ export default function Footer() {
   const [isSubscribed, setIsSubscribed] = useState(false);
   
   const socialLinks = [
-    { name: "Twitter", url: "https://twitter.com", icon: "/icons/twitter.svg" },
-    { name: "Discord", url: "https://discord.com", icon: "/icons/discord.svg" },
-    { name: "Telegram", url: "https://telegram.org", icon: "/icons/telegram.svg" },
-    { name: "GitHub", url: "https://github.com", icon: "/icons/github.svg" },
+    { nameKey: "footer.social_twitter", url: "https://twitter.com", icon: "/icons/twitter.svg" },
+    { nameKey: "footer.social_discord", url: "https://discord.com", icon: "/icons/discord.svg" },
+    { nameKey: "footer.social_telegram", url: "https://telegram.org", icon: "/icons/telegram.svg" },
+    { nameKey: "footer.social_github", url: "https://github.com", icon: "/icons/github.svg" },
   ];
   
   const handleSubscribe = (e) => {
@@ -130,17 +130,17 @@ export default function Footer() {
             <div className="bg-[#1a0a2a]/85 backdrop-blur-sm rounded-lg p-4 flex justify-between">
               {socialLinks.map((social) => (
                 <a 
-                  key={social.name}
+                  key={social.nameKey}
                   href={social.url} 
                   target="_blank" 
                   rel="noopener noreferrer" 
-                  aria-label={social.name}
+                  aria-label={t(social.nameKey)}
                   className="group transition-all duration-300 hover:scale-110 hover:drop-shadow-[0_0_15px_rgba(255,0,100,0.6)]"
                 >
                   <div className="w-10 h-10 flex items-center justify-center bg-[#250020]/80 rounded-full border border-white/10 group-hover:bg-gradient-to-r group-hover:from-red-magic group-hover:to-blue-magic group-hover:border-transparent transition-all duration-300 group-hover:animate-neon-flicker">
                     <Image 
                       src={social.icon} 
-                      alt={social.name} 
+                      alt={t(social.nameKey)} 
                       width={20} 
                       height={20} 
                       className="filter invert group-hover:drop-shadow-[0_0_5px_rgba(255,255,255,0.8)]"

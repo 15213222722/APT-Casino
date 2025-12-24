@@ -1,4 +1,5 @@
 "use client";
+import { useTranslation } from 'react-i18next';
 import { useState, useRef, useEffect } from "react";
 import GradientBorderButton from "@/components/GradientBorderButton";
 import Image from "next/image";
@@ -7,71 +8,73 @@ import { FaArrowLeft, FaArrowRight, FaUsers, FaBolt, FaFire } from "react-icons/
 import HeaderText from "@/components/HeaderText";
 import GameStats from "@/components/GameStats";
 
-// Game data with more details
-const FEATURED_GAMES = [
-  {
-    id: 'roulette',
-    title: 'Roulette',
-    description: 'Spin the wheel and test your luck',
-    image: '/images/games/roulette.png',
-    path: '/game/roulette',
-    players: 142,
-    categories: ['featured', 'table'],
-    badge: 'POPULAR',
-    badgeColor: 'from-[#0066FF] to-[#00A3FF]',
-    isNew: false,
-    isHot: true,
-  },
-  {
-    id: 'mines',
-    title: 'Mines',
-    description: 'Navigate through the minefield and collect gems',
-    image: '/images/games/mines.png',
-    path: '/game/mines',
-    players: 156,
-    categories: ['featured', 'instant'],
-    badge: 'HOT',
-    badgeColor: 'from-[#4DA6FF] to-[#00A3FF]',
-    isNew: false,
-    isHot: true,
-  },
-  {
-    id: 'wheel',
-    title: 'Spin Wheel',
-    description: 'Spin the wheel of fortune for amazing prizes',
-    image: '/images/games/spin_the_wheel.png',
-    path: '/game/wheel',
-    players: 98,
-    categories: ['featured', 'instant'],
-    badge: 'FEATURED',
-    badgeColor: 'from-[#0066FF] to-[#4DA6FF]',
-    isNew: false,
-    isHot: true,
-  },
-  {
-    id: 'plinko',
-    title: 'Plinko',
-    description: 'Drop the ball and watch it bounce to big wins',
-    image: '/images/games/plinko.png',
-    path: '/game/plinko',
-    players: 134,
-    categories: ['featured', 'instant'],
-    badge: 'POPULAR',
-    badgeColor: 'from-[#00A3FF] to-[#66B3FF]',
-    isNew: false,
-    isHot: true,
-  }
-];
-
-// Available category filters
-const CATEGORIES = [
-  { id: 'all', label: 'All Games' },
-  { id: 'featured', label: 'Featured' },
-  { id: 'table', label: 'Table Games' },
-  { id: 'instant', label: 'Instant Win' },
-];
-
 const GameCarousel = () => {
+  const { t } = useTranslation();
+
+  // Game data with more details
+  const FEATURED_GAMES = [
+    {
+      id: 'roulette',
+      title: t('game_carousel.roulette_title'),
+      description: t('game_carousel.roulette_description'),
+      image: '/images/games/roulette.png',
+      path: '/game/roulette',
+      players: 142,
+      categories: ['featured', 'table'],
+      badge: t('game_carousel.badge_popular'),
+      badgeColor: 'from-[#0066FF] to-[#00A3FF]',
+      isNew: false,
+      isHot: true,
+    },
+    {
+      id: 'mines',
+      title: t('game_carousel.mines_title'),
+      description: t('game_carousel.mines_description'),
+      image: '/images/games/mines.png',
+      path: '/game/mines',
+      players: 156,
+      categories: ['featured', 'instant'],
+      badge: t('game_carousel.badge_hot'),
+      badgeColor: 'from-[#4DA6FF] to-[#00A3FF]',
+      isNew: false,
+      isHot: true,
+    },
+    {
+      id: 'wheel',
+      title: t('game_carousel.spin_wheel_title'),
+      description: t('game_carousel.spin_wheel_description'),
+      image: '/images/games/spin_the_wheel.png',
+      path: '/game/wheel',
+      players: 98,
+      categories: ['featured', 'instant'],
+      badge: t('game_carousel.badge_featured'),
+      badgeColor: 'from-[#0066FF] to-[#4DA6FF]',
+      isNew: false,
+      isHot: true,
+    },
+    {
+      id: 'plinko',
+      title: t('game_carousel.plinko_title'),
+      description: t('game_carousel.plinko_description'),
+      image: '/images/games/plinko.png',
+      path: '/game/plinko',
+      players: 134,
+      categories: ['featured', 'instant'],
+      badge: t('game_carousel.badge_popular'),
+      badgeColor: 'from-[#00A3FF] to-[#66B3FF]',
+      isNew: false,
+      isHot: true,
+    }
+  ];
+
+  // Available category filters
+  const CATEGORIES = [
+    { id: 'all', label: t('game_carousel.all_games') },
+    { id: 'featured', label: t('game_carousel.featured') },
+    { id: 'table', label: t('game_carousel.table_games') },
+    { id: 'instant', label: t('game_carousel.instant_win') },
+  ];
+
   const scrollContainerRef = useRef(null);
   const [activeCategory, setActiveCategory] = useState('all');
   const [visibleGames, setVisibleGames] = useState(FEATURED_GAMES);
@@ -224,7 +227,7 @@ const GameCarousel = () => {
               {(game.id === 'roulette' || game.id === 'plinko' || game.id === 'mines' || game.id === 'wheel') && (
                 <div className="flex items-center gap-1 bg-[#0066FF]/20 border border-[#00A3FF]/30 px-1 py-0.5 rounded-full">
                   <div className="w-1.5 h-1.5 rounded-full bg-[#00A3FF] animate-pulse"></div>
-                  <span className="text-[#4DA6FF] text-xs font-medium">LIVE</span>
+                  <span className="text-[#4DA6FF] text-xs font-medium">{t('game_carousel.live')}</span>
                 </div>
               )}
             </div>
@@ -233,7 +236,7 @@ const GameCarousel = () => {
             {/* Live player count */}
             <div className="flex items-center gap-1 text-white/70">
               <FaUsers className="text-[#00A3FF] text-xs" />
-              <span className="text-xs">{game.players} players</span>
+              <span className="text-xs">{t('game_carousel.players', { count: game.players })}</span>
             </div>
           </div>
           
@@ -241,7 +244,7 @@ const GameCarousel = () => {
             <Link href={game.path}>
               <div className="bg-gradient-to-r from-red-magic to-blue-magic hover:from-blue-magic hover:to-red-magic rounded-sm p-0.5 cursor-pointer transition-all w-full">
                 <div className="bg-[#070005] rounded-sm px-2.5 py-1.5 justify-center font-display flex items-center text-white text-sm font-medium h-full">
-                  Play Now
+                  {t('game_carousel.play_now')}
                 </div>
               </div>
             </Link>
@@ -255,7 +258,7 @@ const GameCarousel = () => {
             height={180}
             quality={100}
             priority
-            alt={`${game.title} game`}
+            alt={t('game_carousel.game_alt', { title: game.title })}
             className="object-contain drop-shadow-lg"
             style={{ objectFit: 'contain' }}
           />
@@ -448,8 +451,8 @@ const GameCarousel = () => {
       <div className="mb-12 flex flex-col md:flex-row items-center justify-center relative z-10">
         <div className="text-center md:text-left md:max-w-2xl">
           <HeaderText
-            header="Featured Games"
-            description="Experience our premium selection of games with the highest payout rates and player counts"
+            header={t('game_carousel.header')}
+            description={t('game_carousel.description')}
           />
         </div>
         <div className="mt-6 md:mt-0">
@@ -481,7 +484,7 @@ const GameCarousel = () => {
           <button
             onClick={handleScrollLeft}
             className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-[#001F3F]/90 backdrop-blur-sm hover:bg-[#0066FF]/20 border border-[#00A3FF]/30 h-10 w-10 rounded-full flex items-center justify-center"
-            aria-label="Scroll left"
+            aria-label={t('game_carousel.scroll_left')}
           >
             <FaArrowLeft className="text-white text-sm" />
           </button>
@@ -492,7 +495,7 @@ const GameCarousel = () => {
           <button
             onClick={handleScrollRight}
             className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-[#001F3F]/90 backdrop-blur-sm hover:bg-[#0066FF]/20 border border-[#00A3FF]/30 h-10 w-10 rounded-full flex items-center justify-center"
-            aria-label="Scroll right"
+            aria-label={t('game_carousel.scroll_right')}
           >
             <FaArrowRight className="text-white text-sm" />
           </button>
@@ -518,7 +521,7 @@ const GameCarousel = () => {
               ))
             ) : (
               <div className="flex items-center justify-center w-full py-10">
-                <p className="text-white/70 text-lg">No games found in this category</p>
+                <p className="text-white/70 text-lg">{t('game_carousel.no_games_found')}</p>
               </div>
             )}
           </div>
@@ -542,7 +545,7 @@ const GameCarousel = () => {
                 ? 'bg-[#00A3FF] w-4'
                 : 'bg-white/30'
             }`}
-            aria-label={`Go to slide ${index + 1}`}
+            aria-label={t('game_carousel.go_to_slide', { index: index + 1 })}
           />
         ))}
       </div>
@@ -551,7 +554,7 @@ const GameCarousel = () => {
       <div className="text-center mt-10 max-w-7xl mx-auto relative z-10">
         <Link href="/game">
           <GradientBorderButton className="px-8">
-            View All Games
+            {t('game_carousel.view_all_games')}
           </GradientBorderButton>
         </Link>
       </div>

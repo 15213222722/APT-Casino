@@ -1,28 +1,30 @@
 'use client';
+import { useTranslation } from 'react-i18next';
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 
 export default function FeatureSection() {
+  const { t } = useTranslation();
   const [imageError, setImageError] = useState(false);
   
   const features = [
     {
       id: 1,
-      title: "Transparent & Provably Fair",
-      description: "All games use verifiable on-chain randomness through our Pyth Entropy, ensuring complete transparency and fairness in every outcome.",
+      title: t('feature_section.feature1_title'),
+      description: t('feature_section.feature1_description'),
       icon: "🎲"
     },
     {
       id: 2,
-      title: "Cross-Chain Liquidity",
-      description: "Stake tokens across multiple chains to earn OCT tokens while playing your favorite games with minimal slippage.",
+      title: t('feature_section.feature2_title'),
+      description: t('feature_section.feature2_description'),
       icon: "⛓️"
     },
     {
       id: 3,
-      title: "No Restrictions",
-      description: "Enjoy flexible withdrawals, transparent bonus schemes, and full control over your assets through decentralized management.",
+      title: t('feature_section.feature3_title'),
+      description: t('feature_section.feature3_description'),
       icon: "🔓"
     }
   ];
@@ -210,7 +212,7 @@ export default function FeatureSection() {
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="flex items-center mb-12 justify-center">
           <div className="w-1 h-6 bg-gradient-to-r from-[#0066FF] to-[#00A3FF] rounded-full mr-3"></div>
-          <h2 className="text-2xl font-display font-bold text-white">Key Features of OneArcade</h2>
+          <h2 className="text-2xl font-display font-bold text-white">{t('feature_section.title')}</h2>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center mb-16">
@@ -220,7 +222,7 @@ export default function FeatureSection() {
               {!imageError ? (
                 <Image
                   src="/images/casino-players.png"
-                  alt="Two casino players enjoying a game of poker"
+                  alt={t('feature_section.image_alt')}
                   fill
                   className="object-cover rounded-xl"
                   priority
@@ -231,8 +233,8 @@ export default function FeatureSection() {
                 <div className="w-full h-full flex items-center justify-center">
                   <div className="text-center px-6">
                     <div className="text-5xl mb-4">🎰</div>
-                    <h3 className="text-xl font-medium text-white mb-2">OneArcade</h3>
-                    <p className="text-white/70">Experience the future of decentralized gaming</p>
+                    <h3 className="text-xl font-medium text-white mb-2">{t('feature_section.fallback_title')}</h3>
+                    <p className="text-white/70">{t('feature_section.fallback_text')}</p>
                   </div>
                 </div>
               )}
@@ -242,59 +244,56 @@ export default function FeatureSection() {
           {/* Comparison section */}
           <div className="lg:col-span-7 p-[1px] bg-gradient-to-r from-[#0066FF] to-[#00A3FF] rounded-xl">
             <div className="bg-[#001F3F]/90 backdrop-blur-sm rounded-xl p-6 md:p-8">
-              <h3 className="text-white/70 text-sm uppercase tracking-wider mb-3">Traditional vs OneArcade</h3>
-              <h4 className="text-white text-2xl font-display font-medium mb-6">A New Era of Fair Gaming</h4>
+              <h3 className="text-white/70 text-sm uppercase tracking-wider mb-3">{t('feature_section.comparison_title')}</h3>
+              <h4 className="text-white text-2xl font-display font-medium mb-6">{t('feature_section.comparison_subtitle')}</h4>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 <div className="bg-[#001F3F]/50 rounded-lg p-4 border-l-2 border-[#FF4444]/50">
-                  <h5 className="text-[#FF6B6B] font-medium mb-2">Traditional Casinos</h5>
+                  <h5 className="text-[#FF6B6B] font-medium mb-2">{t('feature_section.traditional_casinos_title')}</h5>
                   <ul className="space-y-2 text-white/70 text-sm">
                     <li className="flex items-start">
                       <span className="text-[#FF6B6B] mr-2">✗</span>
-                      <span>Hidden RNG algorithms</span>
+                      <span>{t('feature_section.traditional_casinos_feature1')}</span>
                     </li>
                     <li className="flex items-start">
                       <span className="text-[#FF6B6B] mr-2">✗</span>
-                      <span>Restrictive withdrawal policies</span>
+                      <span>{t('feature_section.traditional_casinos_feature2')}</span>
                     </li>
                     <li className="flex items-start">
                       <span className="text-[#FF6B6B] mr-2">✗</span>
-                      <span>Unclear bonus terms</span>
+                      <span>{t('feature_section.traditional_casinos_feature3')}</span>
                     </li>
                     <li className="flex items-start">
                       <span className="text-[#FF6B6B] mr-2">✗</span>
-                      <span>Centralized control of funds</span>
+                      <span>{t('feature_section.traditional_casinos_feature4')}</span>
                     </li>
                   </ul>
                 </div>
                 
                 <div className="bg-[#001F3F]/50 rounded-lg p-4 border-l-2 border-[#00A3FF]/50">
-                  <h5 className="text-[#4DA6FF] font-medium mb-2">OneArcade</h5>
+                  <h5 className="text-[#4DA6FF] font-medium mb-2">{t('feature_section.one_arcade_title')}</h5>
                   <ul className="space-y-2 text-white/70 text-sm">
                     <li className="flex items-start">
                       <span className="text-[#4CAF50] mr-2">✓</span>
-                      <span>Verifiable on-chain randomness</span>
+                      <span>{t('feature_section.one_arcade_feature1')}</span>
                     </li>
                     <li className="flex items-start">
                       <span className="text-[#4CAF50] mr-2">✓</span>
-                      <span>Stake and earn while playing</span>
+                      <span>{t('feature_section.one_arcade_feature2')}</span>
                     </li>
                     <li className="flex items-start">
                       <span className="text-[#4CAF50] mr-2">✓</span>
-                      <span>Transparent bonus system</span>
+                      <span>{t('feature_section.one_arcade_feature3')}</span>
                     </li>
                     <li className="flex items-start">
                       <span className="text-[#4CAF50] mr-2">✓</span>
-                      <span>Self-custody of assets</span>
+                      <span>{t('feature_section.one_arcade_feature4')}</span>
                     </li>
                   </ul>
                 </div>
               </div>
               
-              <p className="text-white/80 text-sm">
-                OneArcade leverages One Chain Network Blockchain to provide a transparent, provably fair gaming
-                experience with DeFi integration, allowing players to earn passive income through staking.
-              </p>
+              <p className="text-white/80 text-sm">{t('feature_section.summary')}</p>
             </div>
           </div>
         </div>

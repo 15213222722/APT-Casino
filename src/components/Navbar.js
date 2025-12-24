@@ -129,12 +129,16 @@ export default function Navbar() {
   const { t, i18n } = useTranslation();
   
   // Add function to handle language switching
-  const toggleLanguage = () => {
+  const toggleLanguage = async () => {
     const newLanguage = i18n.language === 'en' ? 'zh' : 'en';
     console.log(`Switching language to ${newLanguage}`);  
-    i18n.changeLanguage(newLanguage).catch(error => {
+    try {
+      await i18n.changeLanguage(newLanguage);
+      // Update the UI immediately after successful language change
+      document.documentElement.lang = newLanguage;
+    } catch (error) {
       console.error('Failed to change language:', error);
-    });
+    }
   };
   
   // One Chain Wallet connection

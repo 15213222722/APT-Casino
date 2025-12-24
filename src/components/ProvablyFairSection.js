@@ -1,36 +1,38 @@
 'use client';
+import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
 import Link from 'next/link';
 
 const ProvablyFairSection = () => {
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState(1);
   
   const steps = [
     {
       id: 1,
-      title: 'Pyth Entropy Request',
-      description: 'When you start a game, a randomness request is sent to Pyth Network Entropy on One Chain Network. The request includes a custom gas limit and required fee.',
+      title: t('provably_fair_section.step1_title'),
+      description: t('provably_fair_section.step1_description'),
       icon: 'client-seed',
       code: 'import pythEntropyService from \'@/services/PythEntropyService\';\n\nconst result = await pythEntropyService.generateRandom(\'ROULETTE\', {\n  purpose: \'roulette_spin\',\n  gameType: \'ROULETTE\',\n  betAmount: 0.1\n});'
     },
     {
       id: 2,
-      title: 'Decentralized Randomness',
-      description: 'Pyth Network provides cryptographically secure randomness derived from multiple data sources, ensuring provably fair results with on-chain verification.',
+      title: t('provably_fair_section.step2_title'),
+      description: t('provably_fair_section.step2_description'),
       icon: 'server-seed',
       code: 'const requestId = result.entropyProof.requestId;\nconst randomValue = result.randomValue;\nconst sequenceNumber = result.entropyProof.sequenceNumber;\nconst transactionHash = result.entropyProof.transactionHash;\nconst explorerUrl = result.entropyProof.explorerUrl;'
     },
     {
       id: 3,
-      title: 'On-Chain Verification',
-      description: 'All randomness requests and results are recorded on One Chain Network blockchain, providing complete transparency and verifiability.',
+      title: t('provably_fair_section.step3_title'),
+      description: t('provably_fair_section.step3_description'),
       icon: 'calculation',
       code: '// Verify randomness via Pyth Entropy Explorer\nconsole.log(\'Transaction:\', transactionHash);\nconsole.log(\'Explorer:\', explorerUrl);\nconsole.log(\'Arbiscan:\', `https://sepolia.arbiscan.io/tx/${transactionHash}`);'
     },
     {
       id: 4,
-      title: 'Transparent Results',
-      description: 'Each game result includes request ID, sequence number, and transaction hash for complete transparency and verifiability.',
+      title: t('provably_fair_section.step4_title'),
+      description: t('provably_fair_section.step4_description'),
       icon: 'verification',
       code: '// Game result with Pyth Entropy proof\nconst gameResult = {\n  randomValue: result.randomValue,\n  entropyProof: {\n    requestId: result.entropyProof.requestId,\n    sequenceNumber: result.entropyProof.sequenceNumber,\n    transactionHash: result.entropyProof.transactionHash,\n    explorerUrl: result.entropyProof.explorerUrl,\n    timestamp: result.entropyProof.timestamp\n  }\n};'
     },
@@ -245,7 +247,7 @@ const ProvablyFairSection = () => {
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="flex items-center mb-8">
           <div className="w-1 h-6 bg-gradient-to-r from-blue-500 to-cyan-400 rounded-full mr-3"></div>
-          <h2 className="text-2xl font-display font-bold text-white">Pyth Entropy Powered Fairness</h2>
+          <h2 className="text-2xl font-display font-bold text-white">{t('provably_fair_section.title')}</h2>
         </div>
         
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
@@ -253,20 +255,17 @@ const ProvablyFairSection = () => {
           <div className="lg:col-span-5">
             <div className="p-[1px] bg-gradient-to-r from-blue-500 to-cyan-400 rounded-xl h-full">
               <div className="bg-[#0f172a] rounded-xl p-6 h-full">
-                <h3 className="text-white text-xl font-medium mb-4">What is Pyth Entropy?</h3>
-                <p className="text-white/80 mb-6">
-                  Pyth Entropy is a decentralized randomness service that provides cryptographically secure random numbers on-chain.
-                  It aggregates randomness from multiple sources and makes it available to smart contracts on One Chain Network.
-                </p>
+                <h3 className="text-white text-xl font-medium mb-4">{t('provably_fair_section.what_is_title')}</h3>
+                <p className="text-white/80 mb-6">{t('provably_fair_section.what_is_description')}</p>
                 
                 <div className="bg-[#1e293b] p-4 rounded-lg mb-6 border-l-2 border-blue-500">
-                  <h4 className="text-white font-medium mb-2">Why Pyth Entropy matters</h4>
+                  <h4 className="text-white font-medium mb-2">{t('provably_fair_section.why_matters_title')}</h4>
                   <ul className="text-white/70 text-sm space-y-2 list-disc pl-4">
-                    <li>Cryptographically secure randomness from multiple sources</li>
-                    <li>On-chain verification and transparency</li>
-                    <li>High throughput suitable for gaming applications</li>
-                    <li>Immune to manipulation by players, casino, or validators</li>
-                    <li>Complete audit trail from request to result</li>
+                    <li>{t('provably_fair_section.why_matters_feature1')}</li>
+                    <li>{t('provably_fair_section.why_matters_feature2')}</li>
+                    <li>{t('provably_fair_section.why_matters_feature3')}</li>
+                    <li>{t('provably_fair_section.why_matters_feature4')}</li>
+                    <li>{t('provably_fair_section.why_matters_feature5')}</li>
                   </ul>
                 </div>
                 
@@ -274,7 +273,7 @@ const ProvablyFairSection = () => {
                   <div className="inline-block">
                     <div className="p-[1px] bg-gradient-to-r from-blue-500 to-cyan-400 rounded-md inline-block">
                       <button className="bg-[#0f172a] hover:bg-[#1e293b] transition-colors text-white px-6 py-2 rounded-md flex items-center">
-                        Verify On-Chain
+                        {t('provably_fair_section.verify_button')}
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-2" viewBox="0 0 20 20" fill="currentColor">
                           <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
                         </svg>
@@ -290,7 +289,7 @@ const ProvablyFairSection = () => {
           <div className="lg:col-span-7">
             <div className="p-[1px] bg-gradient-to-r from-blue-500/40 to-cyan-400/40 rounded-xl">
               <div className="bg-[#0f172a] rounded-xl p-6">
-                <h3 className="text-white text-xl font-medium mb-4">How Pyth Entropy Works</h3>
+                <h3 className="text-white text-xl font-medium mb-4">{t('provably_fair_section.how_it_works_title')}</h3>
                 
                 {/* Steps tabs */}
                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 mb-6">
@@ -304,7 +303,7 @@ const ProvablyFairSection = () => {
                       }`}
                       onClick={() => setActiveTab(step.id)}
                     >
-                      Step {step.id}
+                      {t('provably_fair_section.step', { stepId: step.id })}
                     </button>
                   ))}
                 </div>

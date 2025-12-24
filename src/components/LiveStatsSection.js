@@ -1,18 +1,21 @@
 'use client';
+import { useTranslation } from 'react-i18next';
 import { useState, useEffect } from 'react';
 import { FaUsers, FaTrophy, FaCoins } from 'react-icons/fa';
 
 const LiveStatsSection = () => {
+  const { t } = useTranslation();
+
   // Simulated stats data with initial values
   const [stats, setStats] = useState({
     activePlayers: 2458,
     totalJackpot: 158420,
     dailyWinners: 342,
     recentWinners: [
-      { id: 1, name: 'CryptoWhale', amount: 12450, game: 'Poker', timeAgo: '2m ago' },
-      { id: 2, name: '0x7a...e3f4', amount: 8560, game: 'Roulette', timeAgo: '5m ago' },
-      { id: 3, name: 'BlockMaster', amount: 5280, game: 'Fortune Tiger', timeAgo: '12m ago' },
-      { id: 4, name: '0x3d...8a7c', amount: 3695, game: 'Mines', timeAgo: '18m ago' },
+      { id: 1, name: 'CryptoWhale', amount: 12450, game: t('live_stats_section.poker'), timeAgo: t('live_stats_section.minutes_ago', { count: 2 }) },
+      { id: 2, name: '0x7a...e3f4', amount: 8560, game: t('live_stats_section.roulette'), timeAgo: t('live_stats_section.minutes_ago', { count: 5 }) },
+      { id: 3, name: 'BlockMaster', amount: 5280, game: t('live_stats_section.fortune_tiger'), timeAgo: t('live_stats_section.minutes_ago', { count: 12 }) },
+      { id: 4, name: '0x3d...8a7c', amount: 3695, game: t('live_stats_section.mines'), timeAgo: t('live_stats_section.minutes_ago', { count: 18 }) },
     ]
   });
 
@@ -43,7 +46,7 @@ const LiveStatsSection = () => {
                     <FaUsers className="text-white text-xl" />
                   </div>
                   <div>
-                    <h3 className="text-white/70 text-sm">Active Players</h3>
+                    <h3 className="text-white/70 text-sm">{t('live_stats_section.active_players')}</h3>
                     <p className="text-white text-2xl font-bold">
                       {stats.activePlayers.toLocaleString()}
                     </p>
@@ -55,7 +58,7 @@ const LiveStatsSection = () => {
                     <FaCoins className="text-white text-xl" />
                   </div>
                   <div>
-                    <h3 className="text-white/70 text-sm">Total Jackpot</h3>
+                    <h3 className="text-white/70 text-sm">{t('live_stats_section.total_jackpot')}</h3>
                     <p className="text-white text-2xl font-bold">
                       ${stats.totalJackpot.toLocaleString()}
                     </p>
@@ -67,7 +70,7 @@ const LiveStatsSection = () => {
                     <FaTrophy className="text-white text-xl" />
                   </div>
                   <div>
-                    <h3 className="text-white/70 text-sm">Daily Winners</h3>
+                    <h3 className="text-white/70 text-sm">{t('live_stats_section.daily_winners')}</h3>
                     <p className="text-white text-2xl font-bold">
                       {stats.dailyWinners.toLocaleString()}
                     </p>
@@ -80,7 +83,7 @@ const LiveStatsSection = () => {
             <div className="mt-8">
               <h3 className="text-white font-medium mb-4 flex items-center">
                 <div className="w-1 h-4 magic-gradient rounded-full mr-2"></div>
-                Recent Big Winners
+                {t('live_stats_section.recent_big_winners')}
               </h3>
               
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -94,7 +97,7 @@ const LiveStatsSection = () => {
                         <p className="text-white font-medium truncate">{winner.name}</p>
                         <span className="text-xs text-white/50">{winner.timeAgo}</span>
                       </div>
-                      <p className="text-sm text-white/70 mb-1">Game: {winner.game}</p>
+                      <p className="text-sm text-white/70 mb-1">{t('live_stats_section.game', { game: winner.game })}</p>
                       <p className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-magic to-blue-magic">
                         ${winner.amount.toLocaleString()}
                       </p>
