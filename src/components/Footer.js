@@ -4,12 +4,13 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import GradientBorderButton from "./GradientBorderButton";
-import { FaGlobe, FaChevronDown, FaChevronUp, FaLock, FaShieldAlt } from "react-icons/fa";
+import { FaLock, FaShieldAlt } from "react-icons/fa";
+import { useTranslation, Trans } from 'react-i18next';
 
 export default function Footer() {
+  const { t } = useTranslation();
   const [email, setEmail] = useState("");
   const [isSubscribed, setIsSubscribed] = useState(false);
-  const [showLanguage, setShowLanguage] = useState(false);
   
   const socialLinks = [
     { name: "Twitter", url: "https://twitter.com", icon: "/icons/twitter.svg" },
@@ -17,16 +18,6 @@ export default function Footer() {
     { name: "Telegram", url: "https://telegram.org", icon: "/icons/telegram.svg" },
     { name: "GitHub", url: "https://github.com", icon: "/icons/github.svg" },
   ];
-  
-  const languages = [
-    { code: "en", name: "English" },
-    { code: "es", name: "Español" },
-    { code: "fr", name: "Français" },
-    { code: "de", name: "Deutsch" },
-    { code: "jp", name: "日本語" },
-  ];
-  
-
   
   const handleSubscribe = (e) => {
     e.preventDefault();
@@ -42,6 +33,21 @@ export default function Footer() {
       }, 3000);
     }
   };
+
+  const navigationLinks = [
+    { key: 'navbar.home', href: '/' },
+    { key: 'navbar.game', href: '/game' },
+    { key: 'footer.links_bank', href: '/bank' },
+    { key: 'footer.links_about_us', href: '/about-us' },
+    { key: 'footer.links_faqs', href: '/faqs' }
+  ];
+
+  const supportLinks = [
+      { key: 'footer.links_contact_us', href: '/contact-us' },
+      { key: 'footer.links_privacy_policy', href: '/privacy-policy' },
+      { key: 'footer.links_terms_of_service', href: '/terms-of-service' },
+      { key: 'footer.links_responsible_gaming', href: '/responsible-gaming' }
+  ];
 
   return (
     <footer id="footer" className="bg-gradient-to-br from-[#0a0a1a] via-[#1a0a2a] to-[#0f0a1f] text-white pt-16 pb-8 relative overflow-hidden">
@@ -101,21 +107,20 @@ export default function Footer() {
             <div className="w-full h-full flex items-center justify-center text-black font-bold text-xs">$</div>
           </div>
           <div className="absolute top-8 -right-8 w-10 h-10 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full border-2 border-blue-300 animate-float-delay shadow-lg shadow-blue-500/30" style={{animationDelay: '1s'}}>
-            <div className="w-full h-full flex items-center justify-center text-white font-bold text-xs">♦</div>
+            <div className="w-full h-full flex items-center justify-center text-white font-bold text-xs" >♦</div>
           </div>
           <div className="absolute top-20 -right-6 w-8 h-8 bg-gradient-to-br from-red-400 to-red-600 rounded-full border-2 border-red-300 animate-float-slow shadow-lg shadow-red-500/30" style={{animationDelay: '2s'}}>
             <div className="w-full h-full flex items-center justify-center text-white font-bold text-xs">♥</div>
           </div>
           <a href="/" className="logo block mb-6 transition-all duration-300 hover:scale-105 hover:drop-shadow-[0_0_20px_rgba(255,0,100,0.5)]">
             <div className="font-bold text-3xl font-display animate-cosmic-glow bg-gradient-to-r from-white via-blue-magic to-purple-400 bg-clip-text text-transparent">
-              OneArcade
+              {t('navbar.title')}
             </div>
           </a>
           <div className="p-[1px] bg-gradient-to-r from-red-magic/40 via-purple-600/30 to-blue-magic/40 rounded-lg mb-6 hover:from-red-magic hover:via-purple-600/50 hover:to-blue-magic transition-all duration-300 animate-casino-pulse">
             <div className="bg-[#1a0a2a]/80 backdrop-blur-sm rounded-lg p-4 border border-white/10">
               <p className="text-white/80 text-sm leading-relaxed">
-                OneArcade is your ultimate destination for One Chain Network gaming. Experience transparency, fairness,
-                and excitement powered by One Chain Network blockchain technology.
+                {t('footer.description')}
               </p>
             </div>
           </div>
@@ -145,77 +150,44 @@ export default function Footer() {
               ))}
             </div>
           </div>
-          
-          {/* Language Selector */}
-          <div className="mt-6 relative">
-            <button 
-              className="flex items-center gap-2 text-white/70 hover:text-white p-2 rounded-md bg-[#1a0a2a]/60 hover:bg-[#2a1a3a]/80 w-full transition-colors border border-white/5"
-              onClick={() => setShowLanguage(!showLanguage)}
-            >
-              <FaGlobe className="text-blue-magic" />
-              <span>Select Language</span>
-              {showLanguage ? <FaChevronUp className="ml-auto" /> : <FaChevronDown className="ml-auto" />}
-            </button>
-            
-            {showLanguage && (
-              <div className="absolute z-10 mt-1 w-full bg-[#1a0a2a]/95 border border-white/15 rounded-md shadow-xl p-1 animate-fadeIn backdrop-blur-sm">
-                {languages.map((lang) => (
-                  <button
-                    key={lang.code}
-                    className="flex items-center gap-2 text-white/70 hover:text-white hover:bg-white/15 p-2 rounded-md w-full text-left transition-colors"
-                    onClick={() => setShowLanguage(false)}
-                  >
-                    {lang.name}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
         </div>
 
         {/* Navigation Links */}
         <div className="md:col-span-2 md:ml-8">
           <div className="mb-3 flex items-center">
             <div className="w-1 h-4 magic-gradient rounded-full mr-2"></div>
-            <h3 className="font-display text-lg">Navigation</h3>
+            <h3 className="font-display text-lg">{t('footer.navigation')}</h3>
           </div>
           <ul className="space-y-3 mt-4">
-            {["Home", "Game", "Bank", "About Us", "FAQs"].map((item) => (
-              <li key={item}>
+            {navigationLinks.map((item) => (
+              <li key={item.key}>
                 <Link 
-                  href={item.toLowerCase() === "home" ? "/" : `/${item.toLowerCase().replace(" ", "-")}`} 
+                  href={item.href}
                   className="text-white/70 hover:text-white flex items-center transition-all group"
                 >
                   <span className="w-0 h-[1px] magic-gradient mr-0 group-hover:w-2 group-hover:mr-2 transition-all"></span>
-                  {item}
+                  {t(item.key)}
                 </Link>
               </li>
             ))}
           </ul>
-          
-         
         </div>
 
         {/* Support Links */}
         <div className="md:col-span-2">
           <div className="mb-3 flex items-center">
             <div className="w-1 h-4 magic-gradient rounded-full mr-2"></div>
-            <h3 className="font-display text-lg">Support</h3>
+            <h3 className="font-display text-lg">{t('footer.support')}</h3>
           </div>
           <ul className="space-y-3 mt-4">
-            {[
-              "Contact Us", 
-              "Privacy Policy", 
-              "Terms of Service", 
-              "Responsible Gaming"
-            ].map((item) => (
-              <li key={item}>
+            {supportLinks.map((item) => (
+              <li key={item.key}>
                 <Link 
-                  href={`/${item.toLowerCase().replace(/\s+/g, "-")}`} 
+                  href={item.href}
                   className="text-white/70 hover:text-white flex items-center transition-all group"
                 >
                   <span className="w-0 h-[1px] magic-gradient mr-0 group-hover:w-2 group-hover:mr-2 transition-all"></span>
-                  {item}
+                  {t(item.key)}
                 </Link>
               </li>
             ))}
@@ -224,14 +196,14 @@ export default function Footer() {
           {/* Security Badges */}
           <div className="mt-6 pt-6 border-t border-white/10">
             <h3 className="text-sm font-medium mb-3 text-white/90 flex items-center">
-              <FaShieldAlt className="mr-2 text-green-500" /> Security & Trust
+              <FaShieldAlt className="mr-2 text-green-500" /> {t('footer.security_trust')}
             </h3>
             <div className="flex flex-wrap gap-2">
               <div className="bg-[#1a0a2a]/60 p-1.5 rounded-md flex items-center gap-1.5 text-xs text-white/80 border border-white/10">
-                <FaLock className="text-green-500" /> SSL Secured
+                <FaLock className="text-green-500" /> {t('footer.ssl_secured')}
               </div>
               <div className="bg-[#1a0a2a]/60 p-1.5 rounded-md flex items-center gap-1.5 text-xs text-white/80 border border-white/10">
-                <FaShieldAlt className="text-blue-magic" /> Provably Fair
+                <FaShieldAlt className="text-blue-magic" /> {t('footer.provably_fair')}
               </div>
             </div>
           </div>
@@ -241,33 +213,33 @@ export default function Footer() {
         <div className="md:col-span-4">
           <div className="mb-3 flex items-center">
             <div className="w-1 h-4 magic-gradient rounded-full mr-2"></div>
-            <h3 className="font-display text-lg">Stay Updated</h3>
+            <h3 className="font-display text-lg">{t('footer.stay_updated')}</h3>
           </div>
           
           <div className="mt-4 p-[1px] bg-gradient-to-r from-red-magic via-purple-600 to-blue-magic rounded-lg shadow-xl transition-all hover:shadow-red-magic/40 hover:shadow-2xl animate-casino-pulse">
             <div className="bg-[#1a0a2a]/85 backdrop-blur-sm rounded-lg p-4 border border-white/10">
               <p className="text-white/70 text-sm mb-3">
-                Subscribe to receive updates about new games, features, and promotions.
+                {t('footer.subscribe_promo')}
               </p>
               
               <form onSubmit={handleSubscribe} className="relative">
                 <div className="flex gap-2 mb-2">
                   <input 
                     type="email" 
-                    placeholder="Your email" 
+                    placeholder={t('footer.subscribe_placeholder')} 
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     className="flex-1 bg-[#1a0a2a]/60 border border-white/15 rounded-md px-3 py-2 text-sm focus:outline-none focus:border-blue-magic focus:ring-2 focus:ring-blue-magic/30 transition-all backdrop-blur-sm"
                     required
                   />
                   <GradientBorderButton type="submit" className="hover:scale-105 transition-transform">
-                    Subscribe
+                    {t('footer.subscribe_button')}
                   </GradientBorderButton>
                 </div>
                 
                 {isSubscribed && (
                   <div className="text-green-500 text-xs animate-fadeIn absolute bg-green-500/10 px-2 py-1 rounded-md border border-green-500/20">
-                    🎉 Thank you for subscribing!
+                    🎉 {t('footer.subscribe_success')}
                   </div>
                 )}
               </form>
@@ -275,14 +247,12 @@ export default function Footer() {
               <div className="flex justify-center mt-6">
                 <Link href="/game" className="w-full">
                   <button className="w-full magic-gradient hover:opacity-90 transition-all text-white font-display py-3 px-6 rounded-md hover:shadow-xl hover:shadow-red-magic/40 hover:scale-105 transform animate-cosmic-glow">
-                    🎰 Launch Game
+                    🎰 {t('footer.launch_game')}
                   </button>
                 </Link>
               </div>
             </div>
           </div>
-          
-          
         </div>
       </div>
 
@@ -295,24 +265,26 @@ export default function Footer() {
         
         <div className="flex flex-col md:flex-row justify-between items-center gap-4">
           <div className="text-sm text-white/60 hover:text-white/80 transition-colors">
-            © {new Date().getFullYear()} OneArcade. All rights reserved.
+            {t('footer.copyright', { year: new Date().getFullYear() })}
           </div>
           
           <div className="text-xs text-white/50 flex gap-4">
-            <a href="/terms" className="hover:text-blue-magic transition-colors hover:drop-shadow-[0_0_5px_rgba(0,100,255,0.6)]">Terms</a>
+            <a href="/terms" className="hover:text-blue-magic transition-colors hover:drop-shadow-[0_0_5px_rgba(0,100,255,0.6)]">{t('footer.links_terms')}</a>
             <span className="text-white/20">|</span>
-            <a href="/privacy" className="hover:text-blue-magic transition-colors hover:drop-shadow-[0_0_5px_rgba(0,100,255,0.6)]">Privacy</a>
+            <a href="/privacy" className="hover:text-blue-magic transition-colors hover:drop-shadow-[0_0_5px_rgba(0,100,255,0.6)]">{t('footer.links_privacy')}</a>
             <span className="text-white/20">|</span>
-            <a href="/cookies" className="hover:text-blue-magic transition-colors hover:drop-shadow-[0_0_5px_rgba(0,100,255,0.6)]">Cookies</a>
+            <a href="/cookies" className="hover:text-blue-magic transition-colors hover:drop-shadow-[0_0_5px_rgba(0,100,255,0.6)]">{t('footer.links_cookies')}</a>
             <span className="text-white/20">|</span>
-            <a href="/responsible-gaming" className="hover:text-red-magic transition-colors hover:drop-shadow-[0_0_5px_rgba(255,0,100,0.6)]">Play Responsibly</a>
+            <a href="/responsible-gaming" className="hover:text-red-magic transition-colors hover:drop-shadow-[0_0_5px_rgba(255,0,100,0.6)]">{t('footer.links_play_responsibly')}</a>
           </div>
         </div>
         
         {/* Compliance Statement */}
         <div className="text-xs text-white/40 text-center mt-6 p-3 bg-white/5 rounded-lg backdrop-blur-sm border border-white/10">
-          OneArcade encourages responsible gaming. Please play responsibly and only with funds you can afford to lose.
-          Gambling can be addictive. If you need help or advice, please visit <a href="/responsible-gaming" className="underline text-blue-magic hover:text-blue-magic/80 transition-colors hover:drop-shadow-[0_0_3px_rgba(0,100,255,0.8)]">Responsible Gaming</a>.
+          <Trans i18nKey="footer.compliance_statement">
+            OneArcade encourages responsible gaming. Please play responsibly and only with funds you can afford to lose.
+            Gambling can be addictive. If you need help or advice, please visit <a href="/responsible-gaming" className="underline text-blue-magic hover:text-blue-magic/80 transition-colors hover:drop-shadow-[0_0_3px_rgba(0,100,255,0.8)]">Responsible Gaming</a>.
+          </Trans>
         </div>
       </div>
 

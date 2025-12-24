@@ -14,6 +14,7 @@ import SmartAccountInfo from "./SmartAccountInfo";
 import SmartAccountModal from "./SmartAccountModal";
 import WalletDebug from "./WalletDebug";
 import { Transaction } from '@mysten/sui/transactions';
+import { useTranslation } from 'react-i18next';
 
 import { useNotification } from './NotificationSystem';
 import { TREASURY_CONFIG } from '../config/treasury';
@@ -125,7 +126,17 @@ export default function Navbar() {
   const [isDepositing, setIsDepositing] = useState(false);
   const [showLiveChat, setShowLiveChat] = useState(false);
 
-
+  const { t, i18n } = useTranslation();
+  
+  // Add function to handle language switching
+  const toggleLanguage = () => {
+    const newLanguage = i18n.language === 'en' ? 'zh' : 'en';
+    console.log(`Switching language to ${newLanguage}`);  
+    i18n.changeLanguage(newLanguage).catch(error => {
+      console.error('Failed to change language:', error);
+    });
+  };
+  
   // One Chain Wallet connection
   const { 
     isConnected, 
@@ -326,7 +337,7 @@ export default function Navbar() {
         const newBalance = await UserBalanceSystem.getBalance(address);
         if (newBalance !== initialBalance) {
           dispatch(setBalance(newBalance));
-          notification.success('Balance updated successfully!');
+          notification.success(t('notifications.balance_updated_success'));
           dispatch(setLoading(false));
           return;
         }
@@ -335,14 +346,14 @@ export default function Navbar() {
       }
       await new Promise(resolve => setTimeout(resolve, interval));
     }
-    notification.error('Balance update timed out. Please refresh manually.');
+    notification.error(t('notifications.balance_update_timeout'));
     dispatch(setLoading(false));
   };
 
   // Handle withdraw from house account (One Chain)
   const handleWithdraw = async () => {
     if (!isConnected || !address) {
-      notification.error('Please connect your wallet first');
+      notification.error(t('notifications.connect_wallet_first'));
       return;
     }
 
@@ -350,14 +361,14 @@ export default function Navbar() {
       setIsWithdrawing(true);
       const balanceInOct = parseFloat(userBalance || '0');
       if (balanceInOct <= 0) {
-        notification.error('No balance to withdraw');
+        notification.error(t('notifications.no_balance_to_withdraw'));
         return;
       }
 
       // Call backend API to process withdrawal from One Chain treasury
       console.log('🔍 Withdrawing from One Chain treasury:', { address, amount: balanceInOct });
       
-      notification.info('Processing withdrawal from treasury...');
+      notification.info(t('notifications.processing_withdrawal'));
       
       const response = await fetch('/api/withdraw', {
         method: 'POST',
@@ -389,7 +400,7 @@ export default function Navbar() {
       const txDigest = result?.transactionDigest || result?.transactionHash || 'Unknown';
       const txDisplay = txDigest !== 'Unknown' ? `${txDigest.slice(0, 10)}...` : 'Pending';
       
-      notification.success(`Withdrawal successful! ${balanceInOct.toFixed(5)} OCT transferred. TX: ${txDisplay}`);
+      notification.success(t('notifications.withdrawal_success', { amount: balanceInOct.toFixed(5), tx: txDisplay }));
       
       // Close the modal
       setShowBalanceModal(false);
@@ -399,9 +410,9 @@ export default function Navbar() {
       
       // Ensure error message is a string
       const errorMessage = error?.message || 'Unknown error occurred';
-      const safeErrorMessage = typeof errorMessage === 'string' ? errorMessage : 'Unknown error occurred';
+      const safeErrorMessage = typeof errorMessage === 'string' ? errorMessage : t('notifications.unknown_error');
       
-      notification.error(`Withdrawal failed: ${safeErrorMessage}`);
+      notification.error(t('notifications.withdrawal_failed', { error: safeErrorMessage }));
     } finally {
       setIsWithdrawing(false);
     }
@@ -416,24 +427,24 @@ export default function Navbar() {
     }
     
     if (!isConnected || !address) {
-      notification.error('Please connect your wallet first');
+      notification.error(t('notifications.connect_wallet_first'));
       return;
     }
 
     const amount = parseFloat(depositAmount);
     if (!amount || amount <= 0) {
-      notification.error('Please enter a valid deposit amount');
+      notification.error(t('notifications.invalid_deposit_amount'));
       return;
     }
     
     // Check deposit limits
     if (amount < TREASURY_CONFIG.LIMITS.MIN_DEPOSIT) {
-      notification.error(`Minimum deposit amount is ${TREASURY_CONFIG.LIMITS.MIN_DEPOSIT} OCT`);
+      notification.error(t('notifications.min_deposit', { amount: TREASURY_CONFIG.LIMITS.MIN_DEPOSIT }));
       return;
     }
     
     if (amount > TREASURY_CONFIG.LIMITS.MAX_DEPOSIT) {
-      notification.error(`Maximum deposit amount is ${TREASURY_CONFIG.LIMITS.MAX_DEPOSIT} OCT`);
+      notification.error(t('notifications.max_deposit', { amount: TREASURY_CONFIG.LIMITS.MAX_DEPOSIT }));
       return;
     }
 
@@ -442,7 +453,7 @@ export default function Navbar() {
     try {
       // Check wallet connection
       if (!isConnected || !address) {
-        throw new Error('Wallet is not connected. Please connect your wallet first.');
+        throw new Error(t('notifications.connect_wallet_first'));
       }
       
       console.log('Depositing to One Chain treasury:', { address, amount });
@@ -454,7 +465,7 @@ export default function Navbar() {
       });
 
       if (!coins.data || coins.data.length === 0) {
-        throw new Error('No OCT coins found in your wallet. Please ensure you have OCT tokens.');
+        throw new Error(t('notifications.no_oct_coins'));
       }
 
       // Calculate total balance
@@ -464,7 +475,7 @@ export default function Navbar() {
       const totalNeeded = amountInMist + estimatedGas;
 
       if (totalBalance < totalNeeded) {
-        throw new Error(`Insufficient OCT balance. Available: ${Number(totalBalance) / 1e9} OCT, Needed: ${amount} OCT (+ gas)`);
+        throw new Error(t('notifications.insufficient_oct_balance', { available: Number(totalBalance) / 1e9, needed: amount }));
       }
 
       // Find a coin with sufficient balance for payment
@@ -512,7 +523,7 @@ export default function Navbar() {
       // Set gas budget
       tx.setGasBudget(estimatedGas.toString());
       
-      notification.info('Please approve the transaction in your wallet...');
+      notification.info(t('notifications.approve_transaction'));
       
       // Execute transaction
       let result;
@@ -523,8 +534,8 @@ export default function Navbar() {
         if (error?.message?.includes('permission') || 
             error?.message?.includes('viewAccount') || 
             error?.message?.includes('suggestTransaction')) {
-          notification.error('Wallet permission denied. Please reconnect your wallet and try again.');
-          throw new Error('Wallet permission denied. Please disconnect and reconnect your wallet, then try again.');
+          notification.error(t('notifications.wallet_permission_denied'));
+          throw new Error(t('notifications.wallet_permission_denied'));
         }
         throw error;
       }
@@ -543,7 +554,7 @@ export default function Navbar() {
       // Show success with transaction digest
       const txDigest = result.digest;
       notification.success(
-        `Successfully deposited ${amount} OCT! TX: ${txDigest.slice(0, 10)}...`
+        t('notifications.deposit_success', { amount, tx: txDigest.slice(0, 10) + '...' })
       );
       
       setDepositAmount("");
@@ -559,11 +570,11 @@ export default function Navbar() {
           errorMessage.includes('viewAccount') || 
           errorMessage.includes('suggestTransaction')) {
         notification.error(
-          'Wallet permission denied. Please disconnect and reconnect your wallet, then try again.',
+          t('notifications.wallet_permission_denied'),
           { duration: 5000 }
         );
       } else {
-        notification.error(`Deposit failed: ${errorMessage}`);
+        notification.error(t('notifications.deposit_failed', { error: errorMessage }));
       }
     } finally {
       setIsDepositing(false);
@@ -595,14 +606,12 @@ export default function Navbar() {
 
   const navLinks = [
     {
-      name: "Home",
+      name: t('navbar.home'),
       path: "/",
-      classes: "text-hover-gradient-home",
     },
     {
-      name: "Game",
+      name: t('navbar.game'),
       path: "/game",
-      classes: "text-hover-gradient-game",
     },
     // {
     //   name: "Live",
@@ -638,7 +647,7 @@ export default function Navbar() {
     setNotifications(prev => prev.map(n => ({...n, isRead: true})));
     setUnreadNotifications(0);
     setShowNotificationsPanel(false);
-    notification.success("All notifications marked as read");
+    notification.success(t('notifications.all_marked_as_read'));
   };
   
   const handleSearchIconClick = () => {
@@ -706,7 +715,7 @@ export default function Navbar() {
               </div>
               <span className="relative text-white font-bold text-xl ml-3 tracking-wider">
                 <span className="absolute inset-0 bg-gradient-to-r from-cyan-400 via-purple-500 to-pink-500 bg-clip-text text-transparent animate-gradient bg-300% group-hover:from-red-600 group-hover:via-yellow-400 group-hover:to-green-500 transition-all duration-300 group-hover:animate-pulse neon-glow"></span>
-                <span className="relative drop-shadow-2xl group-hover:drop-shadow-3xl transform transition-all duration-300 hover:scale-110 hover:tracking-widest group-hover:animate-bounce font-black">OneArcade</span>
+                <span className="relative drop-shadow-2xl group-hover:drop-shadow-3xl transform transition-all duration-300 hover:scale-110 hover:tracking-widest group-hover:animate-bounce font-black">{t('navbar.title')}</span>
               </span>
               {/* Additional impact elements */}
               <div className="absolute inset-0 pointer-events-none">
@@ -720,7 +729,7 @@ export default function Navbar() {
             <button 
               className="md:hidden text-white p-1 rounded-lg hover:bg-blue-500/20 transition-colors"
               onClick={() => setShowMobileMenu(!showMobileMenu)}
-              aria-label="Toggle mobile menu"
+              aria-label={t('navbar.toggle_menu_aria')}
             >
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 {showMobileMenu ? (
@@ -757,12 +766,19 @@ export default function Navbar() {
           </div>
           
           <div className="flex items-center gap-2 md:gap-3">
+            {/* Language Switch Button */}
+            <button
+              className="px-3 py-2 text-white/70 hover:text-white transition-colors rounded hover:bg-blue-500/20 border border-white/20"
+              onClick={toggleLanguage}
+            >
+              {i18n.language === 'en' ? 'ZH' : 'EN'}
+            </button>
             {/* Search Icon */}
             <div className="relative">
               <button 
                 className="p-2 text-white/70 hover:text-white transition-colors rounded-full hover:bg-blue-500/20"
                 onClick={handleSearchIconClick}
-                aria-label="Search"
+                aria-label={t('search.aria_label')}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <circle cx="11" cy="11" r="8"></circle>
@@ -783,7 +799,7 @@ export default function Navbar() {
                         type="text"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        placeholder="Search games, tournaments..."
+                        placeholder={t('search.placeholder')}
                         className="w-full py-2 px-3 pr-10 bg-[#001F3F]/50 border border-[#00A3FF]/30 rounded-md text-white focus:outline-none focus:border-[#00A3FF]"
                       />
                       <svg 
@@ -809,14 +825,14 @@ export default function Navbar() {
                          searchResults.tournaments.length === 0 && 
                          searchResults.pages.length === 0)) ? (
                         <div className="p-4 text-center text-white/50">
-                          No results found
+                          {t('search.no_results')}
                         </div>
                       ) : (
                         <>
                           {/* Games */}
                           {searchResults.games.length > 0 && (
                             <div className="p-2">
-                              <h3 className="text-xs font-medium text-white/50 uppercase px-3 mb-1">Games</h3>
+                              <h3 className="text-xs font-medium text-white/50 uppercase px-3 mb-1">{t('search.games')}</h3>
                               {searchResults.games.map(game => (
                                 <div 
                                   key={game.id}
@@ -840,7 +856,7 @@ export default function Navbar() {
                           {/* Tournaments */}
                           {searchResults.tournaments.length > 0 && (
                             <div className="p-2">
-                              <h3 className="text-xs font-medium text-white/50 uppercase px-3 mb-1">Tournaments</h3>
+                              <h3 className="text-xs font-medium text-white/50 uppercase px-3 mb-1">{t('search.tournaments')}</h3>
                               {searchResults.tournaments.map(tournament => (
                                 <div 
                                   key={tournament.id}
@@ -853,7 +869,7 @@ export default function Navbar() {
                                     </div>
                                     <div>
                                       <p className="text-sm font-medium text-white">{tournament.name}</p>
-                                      <span className="text-xs text-white/50">Prize: {tournament.prize}</span>
+                                      <span className="text-xs text-white/50">{t('search.prize')}{tournament.prize}</span>
                                     </div>
                                   </div>
                                 </div>
@@ -864,7 +880,7 @@ export default function Navbar() {
                           {/* Pages */}
                           {searchResults.pages.length > 0 && (
                             <div className="p-2">
-                              <h3 className="text-xs font-medium text-white/50 uppercase px-3 mb-1">Pages</h3>
+                              <h3 className="text-xs font-medium text-white/50 uppercase px-3 mb-1">{t('search.pages')}</h3>
                               {searchResults.pages.map(page => (
                                 <div 
                                   key={page.id}
@@ -894,7 +910,7 @@ export default function Navbar() {
                   {searchQuery.length > 0 && (
                     <div className="p-2 border-t border-[#00A3FF]/30 text-center">
                       <span className="text-xs text-white/50">
-                        Press Enter to search for "{searchQuery}"
+                        {t('search.press_enter', { query: searchQuery })}
                 </span>
                     </div>
                   )}
@@ -932,7 +948,7 @@ export default function Navbar() {
               <button 
                 onClick={() => setShowNotificationsPanel(!showNotificationsPanel)}
                 className="p-2 text-white/70 hover:text-white transition-colors relative rounded-full hover:bg-blue-500/20"
-                aria-label="Notifications"
+                aria-label={t('notifications.title')}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
@@ -949,19 +965,19 @@ export default function Navbar() {
               {showNotificationsPanel && (
                 <div className="absolute right-0 mt-2 w-80 bg-gradient-to-b from-[#001F3F]/95 to-[#003366]/95 backdrop-blur-md border border-[#00A3FF]/30 rounded-lg shadow-xl shadow-blue-500/20 z-30 animate-fadeIn">
                   <div className="p-3 border-b border-[#00A3FF]/30 flex justify-between items-center">
-                    <h3 className="font-medium text-white">Notifications</h3>
+                    <h3 className="font-medium text-white">{t('notifications.title')}</h3>
                     <button 
                       onClick={clearAllNotifications}
                       className="text-xs text-white/50 hover:text-white"
                     >
-                      Mark all as read
+                      {t('notifications.mark_all_read')}
                     </button>
                   </div>
                   
                   <div className="max-h-96 overflow-y-auto">
                     {notifications.length === 0 ? (
                       <div className="p-4 text-center text-white/50">
-                        No notifications
+                        {t('notifications.no_notifications')}
                       </div>
                     ) : (
                       notifications.map(notification => (
@@ -985,7 +1001,7 @@ export default function Navbar() {
                   
                   <div className="p-2 border-t border-[#00A3FF]/30 text-center">
                     <a href="/notifications" className="text-xs text-white/70 hover:text-white">
-                      View all notifications
+                      {t('notifications.view_all')}
                     </a>
                   </div>
                 </div>
@@ -999,15 +1015,15 @@ export default function Navbar() {
               <div className="flex items-center space-x-3">
                 <div className="bg-gradient-to-r from-green-900/20 to-green-800/10 rounded-lg border border-green-800/30 px-3 py-2">
                   <div className="flex items-center space-x-2">
-                    <span className="text-xs text-gray-300">Balance:</span>
+                    <span className="text-xs text-gray-300">{t('balance.label')}</span>
                     <span className="text-sm text-green-300 font-medium">
-                      {isLoadingBalance ? 'Loading...' : `${parseFloat(userBalance || '0').toFixed(5)} OCT`}
+                      {isLoadingBalance ? t('common.loading') : `${parseFloat(userBalance || '0').toFixed(5)} OCT`}
                     </span>
                     <button
                       onClick={() => setShowBalanceModal(true)}
                       className="ml-2 text-xs bg-green-600/30 hover:bg-green-500/30 text-green-300 px-2 py-1 rounded transition-colors"
                     >
-                      Manage
+                      {t('balance.manage')}
                     </button>
                   </div>
                 </div>
@@ -1044,7 +1060,7 @@ export default function Navbar() {
               ))}
               {/* Switch to Testnet button removed */}
               <div className="flex justify-between items-center py-2 px-3">
-                <span className="text-white/70">Dark Mode</span>
+                <span className="text-white/70">{t('navbar.dark_mode')}</span>
                 <button 
                   onClick={toggleDarkMode}
                   className="p-2 text-white/70 hover:text-white bg-blue-500/10 rounded-full flex items-center justify-center h-8 w-8"
@@ -1074,9 +1090,9 @@ export default function Navbar() {
                 <div className="pt-2 mt-2 border-t border-[#00A3FF]/30">
                   <div className="p-3 bg-gradient-to-r from-green-900/20 to-green-800/10 rounded-lg border border-green-800/30">
                     <div className="flex justify-between items-center mb-2">
-                      <span className="text-sm text-gray-300">House Balance:</span>
+                      <span className="text-sm text-gray-300">{t('balance.house_balance_label')}</span>
                       <span className="text-sm text-green-300 font-medium">
-                      {isLoadingBalance ? 'Loading...' : `${parseFloat(userBalance || '0').toFixed(5)} OCT`}
+                      {isLoadingBalance ? t('common.loading') : `${parseFloat(userBalance || '0').toFixed(5)} OCT`}
                     </span>
                     </div>
                     <button
@@ -1086,7 +1102,7 @@ export default function Navbar() {
                       }}
                       className="w-full text-xs bg-green-600/30 hover:bg-green-500/30 text-green-300 px-3 py-2 rounded transition-colors"
                     >
-                      Manage Balance
+                      {t('balance.manage_balance')}
                     </button>
                   </div>
                 </div>
@@ -1098,7 +1114,7 @@ export default function Navbar() {
                   className="block py-2 px-3 text-white/80 hover:text-white hover:bg-blue-500/10 rounded-md"
                   onClick={() => setShowMobileMenu(false)}
                 >
-                  Support
+                  {t('navbar.support')}
                 </a>
               </div>
             </div>
@@ -1118,7 +1134,7 @@ export default function Navbar() {
               aria-modal="true"
             >
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-white">House Balance</h3>
+                <h3 className="text-lg font-semibold text-white">{t('balance.title')}</h3>
                 <button
                   onClick={() => setShowBalanceModal(false)}
                   className="text-gray-400 hover:text-white transition-colors"
@@ -1134,7 +1150,7 @@ export default function Navbar() {
               <SmartAccountInfo />
               
               <div className="mb-4 p-3 bg-gradient-to-r from-green-900/20 to-green-800/10 rounded-lg border border-green-800/30">
-                <span className="text-sm text-gray-300">Current Balance:</span>
+                <span className="text-sm text-gray-300">{t('balance.current')}</span>
                 <div className="text-lg text-green-300 font-bold">
                   {isLoadingBalance ? 'Loading...' : `${parseFloat(userBalance || '0').toFixed(5)} OCT`}
                 </div>
@@ -1142,22 +1158,22 @@ export default function Navbar() {
               
               {/* Deposit Section */}
               <div className="mb-6">
-                <h4 className="text-sm font-medium text-white mb-2">Deposit OCT to Casino Treasury</h4>
+                <h4 className="text-sm font-medium text-white mb-2">{t('balance.deposit_title')}</h4>
                 <div className="text-xs text-gray-400 mb-3 space-y-1">
                   <div className="flex items-center gap-2">
-                    <span className="text-gray-500">Network:</span>
+                    <span className="text-gray-500">{t('balance.network')}</span>
                     <span className="text-purple-400 font-medium">{TREASURY_CONFIG.NETWORK.CHAIN_NAME}</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="text-gray-500">Treasury:</span>
+                    <span className="text-gray-500">{t('balance.treasury')}</span>
                     <span className="font-mono">{TREASURY_CONFIG.ADDRESS.slice(0, 10)}...{TREASURY_CONFIG.ADDRESS.slice(-8)}</span>
                     <button
                       onClick={() => {
                         navigator.clipboard.writeText(TREASURY_CONFIG.ADDRESS);
-                        notification.success('Treasury address copied!');
+                        notification.success(t('balance.treasury_address_copied'));
                       }}
                       className="text-purple-400 hover:text-purple-300 transition-colors"
-                      title="Copy address"
+                      title={t('balance.copy_address_title')}
                     >
                       <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
@@ -1170,7 +1186,7 @@ export default function Navbar() {
                     type="number"
                     value={depositAmount}
                     onChange={(e) => setDepositAmount(e.target.value)}
-                    placeholder="Enter OCT amount"
+                    placeholder={t('balance.enter_oct_amount_placeholder')}
                     className="flex-1 px-3 py-2 bg-[#001F3F]/50 border border-[#00A3FF]/30 rounded text-white placeholder-gray-400 focus:outline-none focus:border-[#00A3FF] focus:ring-1 focus:ring-[#00A3FF]/25"
                     min="0"
                     step="0.00000001"
@@ -1184,11 +1200,11 @@ export default function Navbar() {
                     {isDepositing ? (
                       <>
                         <div className="animate-spin w-4 h-4 border-2 border-white/20 border-t-white rounded-full"></div>
-                        Depositing...
+                        {t('balance.depositing')}
                       </>
                     ) : (
                       <>
-                        Deposit
+                        {t('balance.deposit_button')}
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8l-8-8-8 8" />
                         </svg>
@@ -1197,7 +1213,7 @@ export default function Navbar() {
                   </button>
                 </div>
                 <p className="text-xs text-gray-400 mt-1">
-                  Transfer OCT from your wallet to house balance for gaming
+                  {t('balance.deposit_description')}
                 </p>
                 {/* Quick Deposit Buttons */}
                 <div className="flex gap-1 mt-2">
@@ -1217,7 +1233,7 @@ export default function Navbar() {
 
               {/* Withdraw Section */}
               <div className="mb-4">
-                <h4 className="text-sm font-medium text-white mb-2">Withdraw OCT</h4>
+                <h4 className="text-sm font-medium text-white mb-2">{t('balance.withdraw_title')}</h4>
                 <button
                   onClick={handleWithdraw}
                   disabled={!isConnected || parseFloat(userBalance || '0') <= 0 || isWithdrawing}
@@ -1226,11 +1242,11 @@ export default function Navbar() {
                   {isWithdrawing ? (
                     <>
                       <div className="animate-spin w-4 h-4 border-2 border-white/20 border-t-white rounded-full"></div>
-                      Processing...
+                      {t('common.processing')}
                     </>
                   ) : isConnected ? (
-                    parseFloat(userBalance || '0') > 0 ? 'Withdraw All OCT' : 'No Balance'
-                  ) : 'Connect Wallet'}
+                    parseFloat(userBalance || '0') > 0 ? t('balance.withdraw_all_button') : t('balance.no_balance')
+                  ) : t('wallet.connect_button')}
                   {isConnected && parseFloat(userBalance || '0') > 0 && !isWithdrawing && (
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
@@ -1239,7 +1255,7 @@ export default function Navbar() {
                 </button>
                 {isConnected && parseFloat(userBalance || '0') > 0 && (
                   <p className="text-xs text-gray-400 mt-1 text-center">
-                    Withdraw {parseFloat(userBalance || '0').toFixed(5)} OCT to your wallet
+                    {t('balance.withdraw_description', { amount: parseFloat(userBalance || '0').toFixed(5) })}
                   </p>
                 )}
               </div>
@@ -1259,7 +1275,7 @@ export default function Navbar() {
                   }}
                   className="w-full px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded font-medium transition-colors"
                 >
-                  Refresh Balance
+                  {t('balance.refresh_button')}
                 </button>
               </div>
             </div>

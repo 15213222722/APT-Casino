@@ -5,6 +5,7 @@ import Navbar from "@/components/Navbar.js";
 import Footer from "@/components/Footer";
 import GlobalWalletManager from "@/components/GlobalWalletManager";
 import NetworkSwitcher from "@/components/NetworkSwitcher";
+import '@/i18n';
 
 
 const inter = Inter({ subsets: ["latin"] });
