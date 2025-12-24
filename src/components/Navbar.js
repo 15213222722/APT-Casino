@@ -1017,17 +1017,7 @@ export default function Navbar() {
             {/* One Chain Wallet Button */}
             <OneChainWalletButton />
             
-            {/* Live Chat Button */}
-            <button
-              onClick={() => setShowLiveChat(true)}
-              className="px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-medium rounded-lg transition-all duration-200 hover:scale-105 flex items-center gap-2"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-              </svg>
-              Live Chat
-            </button>
-      
+           
           </div>
         </div>
         
