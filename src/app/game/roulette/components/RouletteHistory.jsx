@@ -77,10 +77,21 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
     if (timeString instanceof Date) {
       date = timeString;
     } else if (typeof timeString === 'string') {
-      date = new Date(timeString);
+      // Check if it's a timestamp string (numeric) or ISO string
+      if (/^\d+$/.test(timeString)) {
+        // It's a numeric timestamp string, convert to number first
+        date = new Date(parseInt(timeString));
+      } else {
+        // It's an ISO date string
+        date = new Date(timeString);
+      }
     } else if (typeof timeString === 'number') {
       date = new Date(timeString);
     } else {
+      return '--:--';
+    }
+    // Check if date is valid
+    if (isNaN(date.getTime())) {
       return '--:--';
     }
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -91,15 +102,26 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
     if (timeString instanceof Date) {
       date = timeString;
     } else if (typeof timeString === 'string') {
-      date = new Date(timeString);
+      // Check if it's a timestamp string (numeric) or ISO string
+      if (/^\d+$/.test(timeString)) {
+        // It's a numeric timestamp string, convert to number first
+        date = new Date(parseInt(timeString));
+      } else {
+        // It's an ISO date string
+        date = new Date(timeString);
+      }
     } else if (typeof timeString === 'number') {
       date = new Date(timeString);
     } else {
       return '--';
     }
+    // Check if date is valid
+    if (isNaN(date.getTime())) {
+      return '--';
+    }
     return date.toLocaleDateString([], { month: 'short', day: 'numeric' });
   };
-  
+
   // Determine color based on roulette number
   const getNumberColor = (num) => {
     if (num === 0) return '#14D854'; // Green for zero
@@ -221,7 +243,28 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
         <>
           {tabValue === 0 && (
             <Fade in={true}>
-              <TableContainer sx={{ maxHeight: 400, borderRadius: 2, overflow: 'hidden', border: '1px solid rgba(0, 150, 255, 0.2)' }}>
+              <TableContainer 
+                sx={{ 
+                  maxHeight: 400, 
+                  borderRadius: 2, 
+                  overflow: 'auto', 
+                  border: '1px solid rgba(0, 150, 255, 0.2)',
+                  '&::-webkit-scrollbar': {
+                    width: '8px',
+                  },
+                  '&::-webkit-scrollbar-track': {
+                    background: 'rgba(0, 0, 0, 0.2)',
+                    borderRadius: '4px',
+                  },
+                  '&::-webkit-scrollbar-thumb': {
+                    background: 'rgba(0, 150, 255, 0.4)',
+                    borderRadius: '4px',
+                  },
+                  '&::-webkit-scrollbar-thumb:hover': {
+                    background: 'rgba(0, 150, 255, 0.6)',
+                  }
+                }} 
+              >
                 <Table stickyHeader>
                   <TableHead>
                     <TableRow sx={{ 
