@@ -611,7 +611,7 @@ function GridInside({
               {straightup > 0 && (
                 <BetBox
                   betValue={straightup}
-                  betType={t("roulette_page.bet_name_straight_up")}
+                  betType={"Straight up"}
                   position="top-right"
                   onClick={(e) =>
                     placeBet(e, "inside", (insideNumber - 1) * 4 + 1)
