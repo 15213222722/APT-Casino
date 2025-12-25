@@ -247,9 +247,9 @@ function GridInside({
 
     const cornerNumbers = cornerMap[insideNumber];
     if (cornerNumbers) {
-      return t('corner_bet', {numbers: cornerNumbers.replace(/,/g, '-')});
+      return `Corner ${cornerNumbers.replace(/,/g, '-')}`;
     }
-    return t('corner_bet', {numbers: insideNumber});
+    return `Corner ${insideNumber}`;
   };
 
   // Get split bet numbers from predefined map
@@ -301,9 +301,9 @@ function GridInside({
     const splitNumbers = splitMap[insideNumber];
     if (splitNumbers) {
       // Show only the numbers, not the split number
-      return t('split_bet', {numbers: splitNumbers.replace(',', '-')});
+      return `Split ${splitNumbers.replace(',', '-')}`;
     }
-    return t('split_bet', {numbers: insideNumber});
+    return `Split ${insideNumber}`;
   };
 
   // Get bottom bet numbers - can be either street bet or bottom split bet
@@ -315,7 +315,7 @@ function GridInside({
     if (isBottomRow) {
       // Bottom row: street bet [n, n+1, n+2]
       const streetNumbers = [insideNumber, insideNumber + 1, insideNumber + 2];
-      return t('street_bet', {numbers: streetNumbers.join('-')});
+      return `Street ${streetNumbers.join('-')}`;
     } else {
       // Middle/Top row: bottom split bet - use predefined values
       const bottomSplitMap = {
@@ -347,12 +347,12 @@ function GridInside({
       
       const splitNumbers = bottomSplitMap[insideNumber];
       if (splitNumbers) {
-        return t('split_bet', {numbers: splitNumbers.replace(',', '-')});
+        return `Split ${splitNumbers.replace(',', '-')}`;
       }
       
       // Fallback to old calculation if not in map
       const bottomNumber = insideNumber + 3;
-      return t('split_bet', {numbers: `${insideNumber}-${bottomNumber}`});
+      return `Split ${insideNumber}-${bottomNumber}`;
     }
   };
 
@@ -390,9 +390,9 @@ function GridInside({
     const horizontalSplitNumbers = horizontalSplitMap[insideNumber];
     if (horizontalSplitNumbers) {
       // Show only the numbers, not the split number
-      return t('split_bet', {numbers: horizontalSplitNumbers.replace(',', '-')});
+      return `Split ${horizontalSplitNumbers.replace(',', '-')}`;
     }
-    return t('split_bet', {numbers: insideNumber});
+    return `Split ${insideNumber}`;
   };
 
   return (
