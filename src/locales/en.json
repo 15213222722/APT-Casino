@@ -492,5 +492,98 @@
     "split_bet": "Split {{numbers}}",
     "street_bet": "Street {{numbers}}",
     "bet_type_2_to_1_short": "2 To 1 (row {{row}})"
+  },
+  "strategy_guide": {
+    "title": "Cosmic Strategy Guide",
+    "description": "Popular betting strategies to enhance your roulette experience. Remember that no strategy can overcome the house edge entirely.",
+    "effectiveness": "Effectiveness",
+    "risk": "Risk",
+    "advantages": "Advantages",
+    "disadvantages": "Disadvantages",
+    "example": "Example",
+    "important": "Important",
+    "important_text": "These strategies can enhance entertainment. Always gamble responsibly and set clear limits for your play.",
+    "strategies": {
+      "martingale": {
+        "title": "Martingale System",
+        "difficulty": "Beginner",
+        "description": "Double your bet after each loss until you win, recovering all previous losses plus a profit equal to the original bet.",
+        "pros": [
+          "Simple to understand and implement",
+          "Guaranteed profit on winning streak",
+          "Works well in short sessions"
+        ],
+        "cons": [
+          "Requires large bankroll for long losing streaks",
+          "Table limits can prevent continuation",
+          "Risk of rapid bankroll depletion"
+        ],
+        "example": "Start with $1 bet. Lose, bet $2. Lose, bet $4. Win $4 bet, recover $7 total ($1+2+4) plus $1 profit."
+      },
+      "dalembert": {
+        "title": "D'Alembert System",
+        "difficulty": "Beginner",
+        "description": "Increase bet by one unit after loss, decrease by one unit after win. More conservative than Martingale.",
+        "pros": [
+          "Less aggressive than Martingale",
+          "Easier on bankroll",
+          "Works well for even money bets"
+        ],
+        "cons": [
+          "Slower recovery from losses",
+          "Still vulnerable to long losing streaks",
+          "Profit potential is limited"
+        ],
+        "example": "Start with $5 bet. Lose, bet $6. Lose, bet $7. Win $7 bet, decrease to $6 next bet."
+      },
+      "fibonacci": {
+        "title": "Fibonacci System",
+        "difficulty": "Intermediate",
+        "description": "Follow the Fibonacci sequence for bet sizing. Move forward two numbers after loss, back one after win.",
+        "pros": [
+          "Mathematically sound sequence",
+          "More conservative than Martingale",
+          "Natural progression feels intuitive"
+        ],
+        "cons": [
+          "Complex to track during play",
+          "Recovery can take time",
+          "Still requires discipline"
+        ],
+        "example": "Sequence: 1, 1, 2, 3, 5, 8, 13... Bet $1, lose, bet $1. Lose, bet $2. Win, go back one: bet $1."
+      },
+      "james_bond": {
+        "title": "James Bond Strategy",
+        "difficulty": "Advanced",
+        "description": "Complex strategy covering multiple bet types simultaneously with a $200 bankroll for higher payout potential.",
+        "pros": [
+          "Covers wide range of numbers",
+          "Higher payout potential",
+          "Interesting and engaging"
+        ],
+        "cons": [
+          "Requires large initial bankroll",
+          "Complex bet placement",
+          "Still subject to house edge"
+        ],
+        "example": "With $200: $140 on high numbers (19-36), $50 on 6-number bet (13-18), $10 on 0 for insurance."
+      },
+      "oscar_grind": {
+        "title": "Oscar's Grind",
+        "difficulty": "Intermediate",
+        "description": "Increase bet by one unit after win, reset to original after reaching profit target. Conservative progression.",
+        "pros": [
+          "Very conservative approach",
+          "Minimal risk of large losses",
+          "Focus on small, consistent wins"
+        ],
+        "cons": [
+          "Very slow profit accumulation",
+          "Requires long playing sessions",
+          "Can be frustratingly slow"
+        ],
+        "example": "Start with $5 bet. Win, increase to $10. Lose, stay at $10. Win, increase to $15. Reach profit goal, reset to $5."
+      }
+    }
   }
 }
