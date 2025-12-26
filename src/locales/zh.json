@@ -585,5 +585,70 @@
         "example": "以5美元赌注开始。赢，增加到10美元。输，保持10美元。赢，增加到15美元。达到利润目标，重置到5美元。"
       }
     }
+  },
+  "smart_account_modal": {
+    "title": "账户信息",
+    "smart_account": "智能账户",
+    "eoa_account": "EOA 账户",
+    "advanced_features": "高级账户功能可用",
+    "contract_size": "合约大小：{{size}} 字节",
+    "standard_account": "标准以太坊账户",
+    "eoa_description": "外部拥有账户 (EOA)",
+    "available_features": "可用功能",
+    "features": {
+      "batch_transactions": "批量交易",
+      "sponsored_transactions": "赞助交易",
+      "session_keys": "会话密钥",
+      "social_recovery": "社交恢复"
+    },
+    "casino_benefits": "赌场优势",
+    "benefits": {
+      "smart": {
+        "batch_bets": "在一个交易中批量下注",
+        "lower_gas": "频繁玩家的较低 gas 费用",
+        "advanced_strategies": "高级投注策略",
+        "enhanced_security": "增强的安全功能"
+      },
+      "eoa": {
+        "simple_secure": "简单且安全",
+        "compatible_games": "兼容所有游戏",
+        "standard_features": "标准以太坊功能",
+        "easy_use": "易于使用和理解"
+      }
+    },
+    "eip4337_title": "EIP-4337 智能账户",
+    "standard_eoa_title": "标准 EOA 账户",
+    "smart_account_description": "这是一个具有高级功能潜力的智能合约账户。",
+    "eoa_account_description": "这是一个标准的以太坊账户。智能账户功能不可用。",
+    "got_it": "知道了！"
+  },
+  "smart_account_info": {
+    "title": "账户信息",
+    "address": "地址",
+    "type": "类型",
+    "smart_features_active": "智能账户功能激活"
+  },
+  "win_probabilities": {
+    "title": "宇宙获胜概率",
+    "description": "欧洲轮盘赌获胜机会的可视化指南",
+    "sort_by_chance": "按概率",
+    "sort_by_payout": "按赔付",
+    "payout_ratio": "赔付比例",
+    "best_odds": "最佳赔率",
+    "medium_odds": "中等赔率",
+    "high_reward": "高奖励",
+    "footer_note": "高概率投注提供更频繁的获胜但较低的赔付。风险更高的投注有更高的奖励但获胜机会较少。",
+    "bet_types": {
+      "red_black": "押红或黑。覆盖18个数字，48.6%的机会。",
+      "odd_even": "押奇数或偶数。覆盖18个数字，48.6%的机会。",
+      "high_low": "押高（19-36）或低（1-18）数字。覆盖18个数字，48.6%的机会。",
+      "dozens": "押第一（1-12）、第二（13-24）或第三（25-36）打。覆盖12个数字，32.4%的机会。",
+      "columns": "押三个垂直列之一。覆盖12个数字，32.4%的机会。",
+      "six_line": "押两个相邻行（6个数字）。覆盖6个数字，16.2%的机会。",
+      "corner": "押角落交叉的四个数字。覆盖4个数字，10.8%的机会。",
+      "street": "押水平行中的三个数字。覆盖3个数字，8.1%的机会。",
+      "split": "押两个相邻数字。覆盖2个数字，5.4%的机会。",
+      "straight_up": "押单个数字。覆盖1个数字，2.7%的机会。"
+    }
   }
 }

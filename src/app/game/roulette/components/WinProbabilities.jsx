@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Box, Typography, Paper, Button, Tooltip, Stack, Fade } from '@mui/material';
 import { FaChartPie, FaInfoCircle, FaThumbsUp, FaDice, FaQuestion, FaChevronRight } from 'react-icons/fa';
 import Grid from "@mui/material/Unstable_Grid2";
+import { useTranslation } from 'react-i18next';
 
 const probabilityData = [
   {
@@ -69,6 +70,7 @@ const probabilityData = [
 
 const WinProbabilities = () => {
   const [sortBy, setSortBy] = useState('probability'); // or 'odds'
+  const { t } = useTranslation();
   
   const sortedData = [...probabilityData].sort((a, b) => {
     if (sortBy === 'probability') {
@@ -80,6 +82,33 @@ const WinProbabilities = () => {
       return payoutB - payoutA;
     }
   });
+  
+  const getBetTypeDescription = (type) => {
+    switch (type) {
+      case 'Red/Black':
+        return t('win_probabilities.bet_types.red_black');
+      case 'Odd/Even':
+        return t('win_probabilities.bet_types.odd_even');
+      case 'High/Low':
+        return t('win_probabilities.bet_types.high_low');
+      case 'Dozens':
+        return t('win_probabilities.bet_types.dozens');
+      case 'Columns':
+        return t('win_probabilities.bet_types.columns');
+      case 'Six Line':
+        return t('win_probabilities.bet_types.six_line');
+      case 'Corner':
+        return t('win_probabilities.bet_types.corner');
+      case 'Street':
+        return t('win_probabilities.bet_types.street');
+      case 'Split':
+        return t('win_probabilities.bet_types.split');
+      case 'Straight Up':
+        return t('win_probabilities.bet_types.straight_up');
+      default:
+        return '';
+    }
+  };
   
   return (
     <Paper
@@ -122,7 +151,7 @@ const WinProbabilities = () => {
       >
         <FaChartPie color="#00d4ff" size={22} />
         <span style={{ background: 'linear-gradient(90deg, #FFFFFF, #00d4ff)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-          Cosmic Win Probabilities
+          {t('win_probabilities.title')}
         </span>
       </Typography>
       
@@ -131,7 +160,7 @@ const WinProbabilities = () => {
           variant="body2" 
           color="rgba(255,255,255,0.7)"
         >
-          Visual guide to win chances in European Roulette
+          {t('win_probabilities.description')}
         </Typography>
         
         <Stack 
@@ -161,7 +190,7 @@ const WinProbabilities = () => {
               }
             }}
           >
-            By Chance
+            {t('win_probabilities.sort_by_chance')}
           </Button>
           <Button 
             size="small" 
@@ -180,7 +209,7 @@ const WinProbabilities = () => {
               }
             }}
           >
-            By Payout
+            {t('win_probabilities.sort_by_payout')}
           </Button>
         </Stack>
       </Box>
@@ -247,23 +276,14 @@ const WinProbabilities = () => {
                       }}
                     >
                       <span style={{ color: '#00d4ff', fontWeight: 'bold' }}>{item.odds}</span>
-                      payout ratio
+                      {t('win_probabilities.payout_ratio')}
                     </Typography>
                   </Box>
                   <Tooltip 
                     title={
                       <Box>
                         <Typography variant="body2">
-                          {item.type === 'Red/Black' && 'Bet on all red or black numbers.'}
-                          {item.type === 'Odd/Even' && 'Bet on all odd or even numbers.'}
-                          {item.type === 'High/Low' && 'Bet on numbers 1-18 or 19-36.'}
-                          {item.type === 'Dozens' && 'Bet on a group of 12 numbers (1-12, 13-24, or 25-36).'}
-                          {item.type === 'Columns' && 'Bet on a vertical column of 12 numbers.'}
-                          {item.type === 'Six Line' && 'Bet on six consecutive numbers forming two rows.'}
-                          {item.type === 'Corner' && 'Bet on four numbers forming a square.'}
-                          {item.type === 'Street' && 'Bet on three consecutive numbers in a row.'}
-                          {item.type === 'Split' && 'Bet on two adjacent numbers.'}
-                          {item.type === 'Straight Up' && 'Bet on a single number.'}
+                          {getBetTypeDescription(item.type)}
                         </Typography>
                       </Box>
                     }
@@ -358,9 +378,9 @@ const WinProbabilities = () => {
                         fontWeight="medium"
                         color={item.probability > 40 ? '#14D854' : item.probability > 15 ? '#00a8cc' : '#00d4ff'}
                       >
-                        {item.probability > 40 && 'Best odds'}
-                        {item.probability > 15 && item.probability <= 40 && 'Medium odds'}
-                        {item.probability <= 15 && 'High reward'}
+                        {item.probability > 40 && t('win_probabilities.best_odds')}
+                        {item.probability > 15 && item.probability <= 40 && t('win_probabilities.medium_odds')}
+                        {item.probability <= 15 && t('win_probabilities.high_reward')}
                       </Typography>
                     </Box>
                     
@@ -397,11 +417,11 @@ const WinProbabilities = () => {
       >
         <FaInfoCircle color="#0066ff" style={{ flexShrink: 0 }} />
         <Typography variant="body2" color="rgba(255,255,255,0.8)">
-          Higher probability bets offer more frequent wins but lower payouts. Riskier bets have higher rewards but less chance of winning.
+          {t('win_probabilities.footer_note')}
         </Typography>
       </Box>
     </Paper>
   );
 };
 
-export default WinProbabilities; 
+export default WinProbabilities;

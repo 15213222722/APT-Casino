@@ -585,5 +585,70 @@
         "example": "Start with $5 bet. Win, increase to $10. Lose, stay at $10. Win, increase to $15. Reach profit goal, reset to $5."
       }
     }
+  },
+  "smart_account_modal": {
+    "title": "Account Information",
+    "smart_account": "Smart Account",
+    "eoa_account": "EOA Account",
+    "advanced_features": "Advanced account features available",
+    "contract_size": "Contract size: {{size}} bytes",
+    "standard_account": "Standard Ethereum account",
+    "eoa_description": "Externally Owned Account (EOA)",
+    "available_features": "Available Features",
+    "features": {
+      "batch_transactions": "Batch Transactions",
+      "sponsored_transactions": "Sponsored Transactions",
+      "session_keys": "Session Keys",
+      "social_recovery": "Social Recovery"
+    },
+    "casino_benefits": "Casino Benefits",
+    "benefits": {
+      "smart": {
+        "batch_bets": "Batch multiple bets in one transaction",
+        "lower_gas": "Lower gas costs for frequent players",
+        "advanced_strategies": "Advanced betting strategies",
+        "enhanced_security": "Enhanced security features"
+      },
+      "eoa": {
+        "simple_secure": "Simple and secure",
+        "compatible_games": "Compatible with all games",
+        "standard_features": "Standard Ethereum features",
+        "easy_use": "Easy to use and understand"
+      }
+    },
+    "eip4337_title": "EIP-4337 Smart Account",
+    "standard_eoa_title": "Standard EOA Account",
+    "smart_account_description": "This is a smart contract account with potential for advanced features.",
+    "eoa_account_description": "This is a standard Ethereum account. Smart Account features are not available.",
+    "got_it": "Got it!"
+  },
+  "smart_account_info": {
+    "title": "Account Information",
+    "address": "Address",
+    "type": "Type",
+    "smart_features_active": "Smart Account Features Active"
+  },
+  "win_probabilities": {
+    "title": "Cosmic Win Probabilities",
+    "description": "Visual guide to win chances in European Roulette",
+    "sort_by_chance": "By Chance",
+    "sort_by_payout": "By Payout",
+    "payout_ratio": "payout ratio",
+    "best_odds": "Best odds",
+    "medium_odds": "Medium odds",
+    "high_reward": "High reward",
+    "footer_note": "Higher probability bets offer more frequent wins but lower payouts. Riskier bets have higher rewards but less chance of winning.",
+    "bet_types": {
+      "red_black": "Bet on red or black. Covers 18 numbers with 48.6% chance.",
+      "odd_even": "Bet on odd or even numbers. Covers 18 numbers with 48.6% chance.",
+      "high_low": "Bet on high (19-36) or low (1-18) numbers. Covers 18 numbers with 48.6% chance.",
+      "dozens": "Bet on first (1-12), second (13-24), or third (25-36) dozen. Covers 12 numbers with 32.4% chance.",
+      "columns": "Bet on one of the three vertical columns. Covers 12 numbers with 32.4% chance.",
+      "six_line": "Bet on two adjacent rows (6 numbers). Covers 6 numbers with 16.2% chance.",
+      "corner": "Bet on four numbers at the corner intersection. Covers 4 numbers with 10.8% chance.",
+      "street": "Bet on three numbers in a horizontal row. Covers 3 numbers with 8.1% chance.",
+      "split": "Bet on two adjacent numbers. Covers 2 numbers with 5.4% chance.",
+      "straight_up": "Bet on a single number. Covers 1 number with 2.7% chance."
+    }
   }
 }
