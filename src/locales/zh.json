@@ -1,6 +1,6 @@
 {
   "navbar": {
-    "title": "壹号街机",
+    "title": "OneArcade",
     "home": "首页",
     "game": "游戏",
     "toggle_menu_aria": "切换移动菜单",
@@ -107,9 +107,9 @@
     "title_part2": "随机性",
     "subtitle_part1": "自主可证的透明",
     "subtitle_part2": "游戏由",
-    "subtitle_part3": "壹链网络",
+    "subtitle_part3": "OneChain网络",
     "subtitle_part4": "Pyth Entropy",
-    "subtitle_part5": "体验去中心化的随机性，具有可验证的加密公平性，而不仅仅是信任。",
+    "subtitle_part5": "提供去中心化的随机性，具有可验证的加密公平性，而不仅仅是信任。",
     "feature1": "没有被操纵的结果。没有隐藏的限制。不托管您的资金。",
     "feature2": "纯粹、透明的 GambleFi",
     "feature3": "在这里，数学取代了信任。",
@@ -242,7 +242,7 @@
     "players": "玩家",
     "winners": "赢家",
     "oct_wagered": "OCT 投注",
-    "title": "壹号街机",
+    "title": "OneArcade",
     "description": "加入我们的游戏世界，每一次点击都将开启一个充满冒险和发现的世界。OneArcade 不仅仅是一个目的地；它是一个通往无限娱乐的大门，提供可证明公平的游戏和激动人心的奖励。",
     "trust_badge": "可证明公平的游戏 • 安全交易 • 即时提款"
   },
