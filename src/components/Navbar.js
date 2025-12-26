@@ -1235,34 +1235,7 @@ export default function Navbar() {
                 
               </div>
 
-              {/* Withdraw Section */}
-              <div className="mb-4">
-                <h4 className="text-sm font-medium text-white mb-2">{t('balance.withdraw_title')}</h4>
-                <button
-                  onClick={handleWithdraw}
-                  disabled={!isConnected || parseFloat(userBalance || '0') <= 0 || isWithdrawing}
-                  className="w-full px-4 py-2 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 disabled:from-gray-600 disabled:to-gray-700 disabled:cursor-not-allowed text-white rounded font-medium transition-colors flex items-center justify-center gap-2"
-                >
-                  {isWithdrawing ? (
-                    <>
-                      <div className="animate-spin w-4 h-4 border-2 border-white/20 border-t-white rounded-full"></div>
-                      {t('common.processing')}
-                    </>
-                  ) : isConnected ? (
-                    parseFloat(userBalance || '0') > 0 ? t('balance.withdraw_all_button') : t('balance.no_balance')
-                  ) : t('wallet.connect_button')}
-                  {isConnected && parseFloat(userBalance || '0') > 0 && !isWithdrawing && (
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-                    </svg>
-                  )}
-                </button>
-                {isConnected && parseFloat(userBalance || '0') > 0 && (
-                  <p className="text-xs text-gray-400 mt-1 text-center">
-                    {t('balance.withdraw_description', { amount: parseFloat(userBalance || '0').toFixed(5) })}
-                  </p>
-                )}
-              </div>
+              
               
               {/* Refresh Balance */}
               <div className="mt-6">
