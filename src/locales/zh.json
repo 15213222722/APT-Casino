@@ -650,5 +650,59 @@
       "split": "押两个相邻数字。覆盖2个数字，5.4%的机会。",
       "straight_up": "押单个数字。覆盖1个数字，2.7%的机会。"
     }
+  },
+  "roulette_payout": {
+    "title": "宇宙赔付",
+    "description": "欧洲轮盘赌在所有投注中都没有庄家优势。请查看下面的赔付比例：",
+    "headers": {
+      "bet_type": "投注类型",
+      "description": "描述",
+      "payout": "赔付",
+      "win_percentage": "获胜%",
+      "examples": "示例"
+    },
+    "footer_note": "欧洲轮盘赌（单零）与美国轮盘赌的5.26%优势（双零）相比，没有庄家优势。",
+    "bet_types": {
+      "straight_up": {
+        "description": "单个数字投注",
+        "examples": ["7", "13", "25"]
+      },
+      "split": {
+        "description": "两个相邻数字",
+        "examples": ["7-10", "13-16", "25-28"]
+      },
+      "street": {
+        "description": "一行中的三个数字",
+        "examples": ["1-2-3", "13-14-15", "25-26-27"]
+      },
+      "corner": {
+        "description": "交叉处的四个数字",
+        "examples": ["1-2-4-5", "13-14-16-17", "25-26-28-29"]
+      },
+      "six_line": {
+        "description": "两个相邻行（6个数字）",
+        "examples": ["1-2-3-4-5-6", "13-14-15-16-17-18", "25-26-27-28-29-30"]
+      },
+      "dozen": {
+        "description": "十二个数字（第一、第二或第三打）",
+        "examples": ["1-12", "13-24", "25-36"]
+      },
+      "column": {
+        "description": "一列中的十二个数字",
+        "examples": ["第一列", "第二列", "第三列"]
+      },
+      "red_black": {
+        "description": "所有红色或所有黑色数字",
+        "examples": ["红", "黑"]
+      },
+      "odd_even": {
+        "description": "所有奇数或所有偶数",
+        "examples": ["奇", "偶"]
+      },
+      "high_low": {
+        "description": "高（19-36）或低（1-18）数字",
+        "examples": ["1-18", "19-36"]
+      }
+    }
   }
 }

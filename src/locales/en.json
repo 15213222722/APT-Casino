@@ -650,5 +650,59 @@
       "split": "Bet on two adjacent numbers. Covers 2 numbers with 5.4% chance.",
       "straight_up": "Bet on a single number. Covers 1 number with 2.7% chance."
     }
+  },
+  "roulette_payout": {
+    "title": "Cosmic Payouts",
+    "description": "European Roulette offers no house edge across all bets. See payout ratios below:",
+    "headers": {
+      "bet_type": "Bet Type",
+      "description": "Description",
+      "payout": "Payout",
+      "win_percentage": "Win %",
+      "examples": "Examples"
+    },
+    "footer_note": "European Roulette (single zero) offers a no house edge compared to American Roulette's 5.26% edge (double zero).",
+    "bet_types": {
+      "straight_up": {
+        "description": "Single number bet",
+        "examples": ["7", "13", "25"]
+      },
+      "split": {
+        "description": "Two adjacent numbers",
+        "examples": ["7-10", "13-16", "25-28"]
+      },
+      "street": {
+        "description": "Three numbers in a row",
+        "examples": ["1-2-3", "13-14-15", "25-26-27"]
+      },
+      "corner": {
+        "description": "Four numbers at intersection",
+        "examples": ["1-2-4-5", "13-14-16-17", "25-26-28-29"]
+      },
+      "six_line": {
+        "description": "Two adjacent rows (6 numbers)",
+        "examples": ["1-2-3-4-5-6", "13-14-15-16-17-18", "25-26-27-28-29-30"]
+      },
+      "dozen": {
+        "description": "Twelve numbers (1st, 2nd, or 3rd dozen)",
+        "examples": ["1-12", "13-24", "25-36"]
+      },
+      "column": {
+        "description": "Twelve numbers in a column",
+        "examples": ["1st Column", "2nd Column", "3rd Column"]
+      },
+      "red_black": {
+        "description": "All red or all black numbers",
+        "examples": ["Red", "Black"]
+      },
+      "odd_even": {
+        "description": "All odd or all even numbers",
+        "examples": ["Odd", "Even"]
+      },
+      "high_low": {
+        "description": "High (19-36) or Low (1-18) numbers",
+        "examples": ["1-18", "19-36"]
+      }
+    }
   }
 }

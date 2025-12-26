@@ -3,101 +3,104 @@ import React from 'react';
 import { Box, Typography, Paper, Chip, Divider } from '@mui/material';
 import Grid from "@mui/material/Unstable_Grid2";
 import { FaCoins, FaExclamationTriangle } from 'react-icons/fa';
-
-const payoutData = [
-  { 
-    betType: 'Straight Up', 
-    description: 'Single number bet', 
-    payout: '35:1', 
-    probability: 2.7, 
-    houseEdge: 2.7,
-    examples: ['0', '1', '36'],
-    color: '#14D854'
-  },
-  { 
-    betType: 'Split', 
-    description: 'Two adjacent numbers', 
-    payout: '17:1', 
-    probability: 5.4, 
-    houseEdge: 2.7,
-    examples: ['1-2', '25-26'],
-    color: '#F94144'
-  },
-  { 
-    betType: 'Street', 
-    description: 'Three numbers in row', 
-    payout: '11:1', 
-    probability: 8.1, 
-    houseEdge: 2.7,
-    examples: ['1-2-3', '34-36'],
-    color: '#4895EF'
-  },
-  { 
-    betType: 'Corner', 
-    description: 'Four numbers in square', 
-    payout: '8:1', 
-    probability: 10.8, 
-    houseEdge: 2.7,
-    examples: ['1-2-4-5'],
-    color: '#3A0CA3'
-  },
-  { 
-    betType: 'Six Line', 
-    description: 'Six consecutive numbers', 
-    payout: '5:1', 
-    probability: 16.2, 
-    houseEdge: 2.7,
-    examples: ['1-6', '31-36'],
-    color: '#F72585'
-  },
-  { 
-    betType: 'Dozen', 
-    description: '12 consecutive numbers', 
-    payout: '2:1', 
-    probability: 32.4, 
-    houseEdge: 2.7,
-    examples: ['1-12', '25-36'],
-    color: '#4361EE'
-  },
-  { 
-    betType: 'Column', 
-    description: '12 numbers (vertical)', 
-    payout: '2:1', 
-    probability: 32.4, 
-    houseEdge: 2.7,
-    examples: ['1st col', '3rd col'],
-    color: '#4CC9F0'
-  },
-  { 
-    betType: 'Red/Black', 
-    description: 'All red or black numbers', 
-    payout: '1:1', 
-    probability: 48.6, 
-    houseEdge: 2.7,
-    examples: ['Red', 'Black'],
-    color: '#00d4ff'
-  },
-  { 
-    betType: 'Odd/Even', 
-    description: 'All odd or even numbers', 
-    payout: '1:1', 
-    probability: 48.6, 
-    houseEdge: 2.7,
-    examples: ['Odd', 'Even'],
-    color: '#0066ff'
-  },
-  { 
-    betType: 'High/Low', 
-    description: 'Numbers 1-18 or 19-36', 
-    payout: '1:1', 
-    probability: 48.6, 
-    houseEdge: 2.7,
-    examples: ['1-18', '19-36'],
-    color: '#7209B7'
-  }
-];
+import { useTranslation } from 'react-i18next';
 
 const RoulettePayout = () => {
+  const { t } = useTranslation();
+
+  const payoutData = [
+    { 
+      betType: 'Straight Up', 
+      description: t('roulette_payout.bet_types.straight_up.description'), 
+      payout: '35:1', 
+      probability: 2.7, 
+      houseEdge: 2.7,
+      examples: t('roulette_payout.bet_types.straight_up.examples', { returnObjects: true }),
+      color: '#14D854'
+    },
+    { 
+      betType: 'Split', 
+      description: t('roulette_payout.bet_types.split.description'), 
+      payout: '17:1', 
+      probability: 5.4, 
+      houseEdge: 2.7,
+      examples: t('roulette_payout.bet_types.split.examples', { returnObjects: true }),
+      color: '#F94144'
+    },
+    { 
+      betType: 'Street', 
+      description: t('roulette_payout.bet_types.street.description'), 
+      payout: '11:1', 
+      probability: 8.1, 
+      houseEdge: 2.7,
+      examples: t('roulette_payout.bet_types.street.examples', { returnObjects: true }),
+      color: '#4895EF'
+    },
+    { 
+      betType: 'Corner', 
+      description: t('roulette_payout.bet_types.corner.description'), 
+      payout: '8:1', 
+      probability: 10.8, 
+      houseEdge: 2.7,
+      examples: t('roulette_payout.bet_types.corner.examples', { returnObjects: true }),
+      color: '#3A0CA3'
+    },
+    { 
+      betType: 'Six Line', 
+      description: t('roulette_payout.bet_types.six_line.description'), 
+      payout: '5:1', 
+      probability: 16.2, 
+      houseEdge: 2.7,
+      examples: t('roulette_payout.bet_types.six_line.examples', { returnObjects: true }),
+      color: '#F72585'
+    },
+    { 
+      betType: 'Dozen', 
+      description: t('roulette_payout.bet_types.dozen.description'), 
+      payout: '2:1', 
+      probability: 32.4, 
+      houseEdge: 2.7,
+      examples: t('roulette_payout.bet_types.dozen.examples', { returnObjects: true }),
+      color: '#4361EE'
+    },
+    { 
+      betType: 'Column', 
+      description: t('roulette_payout.bet_types.column.description'), 
+      payout: '2:1', 
+      probability: 32.4, 
+      houseEdge: 2.7,
+      examples: t('roulette_payout.bet_types.column.examples', { returnObjects: true }),
+      color: '#4CC9F0'
+    },
+    { 
+      betType: 'Red/Black', 
+      description: t('roulette_payout.bet_types.red_black.description'), 
+      payout: '1:1', 
+      probability: 48.6, 
+      houseEdge: 2.7,
+      examples: t('roulette_payout.bet_types.red_black.examples', { returnObjects: true }),
+      color: '#00d4ff'
+    },
+    { 
+      betType: 'Odd/Even', 
+      description: t('roulette_payout.bet_types.odd_even.description'), 
+      payout: '1:1', 
+      probability: 48.6, 
+      houseEdge: 2.7,
+      examples: t('roulette_payout.bet_types.odd_even.examples', { returnObjects: true }),
+      color: '#0066ff'
+    },
+    { 
+      betType: 'High/Low', 
+      description: t('roulette_payout.bet_types.high_low.description'), 
+      payout: '1:1', 
+      probability: 48.6, 
+      houseEdge: 2.7,
+      examples: t('roulette_payout.bet_types.high_low.examples', { returnObjects: true }),
+      color: '#7209B7'
+    }
+  ];
+
   return (
     <Paper
       elevation={5}
@@ -138,7 +141,7 @@ const RoulettePayout = () => {
       >
         <FaCoins color="#00d4ff" size={22} />
         <span style={{ background: 'linear-gradient(90deg, #FFFFFF, #00d4ff)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-          Cosmic Payouts
+          {t('roulette_payout.title')}
         </span>
       </Typography>
       
@@ -147,7 +150,7 @@ const RoulettePayout = () => {
         color="rgba(255,255,255,0.7)"
         sx={{ mb: 3, mt: 1 }}
       >
-        European Roulette offers no house edge across all bets. See payout ratios below:
+        {t('roulette_payout.description')}
       </Typography>
       
       <Box sx={{ overflowX: 'auto' }}>
@@ -160,19 +163,19 @@ const RoulettePayout = () => {
             mb: 1
           }}>
             <Grid xs={2.5}>
-              <Typography fontWeight="bold" fontSize="0.85rem" color="white">Bet Type</Typography>
+              <Typography fontWeight="bold" fontSize="0.85rem" color="white">{t('roulette_payout.headers.bet_type')}</Typography>
             </Grid>
             <Grid xs={3}>
-              <Typography fontWeight="bold" fontSize="0.85rem" color="white">Description</Typography>
+              <Typography fontWeight="bold" fontSize="0.85rem" color="white">{t('roulette_payout.headers.description')}</Typography>
             </Grid>
             <Grid xs={1.5} sx={{ textAlign: 'center' }}>
-              <Typography fontWeight="bold" fontSize="0.85rem" color="white">Payout</Typography>
+              <Typography fontWeight="bold" fontSize="0.85rem" color="white">{t('roulette_payout.headers.payout')}</Typography>
             </Grid>
             <Grid xs={1.5} sx={{ textAlign: 'center' }}>
-              <Typography fontWeight="bold" fontSize="0.85rem" color="white">Win %</Typography>
+              <Typography fontWeight="bold" fontSize="0.85rem" color="white">{t('roulette_payout.headers.win_percentage')}</Typography>
             </Grid>
             <Grid xs={3.5} sx={{ textAlign: 'center' }}>
-              <Typography fontWeight="bold" fontSize="0.85rem" color="white">Examples</Typography>
+              <Typography fontWeight="bold" fontSize="0.85rem" color="white">{t('roulette_payout.headers.examples')}</Typography>
             </Grid>
           </Grid>
           
@@ -286,11 +289,11 @@ const RoulettePayout = () => {
       >
         <FaExclamationTriangle color="#00d4ff" size={16} style={{ flexShrink: 0 }} />
         <Typography variant="body2" color="rgba(255,255,255,0.8)">
-          European Roulette (single zero) offers a no house edge compared to American Roulette's 5.26% edge (double zero).
+          {t('roulette_payout.footer_note')}
         </Typography>
       </Box>
     </Paper>
   );
 };
 
-export default RoulettePayout; 
+export default RoulettePayout;
