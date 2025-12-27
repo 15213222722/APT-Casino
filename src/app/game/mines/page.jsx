@@ -45,28 +45,22 @@ export default function Mines() {
   
   // AI Auto Betting State
   const [isAIActive, setIsAIActive] = useState(false);
-  const [showAISettings, setShowAISettings] = useState(false);
+  const [isAISettingsModalOpen, setIsAISettingsModalOpen] = useState(false);
   const [aiSettings, setAISettings] = useState({
-    strategy: 'balanced',
-    maxBet: 1,
-    stopLoss: 0.5,
-    targetProfit: 1,
-    riskFactors: {
-      adaptToHistory: true,
-      maxConsecutiveLosses: 3,
-      increaseOnWin: false,
-      decreaseOnLoss: true
-    },
-    tiles: {
-      min: 3,
-      max: 8
-    },
-    mines: {
-      min: 3,
-      max: 10
-    }
+    tilesToReveal: 5,
+    numberOfBets: 100,
+    stopOnProfit: 10,
+    stopOnLoss: 5,
+    onWin: 'reset',
+    onLoss: 'increase_50'
   });
-  
+
+  const handleSettingsChange = (newSettings) => {
+    setBetSettings(newSettings);
+    // No longer need to force re-render here, the game component will handle it.
+    // setGameInstance(prev => prev + 1); 
+  };
+
   // Wallet connection
   const { isConnected } = useWalletStatus();
   
@@ -136,8 +130,9 @@ export default function Mines() {
     }
     
     console.log('Form submitted with data:', formData);
-    setBetSettings(formData);
-    setGameInstance(prev => prev + 1); // Force re-render of game component
+    // Add a 'submitted' flag to the settings to trigger the bet
+    setBetSettings({ ...formData, submitted: true });
+    setGameStatus({ ...gameStatus, isPlaying: true, hasPlacedBet: true });
     setActiveTab(t('mines_page.tabs.manual')); // Switch to manual tab to show the game
   };
 
@@ -184,7 +179,12 @@ export default function Mines() {
     {
       label: t('mines_page.tabs.manual'),
       content: (
-        <DynamicForm config={manualFormConfig} onSubmit={handleFormSubmit} gameStatus={gameStatus} />
+        <DynamicForm 
+          config={manualFormConfig} 
+          onSubmit={handleFormSubmit} 
+          gameStatus={gameStatus}
+          onSettingsChange={handleSettingsChange} 
+        />
       ),
     }
   ], [gameStatus, t]);
@@ -949,13 +949,7 @@ export default function Mines() {
 
      
       
-      {/* AI Settings Modal */}
-      <AISettingsModal
-        isOpen={showAISettings}
-        onClose={() => setShowAISettings(false)}
-        onSave={handleAISettingsSave}
-        currentSettings={aiSettings}
-      />
+    
       
       {/* Diamond particles container */}
       <div id="diamond-particles" className="fixed inset-0 pointer-events-none z-0"></div>

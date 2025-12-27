@@ -7,7 +7,7 @@ import pythEntropyService from '@/services/PythEntropyService';
 import useWalletStatus from '@/hooks/useWalletStatus';
 import { useTranslation } from "react-i18next";
 
-const DynamicForm = ({ config, onSubmit, gameStatus = { isPlaying: false, hasPlacedBet: false } }) => {
+const DynamicForm = ({ config, onSubmit, gameStatus = { isPlaying: false, hasPlacedBet: false }, onSettingsChange }) => {
   const { t } = useTranslation();
   // State to manage form values
   const [formData, setFormData] = useState({});
@@ -32,10 +32,14 @@ const DynamicForm = ({ config, onSubmit, gameStatus = { isPlaying: false, hasPla
   // Handle input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
+    const newFormData = {
+      ...formData,
       [name]: value,
-    }));
+    };
+    setFormData(newFormData);
+    if (onSettingsChange) {
+      onSettingsChange(newFormData);
+    }
   };
 
   // Handle multi-select changes

@@ -178,7 +178,7 @@ const Game = ({ betSettings = {}, onGameStatusChange, onGameComplete }) => {
       const mult = parseFloat((totalTiles / denominator).toFixed(2));
       table.push({ tiles: i, multiplier: mult });
     }
-    
+    console.log('Multiplier table:', table);
     return table;
   }, [minesCount, safeTiles, totalTiles]);
 
@@ -280,121 +280,95 @@ const Game = ({ betSettings = {}, onGameStatusChange, onGameComplete }) => {
     }
   }, [isPlaying, hasPlacedBet, onGameStatusChange]);
 
-  // Reset the game state when gridSize or minesCount changes
+  // Update state when bet settings change, but DO NOT start the game
   useEffect(() => {
-    if (isPlaying) return; // Don't reset while playing
-    
-    setGrid(initializeGrid(minesCount));
-    setMultiplier(1.0);
-    setProfit(0);
-    setRevealedCount(0);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [minesCount]); // Only depend on minesCount since gridSize is fixed at 5
+    // Don't apply settings if a game is in progress
+    if (isPlaying || hasPlacedBet) {
+      return;
+    }
 
-  // Update state when bet settings change
-  useEffect(() => {
-    // Get a string representation of settings to compare
-    const settingsKey = JSON.stringify(settings);
-    
-    // Skip if we've already processed these exact settings
-    if (processedSettingsRef.current === settingsKey) {
-      return;
-    }
-    
-    // Skip if user just cashed out - they should manually start new game
-    if (isCashoutCompleteRef.current) {
-      isCashoutCompleteRef.current = false; // Reset the flag
-      return;
-    }
-    
-    // Check if we actually have settings to process
-    // Only process if betSettings is not empty (form has been submitted)
-    if (Object.keys(betSettings).length > 0) {
-      // Save current settings as processed
-      processedSettingsRef.current = settingsKey;
-      
-      // Reset the game first without affecting hasPlacedBet
-      // We'll update these manually to avoid infinite loops
-      setGameOver(false);
-      setGameWon(false);
-      setGrid(initializeGrid(settings.mines));
+    const newMinesCount = settings.mines || defaultSettings.mines;
+    const newBetAmount = parseFloat(settings.betAmount) || defaultSettings.betAmount;
+
+    // Only update if things have actually changed
+    if (newMinesCount !== minesCount) {
+      setMinesCount(newMinesCount);
+      setGrid(initializeGrid(newMinesCount));
       setMultiplier(1.0);
       setProfit(0);
       setRevealedCount(0);
-      setAutoRevealInProgress(false);
-      setShowConfetti(false);
-      
-      // Set state with new settings
-      setMinesCount(settings.mines);
-              setBetAmount(parseFloat(settings.betAmount));
-      setIsAutoBetting(settings.isAutoBetting);
-      
-      // Place bet using Redux balance
-      const startGameWithBet = async () => {
-        // Check if wallet is connected first
-        console.log('🔌 Mines Bet - Wallet Status:', { isConnected, userBalance });
-        if (!isConnected) {
-          toast.error('Please connect your Ethereum wallet first to play Mines!');
-          return;
-        }
-        
-        // Check Redux balance (OCT)
-        const currentBalance = parseFloat(userBalance || '0');
-        
-        if (currentBalance < parseFloat(settings.betAmount)) {
-          toast.error(`Insufficient balance. You have ${currentBalance.toFixed(5)} OCT but need ${parseFloat(settings.betAmount)} OCT`);
-          return;
-        }
-
-        try {
-          // Deduct bet amount from Redux balance
-          const newBalance = (parseFloat(userBalance || '0') - parseFloat(settings.betAmount)).toString();
-          dispatch(setBalance(newBalance));
-          
-          console.log('=== STARTING MINES BET WITH REDUX BALANCE ===');
-          console.log('Bet amount (ETH):', settings.betAmount);
-          console.log('Current balance (OCT):', currentBalance);
-          console.log('Mines count:', settings.mines);
-          console.log('balance OCT');
-          
-          // Start the game immediately
-          setIsPlaying(true);
-          setHasPlacedBet(true);
-          playSound('bet');
-          
-          toast.success(`Bet placed! ${parseFloat(settings.betAmount).toFixed(5)} OCT deducted from balance`);
-          toast.info(`Game starting...`);
-          
-          // Special message if AI-assisted auto betting
-          if (settings.isAutoBetting && settings.aiAssist) {
-            toast.info(`AI-assisted auto betting activated`);
-            toast.info(`Using advanced pattern recognition algorithms`);
-          } else if (settings.isAutoBetting) {
-            toast.info(`Auto betting mode: Will reveal ${settings.tilesToReveal || 5} tiles`);
-          } else {
-            toast.info(`Bet placed: ${parseFloat(settings.betAmount).toFixed(5)} OCT, ${settings.mines} mines`);
-          }
-          
-          // If auto-betting is enabled, automatically reveal tiles with minimal delay
-          if (settings.isAutoBetting) {
-            const tilesToReveal = settings.tilesToReveal || 5;
-            
-            setTimeout(() => {
-              autoRevealTiles(tilesToReveal);
-            }, 100); // Reduced to 100ms for faster response
-          }
-        } catch (error) {
-          console.error('Error placing bet:', error);
-          toast.error(`Bet placement failed: ${error.message}`);
-          
-          // Refund the deducted balance on error
-          dispatch(setBalance(userBalance));
-        }
-      };
-      
-      startGameWithBet();
     }
-  }, [settings, userBalance, dispatch]); // eslint-disable-line react-hooks/exhaustive-deps
+    if (newBetAmount !== betAmount) {
+      setBetAmount(newBetAmount);
+    }
+    
+  }, [settings, isPlaying, hasPlacedBet]);
+
+  // This effect will now ONLY handle the form submission (actual bet)
+  useEffect(() => {
+    // Ensure we have settings and the form was actually submitted
+    if (Object.keys(betSettings).length === 0 || !betSettings.submitted) {
+      return;
+    }
+
+    // Reset the submission flag to prevent re-triggering
+    betSettings.submitted = false;
+
+    const startGameWithBet = async () => {
+      console.log('🔌 Mines Bet - Wallet Status:', { isConnected, userBalance });
+      if (!isConnected) {
+        toast.error('Please connect your wallet first to play Mines!');
+        return;
+      }
+      
+      const currentBalance = parseFloat(userBalance || '0');
+      const betToPlace = parseFloat(settings.betAmount);
+      
+      if (currentBalance < betToPlace) {
+        toast.error(`Insufficient balance. You have ${currentBalance.toFixed(5)} OCT but need ${betToPlace} OCT`);
+        return;
+      }
+
+      try {
+        // Deduct bet amount from Redux balance
+        const newBalance = (currentBalance - betToPlace).toString();
+        dispatch(setBalance(newBalance));
+        
+        console.log('=== STARTING MINES BET ===');
+        console.log('Bet amount:', betToPlace);
+        console.log('Mines count:', settings.mines);
+        
+        // Reset game state for new round
+        setGameOver(false);
+        setGameWon(false);
+        setGrid(await initializeGrid(settings.mines));
+        setMultiplier(1.0);
+        setProfit(0);
+        setRevealedCount(0);
+        
+        // Start the game
+        setIsPlaying(true);
+        setHasPlacedBet(true);
+        playSound('bet');
+        
+        toast.success(`Bet placed! ${betToPlace.toFixed(5)} OCT deducted.`);
+        
+        if (settings.isAutoBetting) {
+          toast.info(`Auto betting mode: Will reveal ${settings.tilesToReveal || 5} tiles`);
+          setTimeout(() => {
+            autoRevealTiles(settings.tilesToReveal);
+          }, 100);
+        }
+      } catch (error) {
+        console.error('Error placing bet:', error);
+        toast.error(`Bet placement failed: ${error.message}`);
+        // Refund on error
+        dispatch(setBalance(userBalance));
+      }
+    };
+    
+    startGameWithBet();
+  }, [betSettings, userBalance, dispatch, isConnected]); // Dependency on betSettings will catch submissions
 
   // Handle cell hover (for desktop)
   const handleCellHover = (row, col, isHovering) => {
