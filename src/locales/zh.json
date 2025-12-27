@@ -941,5 +941,34 @@
         "warning_text": "这是一种高波动性策略。请极其谨慎地使用，并只使用您资金的一小部分。"
       }
     }
+  },
+  "mines_form": {
+    "auto_betting_title": "自动投注",
+    "manual_betting_title": "手动投注",
+    "auto_betting_desc": "设置自动投注策略",
+    "manual_betting_desc": "手动下注",
+    "game_settings_title": "游戏设置",
+    "advanced_settings_title": "高级设置",
+    "game_in_progress": "游戏进行中...",
+    "start_auto_betting": "开始自动投注",
+    "start_game": "开始游戏",
+    "auto_betting_mode_title": "自动投注模式",
+    "manual_mode_title": "手动模式",
+    "auto_betting_mode_desc": "游戏将根据您的设置自动下注。您可以随时停止。",
+    "manual_mode_desc": "设置您的投注金额和地雷数量，然后点击“开始游戏”开始。",
+    "bet_amount_label": "投注金额",
+    "bet_amount_placeholder": "输入您的投注",
+    "mines_count_label": "地雷数量",
+    "number_of_bets_label": "投注次数",
+    "on_win_label": "获胜时",
+    "on_loss_label": "失败时",
+    "stop_on_profit_label": "盈利时停止",
+    "stop_on_loss_label": "亏损时停止",
+    "increase_bet_by": "增加投注",
+    "reset_bet": "重置投注",
+    "on_win_increase_placeholder": "例如 10%",
+    "on_loss_increase_placeholder": "例如 20%",
+    "stop_on_profit_placeholder": "例如 100 OCT",
+    "stop_on_loss_placeholder": "例如 50 OCT"
   }
 }

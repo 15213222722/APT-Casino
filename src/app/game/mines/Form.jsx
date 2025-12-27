@@ -5,8 +5,10 @@ import CustomInput from "@/components/CustomInput";
 import { motion, AnimatePresence } from "framer-motion";
 import pythEntropyService from '@/services/PythEntropyService';
 import useWalletStatus from '@/hooks/useWalletStatus';
+import { useTranslation } from "react-i18next";
 
 const DynamicForm = ({ config, onSubmit, gameStatus = { isPlaying: false, hasPlacedBet: false } }) => {
+  const { t } = useTranslation();
   // State to manage form values
   const [formData, setFormData] = useState({});
   const [expanded, setExpanded] = useState(true);
@@ -104,10 +106,10 @@ const DynamicForm = ({ config, onSubmit, gameStatus = { isPlaying: false, hasPla
           </div>
           <div>
             <h3 className="text-white font-bold text-lg font-display">
-              {isAutoMode ? "Auto Betting" : "Manual Betting"}
+              {isAutoMode ? t('mines_form.auto_betting_title') : t('mines_form.manual_betting_title')}
             </h3>
             <p className="text-white/60 text-xs mt-0.5">
-              {isAutoMode ? "Configure auto betting parameters" : "Place individual bets manually"}
+              {isAutoMode ? t('mines_form.auto_betting_desc') : t('mines_form.manual_betting_desc')}
             </p>
           </div>
         </div>
@@ -140,7 +142,7 @@ const DynamicForm = ({ config, onSubmit, gameStatus = { isPlaying: false, hasPla
                   <div className="p-1.5 rounded-full bg-gradient-to-br from-purple-700/40 to-purple-900/20 mr-2 border border-purple-800/20">
                     <FaDice className="text-purple-400 text-xs" />
                   </div>
-                  Game Settings
+                  {t('mines_form.game_settings_title')}
                 </h4>
               </div>
               
@@ -156,8 +158,8 @@ const DynamicForm = ({ config, onSubmit, gameStatus = { isPlaying: false, hasPla
                       name={field.id}
                       value={formData[field.id] || ""}
                       onChange={handleChange}
-                      label={field.label}
-                      options={field.options}
+                      label={t(field.label)}
+                      options={field.options.map(opt => ({ ...opt, label: t(opt.label) }))}
                       className="pl-11 bg-black/20 border-purple-800/30 focus:border-purple-600/50"
                       disabled={gameStatus.isPlaying || gameStatus.hasPlacedBet}
                     />
@@ -166,12 +168,12 @@ const DynamicForm = ({ config, onSubmit, gameStatus = { isPlaying: false, hasPla
                   {field.type === "text" && (
                     <CustomInput
                       type="text"
-                      label={field.label}
+                      label={t(field.label)}
                       id={field.id}
                       name={field.id}
                       value={formData[field.id] || ""}
                       onChange={handleChange}
-                      placeholder={field.placeholder || ""}
+                      placeholder={t(field.placeholder) || ""}
                       className="pl-11 bg-black/20 border-purple-800/30 focus:border-purple-600/50"
                       disabled={gameStatus.isPlaying || gameStatus.hasPlacedBet}
                     />
@@ -180,12 +182,12 @@ const DynamicForm = ({ config, onSubmit, gameStatus = { isPlaying: false, hasPla
                   {field.type === "number" && (
                     <CustomInput
                       type="number"
-                      label={field.label}
+                      label={t(field.label)}
                       id={field.id}
                       name={field.id}
                       value={formData[field.id] || ""}
                       onChange={handleChange}
-                      placeholder={field.placeholder || ""}
+                      placeholder={t(field.placeholder) || ""}
                       className="pl-11 bg-black/20 border-purple-800/30 focus:border-purple-600/50"
                       disabled={gameStatus.isPlaying || gameStatus.hasPlacedBet}
                     />
@@ -194,7 +196,7 @@ const DynamicForm = ({ config, onSubmit, gameStatus = { isPlaying: false, hasPla
                   {field.type === "boolean" && (
                     <CustomInput
                       type="boolean"
-                      label={field.label}
+                      label={t(field.label)}
                       id={field.id}
                       name={field.id}
                       value={formData[field.id] || false}
@@ -220,7 +222,7 @@ const DynamicForm = ({ config, onSubmit, gameStatus = { isPlaying: false, hasPla
                     <div className="p-1.5 rounded-full bg-gradient-to-br from-blue-700/40 to-blue-900/20 mr-2 border border-blue-800/20">
                       <FaCog className="text-blue-400 text-xs" />
                     </div>
-                    Advanced Strategy Settings
+                    {t('mines_form.advanced_settings_title')}
                   </h4>
                 </div>
                 
@@ -237,8 +239,8 @@ const DynamicForm = ({ config, onSubmit, gameStatus = { isPlaying: false, hasPla
                           name={field.id}
                           value={formData[field.id] || ""}
                           onChange={handleChange}
-                          label={field.label}
-                          options={field.options}
+                          label={t(field.label)}
+                          options={field.options.map(opt => ({ ...opt, label: t(opt.label) }))}
                           className="pl-11 bg-black/20 border-purple-800/30 focus:border-purple-600/50"
                           disabled={gameStatus.isPlaying || gameStatus.hasPlacedBet}
                         />
@@ -247,12 +249,12 @@ const DynamicForm = ({ config, onSubmit, gameStatus = { isPlaying: false, hasPla
                       {field.type === "text" && (
                         <CustomInput
                           type="text"
-                          label={field.label}
+                          label={t(field.label)}
                           id={field.id}
                           name={field.id}
                           value={formData[field.id] || ""}
                           onChange={handleChange}
-                          placeholder={field.placeholder || ""}
+                          placeholder={t(field.placeholder) || ""}
                           className="pl-11 bg-black/20 border-purple-800/30 focus:border-purple-600/50"
                           disabled={gameStatus.isPlaying || gameStatus.hasPlacedBet}
                         />
@@ -261,12 +263,12 @@ const DynamicForm = ({ config, onSubmit, gameStatus = { isPlaying: false, hasPla
                       {field.type === "number" && (
                         <CustomSelect
                           type="number"
-                          label={field.label}
+                          label={t(field.label)}
                           id={field.id}
                           name={field.id}
                           value={formData[field.id] || ""}
                           onChange={handleChange}
-                          placeholder={field.placeholder || ""}
+                          placeholder={t(field.placeholder) || ""}
                           className="pl-11 bg-black/20 border-purple-800/30 focus:border-purple-600/50"
                           disabled={gameStatus.isPlaying || gameStatus.hasPlacedBet}
                         />
@@ -275,7 +277,7 @@ const DynamicForm = ({ config, onSubmit, gameStatus = { isPlaying: false, hasPla
                       {field.type === "boolean" && (
                         <CustomInput
                           type="boolean"
-                          label={field.label}
+                          label={t(field.label)}
                           id={field.id}
                           name={field.id}
                           value={formData[field.id] || false}
@@ -316,8 +318,8 @@ const DynamicForm = ({ config, onSubmit, gameStatus = { isPlaying: false, hasPla
               )}
               <span className="text-lg">
                 {gameStatus.isPlaying || gameStatus.hasPlacedBet 
-                  ? "GAME IN PROGRESS" 
-                  : isAutoMode ? "START AUTO BETTING" : "START GAME"
+                  ? t('mines_form.game_in_progress') 
+                  : isAutoMode ? t('mines_form.start_auto_betting') : t('mines_form.start_game')
                 }
               </span>
               <FaArrowRight className="ml-2" />
@@ -330,14 +332,14 @@ const DynamicForm = ({ config, onSubmit, gameStatus = { isPlaying: false, hasPla
                   <FaInfoCircle className="text-blue-400" />
                 </div>
                 <div>
-                  <h5 className="font-semibold text-white mb-1">{isAutoMode ? "Auto Betting Mode" : "Manual Mode"}</h5>
+                  <h5 className="font-semibold text-white mb-1">{isAutoMode ? t('mines_form.auto_betting_mode_title') : t('mines_form.manual_mode_title')}</h5>
                   {isAutoMode ? (
                     <p>
-                      Set mines, bet amount and tiles to reveal. The system will automatically place bets and cash out based on your strategy settings. Use stop limits to manage risk.
+                      {t('mines_form.auto_betting_mode_desc')}
                     </p>
                   ) : (
                     <p>
-                      Set mines and bet amount, then click tiles yourself to reveal gems. Cash out anytime to secure your winnings before hitting a mine.
+                      {t('mines_form.manual_mode_desc')}
                     </p>
                   )}
                 </div>

@@ -864,5 +864,34 @@
         "warning_text": "This is a high-volatility strategy. Use with extreme caution and a small portion of your bankroll."
       }
     }
+  },
+  "mines_form": {
+    "auto_betting_title": "Auto Betting",
+    "manual_betting_title": "Manual Bet",
+    "auto_betting_desc": "Set up automated betting strategies",
+    "manual_betting_desc": "Place your bets manually",
+    "game_settings_title": "Game Settings",
+    "advanced_settings_title": "Advanced Settings",
+    "game_in_progress": "Game in Progress...",
+    "start_auto_betting": "Start Auto Betting",
+    "start_game": "Start Game",
+    "auto_betting_mode_title": "Auto-Betting Mode",
+    "manual_mode_title": "Manual Mode",
+    "auto_betting_mode_desc": "The game will automatically place bets based on your settings. You can stop it at any time.",
+    "manual_mode_desc": "Set your bet amount and number of mines, then click 'Start Game' to begin.",
+    "bet_amount_label": "Bet Amount",
+    "bet_amount_placeholder": "Enter your bet",
+    "mines_count_label": "Number of Mines",
+    "number_of_bets_label": "Number of Bets",
+    "on_win_label": "On Win",
+    "on_loss_label": "On Loss",
+    "stop_on_profit_label": "Stop on Profit",
+    "stop_on_loss_label": "Stop on Loss",
+    "increase_bet_by": "Increase bet by",
+    "reset_bet": "Reset bet",
+    "on_win_increase_placeholder": "e.g., 10%",
+    "on_loss_increase_placeholder": "e.g., 20%",
+    "stop_on_profit_placeholder": "e.g., 100 OCT",
+    "stop_on_loss_placeholder": "e.g., 50 OCT"
   }
 }
