@@ -10,7 +10,7 @@ const RoulettePayout = () => {
 
   const payoutData = [
     { 
-      betType: 'Straight Up', 
+      betType: t('roulette_payout.bet_types.straight_up.name'), 
       description: t('roulette_payout.bet_types.straight_up.description'), 
       payout: '35:1', 
       probability: 2.7, 
@@ -19,7 +19,7 @@ const RoulettePayout = () => {
       color: '#14D854'
     },
     { 
-      betType: 'Split', 
+      betType: t('roulette_payout.bet_types.split.name'), 
       description: t('roulette_payout.bet_types.split.description'), 
       payout: '17:1', 
       probability: 5.4, 
@@ -28,7 +28,7 @@ const RoulettePayout = () => {
       color: '#F94144'
     },
     { 
-      betType: 'Street', 
+      betType: t('roulette_payout.bet_types.street.name'), 
       description: t('roulette_payout.bet_types.street.description'), 
       payout: '11:1', 
       probability: 8.1, 
@@ -37,7 +37,7 @@ const RoulettePayout = () => {
       color: '#4895EF'
     },
     { 
-      betType: 'Corner', 
+      betType: t('roulette_payout.bet_types.corner.name'), 
       description: t('roulette_payout.bet_types.corner.description'), 
       payout: '8:1', 
       probability: 10.8, 
@@ -46,7 +46,7 @@ const RoulettePayout = () => {
       color: '#3A0CA3'
     },
     { 
-      betType: 'Six Line', 
+      betType: t('roulette_payout.bet_types.six_line.name'), 
       description: t('roulette_payout.bet_types.six_line.description'), 
       payout: '5:1', 
       probability: 16.2, 
@@ -55,7 +55,7 @@ const RoulettePayout = () => {
       color: '#F72585'
     },
     { 
-      betType: 'Dozen', 
+      betType: t('roulette_payout.bet_types.dozen.name'), 
       description: t('roulette_payout.bet_types.dozen.description'), 
       payout: '2:1', 
       probability: 32.4, 
@@ -64,7 +64,7 @@ const RoulettePayout = () => {
       color: '#4361EE'
     },
     { 
-      betType: 'Column', 
+      betType: t('roulette_payout.bet_types.column.name'), 
       description: t('roulette_payout.bet_types.column.description'), 
       payout: '2:1', 
       probability: 32.4, 
@@ -73,7 +73,7 @@ const RoulettePayout = () => {
       color: '#4CC9F0'
     },
     { 
-      betType: 'Red/Black', 
+      betType: t('roulette_payout.bet_types.red_black.name'), 
       description: t('roulette_payout.bet_types.red_black.description'), 
       payout: '1:1', 
       probability: 48.6, 
@@ -82,7 +82,7 @@ const RoulettePayout = () => {
       color: '#00d4ff'
     },
     { 
-      betType: 'Odd/Even', 
+      betType: t('roulette_payout.bet_types.odd_even.name'), 
       description: t('roulette_payout.bet_types.odd_even.description'), 
       payout: '1:1', 
       probability: 48.6, 
@@ -91,7 +91,7 @@ const RoulettePayout = () => {
       color: '#0066ff'
     },
     { 
-      betType: 'High/Low', 
+      betType: t('roulette_payout.bet_types.high_low.name'), 
       description: t('roulette_payout.bet_types.high_low.description'), 
       payout: '1:1', 
       probability: 48.6, 
@@ -249,7 +249,7 @@ const RoulettePayout = () => {
                 </Grid>
                 <Grid xs={3.5}>
                   <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 0.5 }}>
-                    {item.examples.map((example, idx) => (
+                    {Array.isArray(item.examples) && item.examples.map((example, idx) => (
                       <Chip 
                         key={idx}
                         label={example} 

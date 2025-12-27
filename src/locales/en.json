@@ -664,45 +664,89 @@
     "footer_note": "European Roulette (single zero) offers a no house edge compared to American Roulette's 5.26% edge (double zero).",
     "bet_types": {
       "straight_up": {
+        "name": "Straight Up",
         "description": "Single number bet",
         "examples": ["7", "13", "25"]
       },
       "split": {
+        "name": "Split",
         "description": "Two adjacent numbers",
         "examples": ["7-10", "13-16", "25-28"]
       },
       "street": {
+        "name": "Street",
         "description": "Three numbers in a row",
         "examples": ["1-2-3", "13-14-15", "25-26-27"]
       },
       "corner": {
+        "name": "Corner",
         "description": "Four numbers at intersection",
         "examples": ["1-2-4-5", "13-14-16-17", "25-26-28-29"]
       },
       "six_line": {
+        "name": "Six Line",
         "description": "Two adjacent rows (6 numbers)",
         "examples": ["1-2-3-4-5-6", "13-14-15-16-17-18", "25-26-27-28-29-30"]
       },
       "dozen": {
+        "name": "Dozen",
         "description": "Twelve numbers (1st, 2nd, or 3rd dozen)",
         "examples": ["1-12", "13-24", "25-36"]
       },
       "column": {
+        "name": "Column",
         "description": "Twelve numbers in a column",
         "examples": ["1st Column", "2nd Column", "3rd Column"]
       },
       "red_black": {
+        "name": "Red/Black",
         "description": "All red or all black numbers",
         "examples": ["Red", "Black"]
       },
       "odd_even": {
+        "name": "Odd/Even",
         "description": "All odd or all even numbers",
         "examples": ["Odd", "Even"]
       },
       "high_low": {
+        "name": "High/Low",
         "description": "High (19-36) or Low (1-18) numbers",
         "examples": ["1-18", "19-36"]
       }
     }
+  },
+  "roulette_history": {
+    "title": "Cosmic Spin History",
+    "tabs": {
+      "recent_bets": "Recent Bets",
+      "statistics": "Statistics"
+    },
+    "table_headers": {
+      "time": "Time",
+      "bet_type": "Bet Type",
+      "amount": "Amount",
+      "result": "Result",
+      "payout": "Payout",
+      "verification": "Verification"
+    },
+    "more_wins": "+{{count}} more wins",
+    "more_losses": "+{{count}} more losses",
+    "one_chain": "OneChain",
+    "entropy": "Entropy",
+    "generating": "Generating...",
+    "stats": {
+      "total_bets": "Total Bets",
+      "win_rate": "Win Rate",
+      "total_wagered": "Total Wagered",
+      "net_profit": "Net Profit"
+    },
+    "hot_numbers": "Hot Numbers",
+    "time": "{{count}} time",
+    "time_plural": "{{count}} times",
+    "not_enough_data": "Not enough data to show hot numbers.",
+    "biggest_win": "Biggest Win",
+    "biggest_win_description": "From a single winning bet.",
+    "no_wins": "No wins recorded yet.",
+    "stats_note": "Statistics are based on your last {{bets}} bets, with a current ROI of {{roi}}%."
   }
 }

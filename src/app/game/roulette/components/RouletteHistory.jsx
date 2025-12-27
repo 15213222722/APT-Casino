@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Box, Typography, Paper, Tabs, Tab, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Chip, CircularProgress, Fade } from '@mui/material';
 import { FaHistory, FaChartLine, FaFire, FaExclamationCircle, FaCoins, FaInfoCircle, FaTrophy, FaDice, FaExternalLinkAlt } from 'react-icons/fa';
 import oneChainClientService from '../../../../services/OneChainClientService.js';
+import { useTranslation } from 'react-i18next';
 
 // Utility function to format OCT amounts with proper decimal precision
 const formatMONAmount = (amount) => {
@@ -12,8 +13,6 @@ const formatMONAmount = (amount) => {
   // Round to 6 decimal places to avoid floating point precision issues
   return parseFloat(amount.toFixed(6));
 };
-
-
 
 // Function to calculate statistics from bet history
 const calculateStats = (bets) => {
@@ -58,6 +57,7 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
   const [tabValue, setTabValue] = useState(0);
   const [loading, setLoading] = useState(false);
   const [bets, setBets] = useState([]);
+  const { t } = useTranslation();
 
   // Update bets when bettingHistory prop changes
   React.useEffect(() => {
@@ -191,7 +191,7 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
       >
         <FaHistory color="#00d4ff" size={22} />
         <span style={{ background: 'linear-gradient(90deg, #FFFFFF, #00d4ff)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-          Your Space History
+          {t('roulette_history.title')}
         </span>
       </Typography>
 
@@ -208,7 +208,7 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
         }}
       >
         <Tab
-          label="Recent Bets"
+          label={t('roulette_history.tabs.recent_bets')}
           icon={<FaDice size={16} />}
           iconPosition="start"
           sx={{
@@ -221,7 +221,7 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
           }}
         />
         <Tab
-          label="Statistics"
+          label={t('roulette_history.tabs.statistics')}
           icon={<FaChartLine size={16} />}
           iconPosition="start"
           sx={{
@@ -276,12 +276,12 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
                         borderBottom: 'none',
                       }
                     }}>
-                      <TableCell>Time</TableCell>
-                      <TableCell>Bet Type</TableCell>
-                      <TableCell align="center">Amount</TableCell>
-                      <TableCell align="center">Result</TableCell>
-                      <TableCell align="right">Payout</TableCell>
-                      <TableCell align="center">Verification</TableCell>
+                      <TableCell>{t('roulette_history.table_headers.time')}</TableCell>
+                      <TableCell>{t('roulette_history.table_headers.bet_type')}</TableCell>
+                      <TableCell align="center">{t('roulette_history.table_headers.amount')}</TableCell>
+                      <TableCell align="center">{t('roulette_history.table_headers.result')}</TableCell>
+                      <TableCell align="right">{t('roulette_history.table_headers.payout')}</TableCell>
+                      <TableCell align="center">{t('roulette_history.table_headers.verification')}</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -346,7 +346,7 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
                                         color="rgba(0, 180, 216, 0.7)"
                                         sx={{ fontSize: '0.65rem' }}
                                       >
-                                        +{bet.details.winningBets.length - 2} more
+                                        {t('roulette_history.more_wins', { count: bet.details.winningBets.length - 2 })}
                                       </Typography>
                                     )}
                                   </Box>
@@ -373,7 +373,7 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
                                         color="rgba(0, 200, 255, 0.7)"
                                         sx={{ fontSize: '0.65rem' }}
                                       >
-                                        +{bet.details.losingBets.length - 2} more
+                                        {t('roulette_history.more_losses', { count: bet.details.losingBets.length - 2 })}
                                       </Typography>
                                     )}
                                   </Box>
@@ -459,7 +459,7 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
                                   >
                                     <FaExternalLinkAlt size={10} color="#4CAF50" />
                                     <Typography variant="caption" sx={{ color: '#4CAF50', fontSize: '0.7rem', fontWeight: 'bold' }}>
-                                      One Chain
+                                      {t('roulette_history.one_chain')}
                                     </Typography>
                                   </Box>
                                 )}
@@ -491,7 +491,7 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
                                   >
                                     <FaExternalLinkAlt size={10} color="#2196F3" />
                                     <Typography variant="caption" sx={{ color: '#2196F3', fontSize: '0.7rem', fontWeight: 'bold' }}>
-                                      Entropy
+                                      {t('roulette_history.entropy')}
                                     </Typography>
                                   </Box>
                                 )}
@@ -502,7 +502,7 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                               <CircularProgress size={16} sx={{ color: '#0066ff' }} />
                               <Typography variant="caption" sx={{ color: '#0066ff' }}>
-                                Generating...
+                                {t('roulette_history.generating')}
                               </Typography>
                             </Box>
                           )}
@@ -550,7 +550,7 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
                       >
                         <FaChartLine color="#0066ff" size={16} />
                       </Box>
-                      <Typography variant="body2" color="rgba(255,255,255,0.7)">Total Bets</Typography>
+                      <Typography variant="body2" color="rgba(255,255,255,0.7)">{t('roulette_history.stats.total_bets')}</Typography>
                     </Box>
                     <Typography variant="h4" fontWeight="bold" color="white" sx={{ textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>{stats.totalBets}</Typography>
                   </Box>
@@ -586,7 +586,7 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
                       >
                         <FaFire color="#00a8cc" size={16} />
                       </Box>
-                      <Typography variant="body2" color="rgba(255,255,255,0.7)">Win Rate</Typography>
+                      <Typography variant="body2" color="rgba(255,255,255,0.7)">{t('roulette_history.stats.win_rate')}</Typography>
                     </Box>
                     <Typography variant="h4" fontWeight="bold" color="white" sx={{ textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>{stats.winRate.toFixed(1)}%</Typography>
                   </Box>
@@ -622,7 +622,7 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
                       >
                         <FaCoins color="#00d4ff" size={16} />
                       </Box>
-                      <Typography variant="body2" color="rgba(255,255,255,0.7)">Total Wagered</Typography>
+                      <Typography variant="body2" color="rgba(255,255,255,0.7)">{t('roulette_history.stats.total_wagered')}</Typography>
                     </Box>
                     <Typography variant="h4" fontWeight="bold" color="white" sx={{ textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>{formatMONAmount(stats.totalWagered)} OCT</Typography>
                   </Box>
@@ -658,7 +658,7 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
                       >
                         <FaCoins color="#14D854" size={16} />
                       </Box>
-                      <Typography variant="body2" color="rgba(255,255,255,0.7)">Net Profit</Typography>
+                      <Typography variant="body2" color="rgba(255,255,255,0.7)">{t('roulette_history.stats.net_profit')}</Typography>
                     </Box>
                     <Typography
                       variant="h4"
@@ -693,7 +693,7 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
                       }
                     }}
                   >
-                    <Typography variant="subtitle1" fontWeight="bold" color="white" sx={{ mb: 2 }}>Hot Numbers</Typography>
+                    <Typography variant="subtitle1" fontWeight="bold" color="white" sx={{ mb: 2 }}>{t('roulette_history.hot_numbers')}</Typography>
 
                     {stats.mostCommonResults.length > 0 ? (
                       <Box sx={{ display: 'flex', gap: 3 }}>
@@ -736,14 +736,14 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
                               <Typography variant="h5" fontWeight="bold" color="white" sx={{ textShadow: '0 1px 3px rgba(0,0,0,0.5)' }}>{result.number}</Typography>
                             </Box>
                             <Typography variant="body2" color="rgba(255,255,255,0.7)" sx={{ fontWeight: 'medium' }}>
-                              {result.count} time{result.count !== 1 ? 's' : ''}
+                              {t('roulette_history.time', { count: result.count })}
                             </Typography>
                           </Box>
                         ))}
                       </Box>
                     ) : (
                       <Typography variant="body2" color="rgba(255,255,255,0.5)" sx={{ fontStyle: 'italic' }}>
-                        Not enough data
+                        {t('roulette_history.not_enough_data')}
                       </Typography>
                     )}
                   </Box>
@@ -771,7 +771,7 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
                   >
                     <Typography variant="subtitle1" fontWeight="bold" color="white" sx={{ mb: 2, display: 'flex', alignItems: 'center', gap: 1 }}>
                       <FaTrophy color="#00a8cc" size={16} />
-                      Biggest Win
+                      {t('roulette_history.biggest_win')}
                     </Typography>
 
                     {stats.biggestWin ? (
@@ -802,14 +802,14 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
                           <FaCoins color="#14D854" size={80} />
                         </Box>
                         <Typography variant="body2" color="rgba(255,255,255,0.7)" sx={{ mt: 1, position: 'relative', zIndex: 2 }}>
-                          Your largest single payout so far
+                          {t('roulette_history.biggest_win_description')}
                         </Typography>
                       </Box>
                     ) : (
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                         <FaExclamationCircle color="#00a8cc" />
                         <Typography variant="body2" color="rgba(255,255,255,0.7)">
-                          No wins recorded yet. Keep playing!
+                          {t('roulette_history.no_wins')}
                         </Typography>
                       </Box>
                     )}
@@ -831,7 +831,7 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
                 >
                   <FaInfoCircle color="#0066ff" style={{ flexShrink: 0 }} />
                   <Typography variant="body2" color="rgba(255,255,255,0.8)">
-                    These statistics cover your most recent {stats.totalBets} bets with a lifetime ROI of {stats.roi.toFixed(1)}%.
+                    {t('roulette_history.stats_note', { bets: stats.totalBets, roi: stats.roi.toFixed(1) })}
                   </Typography>
                 </Box>
               </Box>
@@ -843,4 +843,4 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
   );
 };
 
-export default RouletteHistory; 
+export default RouletteHistory;
