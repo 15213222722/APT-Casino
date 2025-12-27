@@ -26,15 +26,17 @@ import AISettingsModal from "./components/AISettingsModal";
 import pythEntropyService from '@/services/PythEntropyService';
 import { useOneChainCasino } from '@/hooks/useOneChainCasino';
 import { useCurrentAccount } from '@mysten/dapp-kit';
+import { useTranslation } from 'react-i18next';
 
 export default function Mines() {
+  const { t } = useTranslation();
   // OneChain Casino hook for game logging
   const currentAccount = useCurrentAccount();
   const address = currentAccount?.address;
   const { startMinesGame: logMinesStart, revealMinesTile: logMinesReveal, cashoutMinesGame: logMinesCashout } = useOneChainCasino();
   // Game State
   const [betSettings, setBetSettings] = useState({});
-  const [activeTab, setActiveTab] = useState("Manual");
+  const [activeTab, setActiveTab] = useState(t('mines_page.tabs.manual'));
   const [gameInstance, setGameInstance] = useState(1); // Force re-render on new game
   const [showTutorial, setShowTutorial] = useState(false);
   const [isStatsExpanded, setIsStatsExpanded] = useState(false);
@@ -136,7 +138,7 @@ export default function Mines() {
     console.log('Form submitted with data:', formData);
     setBetSettings(formData);
     setGameInstance(prev => prev + 1); // Force re-render of game component
-    setActiveTab("Manual"); // Switch to manual tab to show the game
+    setActiveTab(t('mines_page.tabs.manual')); // Switch to manual tab to show the game
   };
 
   // Handle AI settings save
@@ -180,12 +182,12 @@ export default function Mines() {
   // Tab configuration - memoized to prevent unnecessary re-renders
   const tabs = useMemo(() => [
     {
-      label: "Manual",
+      label: t('mines_page.tabs.manual'),
       content: (
         <DynamicForm config={manualFormConfig} onSubmit={handleFormSubmit} gameStatus={gameStatus} />
       ),
     }
-  ], [gameStatus]);
+  ], [gameStatus, t]);
 
   // Handle game completion (only when game ends - cashout or mine hit)
   const handleGameComplete = async (result) => {
@@ -300,7 +302,7 @@ export default function Mines() {
       outcome: result.won ? 'win' : 'loss',
       payout: result.won ? `${result.payout || '0.00000'} OCT` : '0.00000 OCT',
       multiplier: result.won ? `${result.multiplier || '0.00'}x` : '0.00x',
-      time: 'Just now',
+      time: t('mines_page.history.just_now'),
       entropyProof: entropyProof,
       onechainTxHash: onechainTxHash
     };
@@ -346,9 +348,9 @@ export default function Mines() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <p className="text-sm text-gray-400 font-sans">Games / Mines</p>
-                  <span className="text-xs px-2 py-0.5 bg-purple-900/30 rounded-full text-purple-300 font-display">Popular</span>
-                  <span className="text-xs px-2 py-0.5 bg-green-900/30 rounded-full text-green-300 font-display">Live</span>
+                  <p className="text-sm text-gray-400 font-sans">{t('mines_page.header.breadcrumb')}</p>
+                  <span className="text-xs px-2 py-0.5 bg-purple-900/30 rounded-full text-purple-300 font-display">{t('mines_page.header.popular_badge')}</span>
+                  <span className="text-xs px-2 py-0.5 bg-green-900/30 rounded-full text-green-300 font-display">{t('mines_page.header.live_badge')}</span>
                 </motion.div>
                 <motion.h1 
                   className="text-3xl md:text-4xl font-bold font-display bg-gradient-to-r from-purple-300 to-pink-300 bg-clip-text text-transparent"
@@ -356,7 +358,7 @@ export default function Mines() {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.4, delay: 0.1 }}
                 >
-                  Mines
+                  {t('mines_page.header.title')}
                 </motion.h1>
               </div>
             </div>
@@ -366,7 +368,7 @@ export default function Mines() {
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.2 }}
             >
-              Unearth hidden gems while avoiding mines. Higher risk means higher rewards - can you beat the odds?
+              {t('mines_page.header.description')}
             </motion.p>
             
             {/* Game highlights */}
@@ -378,15 +380,15 @@ export default function Mines() {
             >
               <div className="flex items-center text-sm bg-gradient-to-r from-purple-900/30 to-purple-800/10 px-3 py-1.5 rounded-full">
                 <FaBomb className="mr-1.5 text-red-400" />
-                <span className="font-sans">Up to 24 mines</span>
+                <span className="font-sans">{t('mines_page.header.highlight1')}</span>
               </div>
               <div className="flex items-center text-sm bg-gradient-to-r from-purple-900/30 to-purple-800/10 px-3 py-1.5 rounded-full">
                 <GiDiamonds className="mr-1.5 text-blue-400" />
-                <span className="font-sans">Customizable game grid</span>
+                <span className="font-sans">{t('mines_page.header.highlight2')}</span>
               </div>
               <div className="flex items-center text-sm bg-gradient-to-r from-purple-900/30 to-purple-800/10 px-3 py-1.5 rounded-full">
                 <GiCrystalGrowth className="mr-1.5 text-green-400" />
-                <span className="font-sans">Provably fair gaming</span>
+                <span className="font-sans">{t('mines_page.header.highlight3')}</span>
               </div>
             </motion.div>
           </div>
@@ -405,7 +407,7 @@ export default function Mines() {
                   <div className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-600/20 mb-1">
                     <FaChartLine className="text-blue-400" />
                   </div>
-                  <div className="text-xs text-white/50 font-sans text-center">Total Bets</div>
+                  <div className="text-xs text-white/50 font-sans text-center">{t('mines_page.stats.total_bets')}</div>
                   <div className="text-white font-display text-sm md:text-base">{gameStatistics.totalBets}</div>
                 </div>
                 
@@ -413,7 +415,7 @@ export default function Mines() {
                   <div className="flex items-center justify-center w-8 h-8 rounded-full bg-green-600/20 mb-1">
                     <GiGoldBar className="text-yellow-400" />
                   </div>
-                  <div className="text-xs text-white/50 font-sans text-center">Volume</div>
+                  <div className="text-xs text-white/50 font-sans text-center">{t('mines_page.stats.volume')}</div>
                   <div className="text-white font-display text-sm md:text-base">{gameStatistics.totalVolume}</div>
                 </div>
                 
@@ -421,7 +423,7 @@ export default function Mines() {
                   <div className="flex items-center justify-center w-8 h-8 rounded-full bg-red-600/20 mb-1">
                     <FaTrophy className="text-yellow-500" />
                   </div>
-                  <div className="text-xs text-white/50 font-sans text-center">Max Win</div>
+                  <div className="text-xs text-white/50 font-sans text-center">{t('mines_page.stats.max_win')}</div>
                   <div className="text-white font-display text-sm md:text-base">{gameStatistics.maxWin}</div>
                 </div>
               </motion.div>
@@ -438,21 +440,21 @@ export default function Mines() {
                   className="flex items-center justify-center px-4 py-2 bg-gradient-to-r from-purple-800/40 to-purple-900/20 rounded-lg text-white font-medium text-sm hover:from-purple-700/40 hover:to-purple-800/20 transition-all duration-300"
                 >
                   <GiCardRandom className="mr-2" />
-                  Strategy Guide
+                  {t('mines_page.quick_actions.strategy_guide')}
                 </button>
                 <button 
                   onClick={() => scrollToElement('probability')}
                   className="flex items-center justify-center px-4 py-2 bg-gradient-to-r from-blue-800/40 to-blue-900/20 rounded-lg text-white font-medium text-sm hover:from-blue-700/40 hover:to-blue-800/20 transition-all duration-300"
                 >
                   <HiOutlineChartBar className="mr-2" />
-                  Probabilities
+                  {t('mines_page.quick_actions.probabilities')}
                 </button>
                 <button 
                   onClick={() => scrollToElement('history')}
                   className="flex items-center justify-center px-4 py-2 bg-gradient-to-r from-pink-800/40 to-pink-900/20 rounded-lg text-white font-medium text-sm hover:from-pink-700/40 hover:to-pink-800/20 transition-all duration-300"
                 >
                   <FaHistory className="mr-2" />
-                  Game History
+                  {t('mines_page.quick_actions.game_history')}
                 </button>
               </motion.div>
             </div>
@@ -535,7 +537,7 @@ export default function Mines() {
               <div className="flex justify-between items-center mb-4">
                 <h3 className="text-2xl font-bold text-white font-display flex items-center">
                   <GiMineExplosion className="mr-3 text-purple-400 text-3xl" /> 
-                  How to Play Mines
+                  {t('mines_page.tutorial.title')}
                 </h3>
                 <button 
                   onClick={() => setShowTutorial(false)}
@@ -566,11 +568,11 @@ export default function Mines() {
                   <div className="text-white/80 text-sm h-full flex flex-col">
                     <p className="font-display text-lg text-white mb-3">Mines</p>
                     <div className="space-y-3 pr-1">
-                      <p>Select mines on a 5x5 grid – more mines mean higher rewards but greater risk.</p>
+                      <p>{t('mines_page.tutorial.description1')}</p>
                       
-                      <p>Uncover gems while avoiding mines to increase your multiplier. Cash out anytime or keep going for bigger rewards.</p>
+                      <p>{t('mines_page.tutorial.description2')}</p>
                       
-                      <p>With provably fair gameplay and instant payouts, Mines offers the perfect blend of strategy and luck.</p>
+                      <p>{t('mines_page.tutorial.description3')}</p>
                     </div>
                   </div>
                 </div>
@@ -581,7 +583,7 @@ export default function Mines() {
                   className="px-6 py-2.5 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg text-white font-medium hover:from-purple-700 hover:to-blue-700 transition-all shadow-lg shadow-purple-900/20 flex items-center"
                   onClick={() => setShowTutorial(false)}
                 >
-                  <span>Got it!</span>
+                  <span>{t('mines_page.tutorial.got_it_button')}</span>
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
                     <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                   </svg>
@@ -656,7 +658,7 @@ export default function Mines() {
                 <GiChestArmor className="text-yellow-400 text-xl" />
               </div>
               <span className="bg-gradient-to-r from-white to-yellow-300 bg-clip-text text-transparent">
-                Strategy Guide
+                {t('mines_page.strategy_guide.title')}
               </span>
             </h3>
             <button 
@@ -665,7 +667,7 @@ export default function Mines() {
             >
               {isStatsExpanded ? (
                 <>
-                  <span>Show Less</span>
+                  <span>{t('mines_page.strategy_guide.show_less')}</span>
                   <motion.div
                     animate={{ rotate: 180 }}
                     transition={{ duration: 0.3 }}
@@ -675,7 +677,7 @@ export default function Mines() {
                 </>
               ) : (
                 <>
-                  <span>Show More</span>
+                  <span>{t('mines_page.strategy_guide.show_more')}</span>
                   <FaChevronDown className="text-purple-400" size={12} />
                 </>
               )}
@@ -710,12 +712,11 @@ export default function Mines() {
                 <HiLightningBolt className="text-yellow-400" />
               </div>
               <span className="bg-gradient-to-r from-white to-yellow-200 bg-clip-text text-transparent">
-                Beginner Strategy
+                {t('mines_page.strategy_guide.beginner.title')}
               </span>
             </h4>
             <p className="text-white/80 text-sm font-sans relative z-10">
-              Start with 1-3 mines and aim to uncover 5-8 tiles before cashing out. This 
-              offers a good balance of risk and reward while you learn the game.
+              {t('mines_page.strategy_guide.beginner.description')}
             </p>
             
             <ul className="mt-3 space-y-2 text-sm text-white/70 relative z-10">
@@ -723,13 +724,13 @@ export default function Mines() {
                 <div className="w-4 h-4 rounded-full bg-yellow-900/30 border border-yellow-800/30 flex items-center justify-center mr-2 mt-1 flex-shrink-0">
                   <span className="text-yellow-400 text-[10px]">✓</span>
                 </div>
-                <span>Safe option for newcomers</span>
+                <span>{t('mines_page.strategy_guide.beginner.point1')}</span>
               </li>
               <li className="flex items-start">
                 <div className="w-4 h-4 rounded-full bg-yellow-900/30 border border-yellow-800/30 flex items-center justify-center mr-2 mt-1 flex-shrink-0">
                   <span className="text-yellow-400 text-[10px]">✓</span>
                 </div>
-                <span>Focus on consistent small wins</span>
+                <span>{t('mines_page.strategy_guide.beginner.point2')}</span>
               </li>
             </ul>
           </motion.div>
@@ -744,12 +745,11 @@ export default function Mines() {
                 <HiOutlineTrendingUp className="text-blue-400" />
               </div>
               <span className="bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent">
-                Risk Management
+                {t('mines_page.strategy_guide.risk_management.title')}
               </span>
             </h4>
             <p className="text-white/80 text-sm font-sans relative z-10">
-              Set a target multiplier before starting each game and cash out when you reach it.
-              Consistency is key to long-term success.
+              {t('mines_page.strategy_guide.risk_management.description')}
             </p>
             
             <ul className="mt-3 space-y-2 text-sm text-white/70 relative z-10">
@@ -757,13 +757,13 @@ export default function Mines() {
                 <div className="w-4 h-4 rounded-full bg-blue-900/30 border border-blue-800/30 flex items-center justify-center mr-2 mt-1 flex-shrink-0">
                   <span className="text-blue-400 text-[10px]">✓</span>
                 </div>
-                <span>Set a goal of 2x-3x per game</span>
+                <span>{t('mines_page.strategy_guide.risk_management.point1')}</span>
               </li>
               <li className="flex items-start">
                 <div className="w-4 h-4 rounded-full bg-blue-900/30 border border-blue-800/30 flex items-center justify-center mr-2 mt-1 flex-shrink-0">
                   <span className="text-blue-400 text-[10px]">✓</span>
                 </div>
-                <span>Don't chase losses with bigger bets</span>
+                <span>{t('mines_page.strategy_guide.risk_management.point2')}</span>
               </li>
             </ul>
           </motion.div>
@@ -778,12 +778,11 @@ export default function Mines() {
                 <HiOutlineChartBar className="text-green-400" />
               </div>
               <span className="bg-gradient-to-r from-white to-green-200 bg-clip-text text-transparent">
-                Bankroll Management
+                {t('mines_page.strategy_guide.bankroll_management.title')}
               </span>
             </h4>
             <p className="text-white/80 text-sm font-sans relative z-10">
-              Never bet more than 5% of your total bankroll on a single game. This helps 
-              ensure you can recover from losing streaks.
+              {t('mines_page.strategy_guide.bankroll_management.description')}
             </p>
             
             <ul className="mt-3 space-y-2 text-sm text-white/70 relative z-10">
@@ -791,13 +790,13 @@ export default function Mines() {
                 <div className="w-4 h-4 rounded-full bg-green-900/30 border border-green-800/30 flex items-center justify-center mr-2 mt-1 flex-shrink-0">
                   <span className="text-green-400 text-[10px]">✓</span>
                 </div>
-                <span>Divide bankroll into 20+ units</span>
+                <span>{t('mines_page.strategy_guide.bankroll_management.point1')}</span>
               </li>
               <li className="flex items-start">
                 <div className="w-4 h-4 rounded-full bg-green-900/30 border border-green-800/30 flex items-center justify-center mr-2 mt-1 flex-shrink-0">
                   <span className="text-green-400 text-[10px]">✓</span>
                 </div>
-                <span>Take regular profits off the table</span>
+                <span>{t('mines_page.strategy_guide.bankroll_management.point2')}</span>
               </li>
             </ul>
           </motion.div>
@@ -825,45 +824,44 @@ export default function Mines() {
                     <FaChartLine className="text-blue-400" />
                   </div>
                   <span className="bg-gradient-to-r from-white to-purple-200 bg-clip-text text-transparent">
-                    Advanced Pattern Play
+                    {t('mines_page.strategy_guide.advanced_pattern.title')}
                   </span>
-                  <span className="ml-2 text-xs px-2 py-0.5 bg-blue-900/30 text-blue-300 rounded-full border border-blue-800/30">Pro Tip</span>
+                  <span className="ml-2 text-xs px-2 py-0.5 bg-blue-900/30 text-blue-300 rounded-full border border-blue-800/30">{t('mines_page.strategy_guide.advanced_pattern.pro_tip')}</span>
                 </h4>
                 <p className="text-white/80 text-sm font-sans relative z-10">
-                  While mines are placed randomly, some players develop personal systems like "edge-first" 
-                  or "center-out" strategies. Remember that each reveal is statistically independent.
+                  {t('mines_page.strategy_guide.advanced_pattern.description')}
                 </p>
                 
                 <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-2">
                   <div className="bg-black/30 rounded-lg p-3 border border-purple-800/20">
                     <h5 className="text-sm font-medium text-white/90 mb-1.5 flex items-center">
                       <span className="w-5 h-5 rounded-full bg-purple-900/50 text-purple-300 text-xs flex items-center justify-center mr-1.5">1</span>
-                      Edge-first
+                      {t('mines_page.strategy_guide.advanced_pattern.edge_first_title')}
                     </h5>
-                    <p className="text-xs text-white/70">Reveal tiles along the edges first</p>
+                    <p className="text-xs text-white/70">{t('mines_page.strategy_guide.advanced_pattern.edge_first_desc')}</p>
                   </div>
                   
                   <div className="bg-black/30 rounded-lg p-3 border border-purple-800/20">
                     <h5 className="text-sm font-medium text-white/90 mb-1.5 flex items-center">
                       <span className="w-5 h-5 rounded-full bg-purple-900/50 text-purple-300 text-xs flex items-center justify-center mr-1.5">2</span>
-                      Center-out
+                      {t('mines_page.strategy_guide.advanced_pattern.center_out_title')}
                     </h5>
-                    <p className="text-xs text-white/70">Start from center and work outward</p>
+                    <p className="text-xs text-white/70">{t('mines_page.strategy_guide.advanced_pattern.center_out_desc')}</p>
                   </div>
                   
                   <div className="bg-black/30 rounded-lg p-3 border border-purple-800/20">
                     <h5 className="text-sm font-medium text-white/90 mb-1.5 flex items-center">
                       <span className="w-5 h-5 rounded-full bg-purple-900/50 text-purple-300 text-xs flex items-center justify-center mr-1.5">3</span>
-                      Diagonal
+                      {t('mines_page.strategy_guide.advanced_pattern.diagonal_title')}
                     </h5>
-                    <p className="text-xs text-white/70">Reveal tiles in diagonal patterns</p>
+                    <p className="text-xs text-white/70">{t('mines_page.strategy_guide.advanced_pattern.diagonal_desc')}</p>
                   </div>
                 </div>
                 
                 <div className="mt-4 bg-black/20 p-3 rounded-lg border border-purple-800/20 text-xs text-white/70">
                   <div className="flex items-start">
                     <FaInfoCircle className="text-purple-400 mt-0.5 mr-2 flex-shrink-0" />
-                    <p>Remember that each mine placement is random and independent of previous games. Pattern play is purely psychological, not mathematical.</p>
+                    <p>{t('mines_page.strategy_guide.advanced_pattern.note')}</p>
                   </div>
                 </div>
               </motion.div>
@@ -881,26 +879,25 @@ export default function Mines() {
                     <FaTrophy className="text-yellow-500" />
                   </div>
                   <span className="bg-gradient-to-r from-white to-red-200 bg-clip-text text-transparent">
-                    High-Risk Strategies
+                    {t('mines_page.strategy_guide.high_risk.title')}
                   </span>
-                  <span className="ml-2 text-xs px-2 py-0.5 bg-red-900/30 text-red-300 rounded-full border border-red-800/30">Expert</span>
+                  <span className="ml-2 text-xs px-2 py-0.5 bg-red-900/30 text-red-300 rounded-full border border-red-800/30">{t('mines_page.strategy_guide.high_risk.expert_tip')}</span>
                 </h4>
                 <p className="text-white/80 text-sm font-sans relative z-10">
-                  For those seeking the biggest wins, playing with 10+ mines can offer enormous 
-                  multipliers. Be aware that these strategies have a high failure rate.
+                  {t('mines_page.strategy_guide.high_risk.description')}
                 </p>
                 
                 <div className="mt-4 bg-black/30 rounded-lg p-3 border border-red-800/20 backdrop-blur-sm">
                   <h5 className="text-sm font-medium text-white/90 mb-2 flex items-center">
-                    <FaBomb className="text-red-400 mr-2" /> High-Risk Setups
+                    <FaBomb className="text-red-400 mr-2" /> {t('mines_page.strategy_guide.high_risk.setups_title')}
                   </h5>
                   <table className="w-full text-sm">
                     <thead>
                       <tr className="text-white/50 border-b border-red-900/30">
-                        <th className="text-left py-2 px-2">Mines</th>
-                        <th className="text-left py-2 px-2">Safe Reveals</th>
-                        <th className="text-right py-2 px-2">Multiplier</th>
-                        <th className="text-right py-2 px-2">Win Rate</th>
+                        <th className="text-left py-2 px-2">{t('mines_page.strategy_guide.high_risk.mines_header')}</th>
+                        <th className="text-left py-2 px-2">{t('mines_page.strategy_guide.high_risk.safe_reveals_header')}</th>
+                        <th className="text-right py-2 px-2">{t('mines_page.strategy_guide.high_risk.multiplier_header')}</th>
+                        <th className="text-right py-2 px-2">{t('mines_page.strategy_guide.high_risk.win_rate_header')}</th>
                       </tr>
                     </thead>
                     <tbody className="text-white/80">
@@ -929,7 +926,7 @@ export default function Mines() {
                     <FaInfoCircle className="text-red-400" />
                   </div>
                   <p className="text-xs text-white/70">
-                    <span className="text-red-400 font-medium">Warning:</span> High-risk strategies can result in rapid bankroll depletion. Only use with money you can afford to lose.
+                    <span className="text-red-400 font-medium">{t('mines_page.strategy_guide.high_risk.warning_title')}</span> {t('mines_page.strategy_guide.high_risk.warning_text')}
                   </p>
                 </div>
               </motion.div>
@@ -941,8 +938,6 @@ export default function Mines() {
       </motion.div>
         </div>
   );
-
-  // We don't need this function anymore as we've added IDs directly to the components
 
   return (
     <div className="min-h-screen bg-[#070005] bg-gradient-to-b from-[#070005] to-[#0e0512] pb-20 text-white mines-bg custom-scrollbar">

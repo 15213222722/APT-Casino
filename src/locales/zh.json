@@ -830,5 +830,116 @@
     "biggest_win_description": "来自单次获胜投注。",
     "no_wins": "尚无获胜记录。",
     "stats_note": "统计数据基于您最近的 {{bets}} 次投注，当前投资回报率为 {{roi}}%。"
+  },
+  "mines_game": {
+    "how_to_play_title": "玩法介绍",
+    "objective_title": "目标",
+    "objective_text": "目标是揭开尽可能多的宝石而不碰到地雷。每找到一颗宝石，您的赔付倍数就会增加。",
+    "gems_info": "找到它们可以增加您的奖金。",
+    "mines_info": "避开它们！踩到地雷游戏就会结束，您将输掉赌注。",
+    "cashout_info": "您可以随时兑现以领取当前奖金。",
+    "strategy_title": "策略",
+    "strategy_text": "您设置的地雷越多，风险就越高，但每找到一颗宝石的奖励也越大。确定您的风险水平，明智地玩游戏！",
+    "payout_formula_title": "赔付公式",
+    "payout_formula_text": "赔付 = 投注金额 * 倍数",
+    "got_it_button": "明白了！",
+    "unmute_button": "取消静音",
+    "mute_button": "静音",
+    "game_info_button": "游戏信息",
+    "mines_label": "地雷",
+    "chance_of_mine_label": "踩雷几率",
+    "multiplier_label": "倍数",
+    "profit_label": "利润",
+    "cashout_button": "兑现 {{amount}}",
+    "congratulations_message": "恭喜！",
+    "winnings_message": "您以 {{multiplier}}x 的倍数赢得了 {{amount}} OCT！",
+    "won_message_short": "您赢了！",
+    "lost_message_short": "游戏结束 - 踩到地雷！",
+    "multiplier_table_title": "倍数表",
+    "tiles_label": "{{count}} 个格子",
+    "one_safe_tile_message": "找到1个安全的格子即可赢得 {{multiplier}}x 的倍数！",
+    "swipe_message": "滑动查看更多"
+  },
+  "mines_page": {
+    "tabs": {
+      "manual": "手动"
+    },
+    "history": {
+      "just_now": "刚刚"
+    },
+    "header": {
+      "breadcrumb": "娱乐场 / 游戏",
+      "popular_badge": "热门",
+      "live_badge": "直播",
+      "title": "扫雷",
+      "description": "一款激动人心的机会与策略游戏。揭开隐藏的宝石，避开地雷，让您的奖金翻倍。您承担的风险越大，回报就越丰厚！",
+      "highlight1": "可调节地雷",
+      "highlight2": "即时兑现",
+      "highlight3": "可证明公平"
+    },
+    "stats": {
+      "total_bets": "总投注",
+      "volume": "总额",
+      "max_win": "最高赢取"
+    },
+    "quick_actions": {
+      "strategy_guide": "策略指南",
+      "probabilities": "概率",
+      "game_history": "游戏历史"
+    },
+    "tutorial": {
+      "title": "扫雷游戏教程",
+      "description1": "扫雷是一款简单而刺激的游戏，您需要在躲避地雷的同时寻找宝石。",
+      "description2": "设置您的投注金额和雷区中的地雷数量。地雷越多意味着风险越高，但奖励也越大。",
+      "description3": "点击格子揭开下面的东西。找到宝石，您的倍数就会增加。找到地雷，游戏就结束了。随时兑现以确保您的奖金。",
+      "got_it_button": "明白了，开始游戏！"
+    },
+    "strategy_guide": {
+      "title": "扫雷策略宝库",
+      "show_less": "收起",
+      "show_more": "展开",
+      "beginner": {
+        "title": "新手运气",
+        "description": "从少量地雷（例如3-5个）开始，以熟悉游戏。这可以在您学习时将风险降至最低。",
+        "point1": "低风险：地雷越少，找到宝石的机会就越高。",
+        "point2": "稳定的小额胜利：旨在揭开几个格子并兑现，以获得稳定的小额利润。"
+      },
+      "risk_management": {
+        "title": "精算的冒险家",
+        "description": "将地雷增加到中等水平（例如8-12个），以在风险和回报之间取得平衡。",
+        "point1": "更高的倍数：更多的地雷导致更快的倍数增长。",
+        "point2": "兑现策略：在开始前确定一个目标倍数（例如5x-10x），并在达到时兑现。"
+      },
+      "bankroll_management": {
+        "title": "资金守护者",
+        "description": "明智地管理您的资金，以延长游戏时间并增加赢得大奖的机会。",
+        "point1": "1%规则：单局游戏下注不要超过您总资金的1%。",
+        "point2": "设定限额：建立每日或每周的亏损限额以保护您的资金。"
+      },
+      "advanced_pattern": {
+        "title": "高级模式玩法",
+        "pro_tip": "专业提示",
+        "description": "虽然扫雷是一个机会游戏，但一些玩家使用模式来指导他们的选择。这些并不能保证奏效，但可以为您的游戏增添一层策略。",
+        "edge_first_title": "先走边缘",
+        "edge_first_desc": "从网格边缘开始揭开格子。",
+        "center_out_title": "由中向外",
+        "center_out_desc": "从中心开始，向外扩展。",
+        "diagonal_title": "对角线路径",
+        "diagonal_desc": "选择网格上对角线上的格子。",
+        "note": "注意：这些模式不会改变潜在的概率，但可以帮助做出决策。"
+      },
+      "high_risk": {
+        "title": "高风险，高回报",
+        "expert_tip": "专家",
+        "description": "对于追求巨大倍数的寻求刺激者。该策略涉及大量地雷，需要钢铁般的神经。",
+        "setups_title": "流行的高风险设置",
+        "mines_header": "地雷",
+        "safe_reveals_header": "安全揭示",
+        "multiplier_header": "倍数",
+        "win_rate_header": "胜率",
+        "warning_title": "警告：",
+        "warning_text": "这是一种高波动性策略。请极其谨慎地使用，并只使用您资金的一小部分。"
+      }
+    }
   }
 }

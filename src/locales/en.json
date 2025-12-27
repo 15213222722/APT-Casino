@@ -753,5 +753,116 @@
     "biggest_win_description": "From a single winning bet.",
     "no_wins": "No wins recorded yet.",
     "stats_note": "Statistics are based on your last {{bets}} bets, with a current ROI of {{roi}}%."
+  },
+  "mines_game": {
+    "how_to_play_title": "How to Play",
+    "objective_title": "Objective",
+    "objective_text": "The goal is to reveal as many gems as possible without hitting a mine. Each gem you find increases your payout multiplier.",
+    "gems_info": "Find these to increase your winnings.",
+    "mines_info": "Avoid these! Hitting a mine ends the game and you lose your bet.",
+    "cashout_info": "You can cash out at any time to collect your current winnings.",
+    "strategy_title": "Strategy",
+    "strategy_text": "The more mines you set, the higher the risk, but the greater the reward for each gem found. Decide your risk level and play smart!",
+    "payout_formula_title": "Payout Formula",
+    "payout_formula_text": "Payout = Bet Amount * Multiplier",
+    "got_it_button": "Got It!",
+    "unmute_button": "Unmute",
+    "mute_button": "Mute",
+    "game_info_button": "Game Info",
+    "mines_label": "Mines",
+    "chance_of_mine_label": "Chance of Mine",
+    "multiplier_label": "Multiplier",
+    "profit_label": "Profit",
+    "cashout_button": "Cashout {{amount}}",
+    "congratulations_message": "Congratulations!",
+    "winnings_message": "You won {{amount}} OCT with a {{multiplier}}x multiplier!",
+    "won_message_short": "You Won!",
+    "lost_message_short": "Game Over - Mine Hit!",
+    "multiplier_table_title": "Multiplier Table",
+    "tiles_label": "{{count}} Tiles",
+    "one_safe_tile_message": "Find the 1 safe tile to win a {{multiplier}}x multiplier!",
+    "swipe_message": "Swipe to see more"
+  },
+  "mines_page": {
+    "tabs": {
+      "manual": "Manual"
+    },
+    "history": {
+      "just_now": "just now"
+    },
+    "header": {
+      "breadcrumb": "Casino / Games",
+      "popular_badge": "Popular",
+      "live_badge": "Live",
+      "title": "Mines",
+      "description": "A thrilling game of chance and strategy. Uncover hidden gems and avoid the mines to multiply your winnings. The more risk you take, the bigger the reward!",
+      "highlight1": "Adjustable Mines",
+      "highlight2": "Instant Cashout",
+      "highlight3": "Provably Fair"
+    },
+    "stats": {
+      "total_bets": "Total Bets",
+      "volume": "Volume",
+      "max_win": "Max Win"
+    },
+    "quick_actions": {
+      "strategy_guide": "Strategy Guide",
+      "probabilities": "Probabilities",
+      "game_history": "Game History"
+    },
+    "tutorial": {
+      "title": "Mines Gameplay Tutorial",
+      "description1": "Mines is a simple yet exciting game where you try to find gems while avoiding mines.",
+      "description2": "Set your bet amount and the number of mines on the field. More mines mean higher risk but bigger rewards.",
+      "description3": "Click on tiles to reveal what's underneath. Find a gem, and your multiplier increases. Find a mine, and the game is over. Cash out anytime to secure your winnings.",
+      "got_it_button": "Got It, Let's Play!"
+    },
+    "strategy_guide": {
+      "title": "Mines Strategy Vault",
+      "show_less": "Show Less",
+      "show_more": "Show More",
+      "beginner": {
+        "title": "Beginner's Luck",
+        "description": "Start with a low number of mines (e.g., 3-5) to get a feel for the game. This minimizes risk while you learn.",
+        "point1": "Low Risk: Fewer mines mean a higher chance of finding gems.",
+        "point2": "Consistent Small Wins: Aim for revealing a few tiles and cashing out for small, steady profits."
+      },
+      "risk_management": {
+        "title": "Calculated Risk-Taker",
+        "description": "Increase the mines to a moderate level (e.g., 8-12) for a balance between risk and reward.",
+        "point1": "Higher Multipliers: More mines lead to faster multiplier growth.",
+        "point2": "Cashout Strategy: Decide on a target multiplier (e.g., 5x-10x) before you start, and cash out when you hit it."
+      },
+      "bankroll_management": {
+        "title": "Bankroll Guardian",
+        "description": "Manage your funds wisely to play longer and increase your chances of winning big.",
+        "point1": "The 1% Rule: Never bet more than 1% of your total bankroll on a single game.",
+        "point2": "Set Limits: Establish daily or weekly loss limits to protect your funds."
+      },
+      "advanced_pattern": {
+        "title": "Advanced Pattern Play",
+        "pro_tip": "Pro Tip",
+        "description": "While Mines is a game of chance, some players use patterns to guide their choices. These are not guaranteed to work but can add a strategic layer to your gameplay.",
+        "edge_first_title": "Edge First",
+        "edge_first_desc": "Start by revealing tiles along the edges of the grid.",
+        "center_out_title": "Center Out",
+        "center_out_desc": "Begin from the center and work your way outwards.",
+        "diagonal_title": "Diagonal Path",
+        "diagonal_desc": "Choose tiles in a diagonal line across the grid.",
+        "note": "Note: These patterns do not change the underlying probabilities but can help in making decisions."
+      },
+      "high_risk": {
+        "title": "High-Risk, High-Reward",
+        "expert_tip": "Expert",
+        "description": "For thrill-seekers aiming for massive multipliers. This strategy involves a high number of mines and requires nerves of steel.",
+        "setups_title": "Popular High-Risk Setups",
+        "mines_header": "Mines",
+        "safe_reveals_header": "Safe Reveals",
+        "multiplier_header": "Multiplier",
+        "win_rate_header": "Win Rate",
+        "warning_title": "Warning:",
+        "warning_text": "This is a high-volatility strategy. Use with extreme caution and a small portion of your bankroll."
+      }
+    }
   }
 }

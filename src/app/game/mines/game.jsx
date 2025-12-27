@@ -1,4 +1,4 @@
-
+"use client";
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
@@ -12,6 +12,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { setBalance } from '@/store/balanceSlice';
 import useWalletStatus from '@/hooks/useWalletStatus';
+import { useTranslation } from 'react-i18next';
 
 const GRID_SIZES = {
   5: 5, // 5x5 grid - classic mode
@@ -88,6 +89,7 @@ const Game = ({ betSettings = {}, onGameStatusChange, onGameComplete }) => {
   
   // Window size for Confetti
   const { width, height } = useWindowSize();
+  const { t } = useTranslation();
   
   // Calculate safe tiles
   const totalTiles = gridSize * gridSize;
@@ -822,33 +824,33 @@ const Game = ({ betSettings = {}, onGameStatusChange, onGameComplete }) => {
           >
             <div className="max-w-2xl mx-auto">
               <h3 className="text-2xl font-bold text-white mb-4 flex items-center">
-                <GiMineTruck className="mr-2 text-red-500" /> How to Play Mines
+                <GiMineTruck className="mr-2 text-red-500" /> {t('mines_game.how_to_play_title')}
               </h3>
               
               <div className="space-y-4 text-white/90">
-                <p><strong>Objective:</strong> Reveal gem tiles while avoiding hidden mines.</p>
+                <p><strong>{t('mines_game.objective_title')}:</strong> {t('mines_game.objective_text')}</p>
                 
                 <div className="flex items-center gap-2 bg-gray-800/50 p-2 rounded">
                   <FaRegGem className="text-blue-400 text-xl" />
-                  <span>Gems are safe to click - each one increases your multiplier.</span>
+                  <span>{t('mines_game.gems_info')}</span>
                 </div>
                 
                 <div className="flex items-center gap-2 bg-gray-800/50 p-2 rounded">
                   <FaBomb className="text-red-500 text-xl" />
-                  <span>Mines end your game if clicked - you lose your bet.</span>
+                  <span>{t('mines_game.mines_info')}</span>
                 </div>
                 
                 <div className="flex items-center gap-2 bg-gray-800/50 p-2 rounded">
                   <FaCoins className="text-yellow-500 text-xl" />
-                  <span>Cashout anytime to secure your winnings.</span>
+                  <span>{t('mines_game.cashout_info')}</span>
                 </div>
                 
-                <p><strong>Strategy:</strong> More mines mean higher risk but bigger potential rewards.</p>
+                <p><strong>{t('mines_game.strategy_title')}:</strong> {t('mines_game.strategy_text')}</p>
                 
                 <div className="border border-gray-700 rounded p-4">
-                  <h4 className="text-lg font-semibold mb-2">Payout Formula</h4>
+                  <h4 className="text-lg font-semibold mb-2">{t('mines_game.payout_formula_title')}</h4>
                   <p className="font-mono bg-gray-800/50 p-2 rounded text-sm">
-                    multiplier = totalTiles / (totalTiles - mines - revealedTiles)
+                    {t('mines_game.payout_formula_text')}
                   </p>
                 </div>
       </div>
@@ -857,7 +859,7 @@ const Game = ({ betSettings = {}, onGameStatusChange, onGameComplete }) => {
                 className="mt-6 px-4 py-2 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg text-white font-medium"
                 onClick={toggleGameInfo}
               >
-                Got it!
+                {t('mines_game.got_it_button')}
               </button>
         </div>
           </motion.div>
@@ -870,7 +872,7 @@ const Game = ({ betSettings = {}, onGameStatusChange, onGameComplete }) => {
           <button 
             className="p-2 rounded-full bg-purple-900/20 hover:bg-purple-900/40 transition-colors"
             onClick={toggleMute}
-            title={isMuted ? "Unmute" : "Mute"}
+            title={isMuted ? t('mines_game.unmute_button') : t('mines_game.mute_button')}
           >
             {isMuted ? 
               <HiOutlineVolumeOff className="text-white/70 text-xl" /> : 
@@ -881,14 +883,14 @@ const Game = ({ betSettings = {}, onGameStatusChange, onGameComplete }) => {
           <button
             className="p-2 rounded-full bg-blue-900/20 hover:bg-blue-900/40 transition-colors"
             onClick={toggleGameInfo}
-            title="Game Info"
+            title={t('mines_game.game_info_button')}
           >
             <HiOutlineInformationCircle className="text-white/70 text-xl" />
           </button>
         </div>
         
         <div className="flex items-center">
-          <div className="text-sm text-white/70 mr-2">Mines:</div>
+          <div className="text-sm text-white/70 mr-2">{t('mines_game.mines_label')}:</div>
           <div className="flex items-center bg-gray-900/50 rounded overflow-hidden">
             <button 
               className="px-2 py-1 bg-red-900/30 hover:bg-red-900/50 text-white disabled:opacity-50"
@@ -914,21 +916,21 @@ const Game = ({ betSettings = {}, onGameStatusChange, onGameComplete }) => {
       {/* Game Stats */}
       <div className="w-full grid grid-cols-3 gap-2 mb-3">
         <div className="bg-gray-900/50 rounded p-2 text-center">
-          <div className="text-xs text-white/50 mb-1">Chance of Mine</div>
+          <div className="text-xs text-white/50 mb-1">{t('mines_game.chance_of_mine_label')}</div>
           <div className={`text-lg font-bold ${calculateMineChance() > 50 ? 'text-red-400' : 'text-white'}`}>
             {calculateMineChance()}%
           </div>
         </div>
         
         <div className="bg-gray-900/50 rounded p-2 text-center">
-          <div className="text-xs text-white/50 mb-1">Multiplier</div>
+          <div className="text-xs text-white/50 mb-1">{t('mines_game.multiplier_label')}</div>
           <div className="text-lg font-bold text-yellow-400">
             {multiplier.toFixed(2)}x
           </div>
         </div>
         
         <div className="bg-gray-900/50 rounded p-2 text-center">
-          <div className="text-xs text-white/50 mb-1">Profit</div>
+          <div className="text-xs text-white/50 mb-1">{t('mines_game.profit_label')}</div>
           <div className={`text-lg font-bold ${profit > 0 ? 'text-green-400' : 'text-white'}`}>
             {profit > 0 ? '+' : ''}{profit}
           </div>
@@ -993,7 +995,7 @@ const Game = ({ betSettings = {}, onGameStatusChange, onGameComplete }) => {
               } rounded-lg text-white font-bold shadow-lg transition-all flex items-center justify-center gap-2`}
             >
               <FaCoins className="text-yellow-300" />
-              <span>CASH OUT ({calculatePayout()} OCT)</span>
+              <span>{t('mines_game.cashout_button', { amount: calculatePayout() })}</span>
             </button>
           </div>
         )}
@@ -1001,9 +1003,9 @@ const Game = ({ betSettings = {}, onGameStatusChange, onGameComplete }) => {
         {/* Win message - shown when game is won */}
         {gameWon && (
           <div className="text-center py-3 bg-gradient-to-r from-green-600 to-emerald-600 rounded-lg text-white font-bold">
-            <span>🎉 CONGRATULATIONS! YOU WON! 🎉</span>
+            <span>{t('mines_game.congratulations_message')}</span>
             <div className="mt-2 text-sm opacity-90">
-              Winnings: {calculatePayout()} OCT ({multiplier.toFixed(2)}x)
+              {t('mines_game.winnings_message', { amount: calculatePayout(), multiplier: multiplier.toFixed(2) })}
             </div>
           </div>
         )}
@@ -1017,7 +1019,7 @@ const Game = ({ betSettings = {}, onGameStatusChange, onGameComplete }) => {
               gameWon ? 'bg-green-900/30 text-green-400' : 'bg-red-900/30 text-red-400'
             } font-bold`}
           >
-            {gameWon ? 'Congratulations! You won!' : 'Game Over! You hit a mine!'}
+            {gameWon ? t('mines_game.won_message_short') : t('mines_game.lost_message_short')}
           </motion.div>
         )}
       </div>
@@ -1026,7 +1028,7 @@ const Game = ({ betSettings = {}, onGameStatusChange, onGameComplete }) => {
       <div className="w-full mt-2">
         <h3 className="text-white font-medium mb-2 flex items-center">
           <GiCrystalGrowth className="mr-2 text-blue-400" /> 
-          Multiplier Table
+          {t('mines_game.multiplier_table_title')}
         </h3>
         <div className="relative">
           {/* Scrollable multiplier table with improved styling and indicators */}
@@ -1050,7 +1052,7 @@ const Game = ({ betSettings = {}, onGameStatusChange, onGameComplete }) => {
                         : 'bg-gradient-to-br from-gray-800/90 to-gray-900/90 text-white/90 hover:bg-gray-700/90 transition-colors shadow-md border border-gray-700/50'
                     }`}
                   >
-                    <div className="text-xs font-medium mb-1">{item.tiles} Tiles</div>
+                    <div className="text-xs font-medium mb-1">{t('mines_game.tiles_label', { count: item.tiles })}</div>
                     <div className="text-xl font-semibold">{item.multiplier.toFixed(2)}x</div>
                   </div>
                 ))}
@@ -1059,12 +1061,12 @@ const Game = ({ betSettings = {}, onGameStatusChange, onGameComplete }) => {
             
             {safeTiles === 1 ? (
               <div className="text-xs text-center text-yellow-400 font-medium mt-3">
-                Only 1 safe tile with a 25.00x multiplier!
+                {t('mines_game.one_safe_tile_message', { multiplier: (25.00).toFixed(2) })}
               </div>
             ) : multiplierTable.length > 6 && (
               <div className="text-xs text-center text-white/80 mt-3 flex items-center justify-center gap-2">
                 <FaArrowLeft className="text-purple-400" />
-                <span>Swipe to see more multipliers</span>
+                <span>{t('mines_game.swipe_message')}</span>
                 <FaArrowRight className="text-purple-400" />
               </div>
             )}
