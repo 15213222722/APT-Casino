@@ -452,7 +452,7 @@
     "undo_last_bet": "Undo last bet",
     "clear_bet": "Clear bet",
     "go_again": "Go Again",
-    "result_label": "Result: {{result}}",
+    "result_label": "Result: ",
     "place_bet_total": "Place Bet ({{total}} OCT)",
     "place_bet_oct": "Place Bet (OCT)",
     "rolling_die": "Die being rolled, please wait...",

@@ -786,7 +786,7 @@ const RouletteHistory = ({ bettingHistory = [] }) => {
                             zIndex: 2
                           }}
                         >
-                          {stats.biggestWin.payout} OCT
+                          {stats.biggestWin.payout.toFixed(2)} OCT
                         </Typography>
                         <Box
                           sx={{

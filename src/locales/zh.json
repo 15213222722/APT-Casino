@@ -452,7 +452,7 @@
     "undo_last_bet": "撤销上一次下注",
     "clear_bet": "清除下注",
     "go_again": "再来一次",
-    "result_label": "结果: {{result}}",
+    "result_label": "结果: ",
     "place_bet_total": "下注 ({{total}} OCT)",
     "place_bet_oct": "下注 (OCT)",
     "rolling_die": "正在掷骰子，请稍候...",

@@ -2,10 +2,8 @@
 import React, { useState } from 'react';
 import { Box, Typography, Paper, Accordion, AccordionSummary, AccordionDetails, Avatar, Chip, Divider, Fade } from '@mui/material';
 import { FaLightbulb, FaChevronDown, FaStar, FaExclamationTriangle, FaChartLine, FaQuestion, FaCalculator, FaBookOpen, FaCheck, FaTimes } from 'react-icons/fa';
-import { useTranslation } from 'react-i18next';
 
 const StrategyGuide = () => {
-  const { t } = useTranslation();
   const [expanded, setExpanded] = useState(false);
 
   const handleChange = (panel) => (event, isExpanded) => {
@@ -15,63 +13,63 @@ const StrategyGuide = () => {
   const strategies = [
     {
       id: 'strategy-1',
-      title: t('strategy_guide.strategies.martingale.title'),
-      difficulty: t('strategy_guide.strategies.martingale.difficulty'),
+      title: 'Martingale System',
+      difficulty: 'Beginner',
       effectiveness: 4,
       risk: 'High',
       color: '#00d4ff',
-      description: t('strategy_guide.strategies.martingale.description'),
-      pros: t('strategy_guide.strategies.martingale.pros', { returnObjects: true }),
-      cons: t('strategy_guide.strategies.martingale.cons', { returnObjects: true }),
-      example: t('strategy_guide.strategies.martingale.example')
+      description: 'The Martingale strategy involves doubling your bet after each loss, so when you eventually win, you recover all previous losses plus a small profit equal to your original bet.',
+      pros: ['Simple to understand and execute', 'Can be effective in short sessions', 'Works with even-money bets (Red/Black, Odd/Even)'],
+      cons: ['Requires a large bankroll', 'Table limits can prevent doubling after several losses', 'A losing streak can deplete your funds quickly'],
+      example: 'Start with $10 on Red. If you lose, bet $20 on Red. If you lose again, bet $40, then $80, and so on until you win.'
     },
     {
       id: 'strategy-2',
-      title: t('strategy_guide.strategies.dalembert.title'),
-      difficulty: t('strategy_guide.strategies.dalembert.difficulty'),
+      title: 'D\'Alembert System',
+      difficulty: 'Intermediate',
       effectiveness: 3,
       risk: 'Medium',
       color: '#0066ff',
-      description: t('strategy_guide.strategies.dalembert.description'),
-      pros: t('strategy_guide.strategies.dalembert.pros', { returnObjects: true }),
-      cons: t('strategy_guide.strategies.dalembert.cons', { returnObjects: true }),
-      example: t('strategy_guide.strategies.dalembert.example')
+      description: 'A gentler progression system where you increase your bet by one unit after a loss and decrease it by one unit after a win. This approach is less aggressive than Martingale.',
+      pros: ['Lower risk than Martingale', 'Doesn\'t require large bankroll', 'More sustainable for longer sessions'],
+      cons: ['Slower recovery from losses', 'Still vulnerable to long losing streaks', 'Lower potential short-term gains'],
+      example: 'Start with $10 on Black. If you win, bet $9 next. If you lose, bet $11 next. Continue adding after losses and subtracting after wins.'
     },
     {
       id: 'strategy-3',
-      title: t('strategy_guide.strategies.fibonacci.title'),
-      difficulty: t('strategy_guide.strategies.fibonacci.difficulty'),
+      title: 'Fibonacci System',
+      difficulty: 'Intermediate',
       effectiveness: 3,
       risk: 'Medium',
       color: '#7209B7',
-      description: t('strategy_guide.strategies.fibonacci.description'),
-      pros: t('strategy_guide.strategies.fibonacci.pros', { returnObjects: true }),
-      cons: t('strategy_guide.strategies.fibonacci.cons', { returnObjects: true }),
-      example: t('strategy_guide.strategies.fibonacci.example')
+      description: 'Based on the Fibonacci sequence (1, 1, 2, 3, 5, 8, 13...), you move one step forward in the sequence after a loss and two steps back after a win.',
+      pros: ['More measured progression than Martingale', 'Can recover losses with fewer wins', 'Mathematical approach appeals to some players'],
+      cons: ['Complex to track during play', 'Can still lead to large bets after losing streaks', 'Requires discipline to follow correctly'],
+      example: 'Using units: Bet 1 unit. If you lose, bet 1 again. If you lose again, bet 2, then 3, then 5, etc. After a win, move back two numbers in the sequence.'
     },
     {
       id: 'strategy-4',
-      title: t('strategy_guide.strategies.james_bond.title'),
-      difficulty: t('strategy_guide.strategies.james_bond.difficulty'),
+      title: 'James Bond Strategy',
+      difficulty: 'Advanced',
       effectiveness: 2,
       risk: 'High',
       color: '#4361EE',
-      description: t('strategy_guide.strategies.james_bond.description'),
-      pros: t('strategy_guide.strategies.james_bond.pros', { returnObjects: true }),
-      cons: t('strategy_guide.strategies.james_bond.cons', { returnObjects: true }),
-      example: t('strategy_guide.strategies.james_bond.example')
+      description: 'A flat betting system that covers more than half the table. Place $140 on high numbers (19-36), $50 on six numbers (13-18), and $10 on zero for insurance.',
+      pros: ['Covers 25 numbers out of 37', 'Can provide exciting gameplay', 'Fixed betting amount (no progression)'],
+      cons: ['Requires larger initial bet ($200 total)', 'Doesn\'t guarantee a profit', 'House edge still applies to overall strategy'],
+      example: 'With a $200 bankroll, bet $140 on high (19-36), $50 on 13-18, and $10 on 0. This covers 25 out of 37 possible outcomes.'
     },
     {
       id: 'strategy-5',
-      title: t('strategy_guide.strategies.oscar_grind.title'),
-      difficulty: t('strategy_guide.strategies.oscar_grind.difficulty'),
+      title: 'Oscar\'s Grind',
+      difficulty: 'Advanced',
       effectiveness: 3,
       risk: 'Low',
       color: '#14D854',
-      description: t('strategy_guide.strategies.oscar_grind.description'),
-      pros: t('strategy_guide.strategies.oscar_grind.pros', { returnObjects: true }),
-      cons: t('strategy_guide.strategies.oscar_grind.cons', { returnObjects: true }),
-      example: t('strategy_guide.strategies.oscar_grind.example')
+      description: 'A positive progression system focused on winning one unit at a time. You increase your bet by one unit after a win, but keep it the same after a loss.',
+      pros: ['Conservative approach with minimal risk', 'Good for players with patience', 'Can be profitable in the long run with even-money bets'],
+      cons: ['Very slow progression', 'Small profit goals', 'Requires lots of time and many winning spins'],
+      example: 'Start with 1 unit. Keep betting 1 unit until you win. After a win, increase to 2 units. Continue until you\'ve made a profit of 1 unit, then start over.'
     }
   ];
 
@@ -116,7 +114,7 @@ const StrategyGuide = () => {
       >
         <FaBookOpen color="#00d4ff" size={22} />
         <span style={{ background: 'linear-gradient(90deg, #FFFFFF, #00d4ff)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-          {t('strategy_guide.title')}
+          Cosmic Strategy Guide
         </span>
       </Typography>
       
@@ -125,7 +123,7 @@ const StrategyGuide = () => {
         color="rgba(255,255,255,0.7)"
         sx={{ mb: 3 }}
       >
-        {t('strategy_guide.description')}
+        Popular betting strategies to enhance your roulette experience. Remember that no strategy can overcome the house edge entirely.
       </Typography>
 
       {strategies.map((strategy, index) => (
@@ -223,7 +221,7 @@ const StrategyGuide = () => {
                     />
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
                       <Typography variant="caption" color="rgba(255,255,255,0.7)">
-                        {t('strategy_guide.effectiveness')}:
+                        Effectiveness:
                       </Typography>
                       {[...Array(5)].map((_, i) => (
                         <FaStar 
@@ -234,7 +232,7 @@ const StrategyGuide = () => {
                       ))}
                     </Box>
                     <Chip 
-                      label={`${t('strategy_guide.risk')}: ${strategy.risk}`} 
+                      label={`Risk: ${strategy.risk}`} 
                       size="small" 
                       sx={{ 
                         bgcolor: strategy.risk === 'High' ? 'rgba(0, 200, 255, 0.2)' : 
@@ -270,7 +268,7 @@ const StrategyGuide = () => {
                 >
                   <Typography variant="subtitle2" color="#14D854" sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
                     <FaCheck color="#14D854" />
-                    {t('strategy_guide.advantages')}
+                    Advantages
                   </Typography>
                   <Box component="ul" sx={{ pl: 2, m: 0 }}>
                     {strategy.pros.map((pro, i) => (
@@ -292,7 +290,7 @@ const StrategyGuide = () => {
                 >
                   <Typography variant="subtitle2" color="#00d4ff" sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
                     <FaTimes color="#00d4ff" />
-                    {t('strategy_guide.disadvantages')}
+                    Disadvantages
                   </Typography>
                   <Box component="ul" sx={{ pl: 2, m: 0 }}>
                     {strategy.cons.map((con, i) => (
@@ -318,7 +316,7 @@ const StrategyGuide = () => {
                 <FaCalculator color="#00a8cc" style={{ marginTop: '3px' }} />
                 <Box>
                   <Typography variant="subtitle2" color="#00a8cc" sx={{ mb: 1 }}>
-                    {t('strategy_guide.example')}:
+                    Example:
                   </Typography>
                   <Typography variant="body2" color="rgba(255,255,255,0.8)">
                     {strategy.example}
@@ -345,11 +343,11 @@ const StrategyGuide = () => {
       >
         <FaExclamationTriangle color="#00d4ff" size={20} style={{ flexShrink: 0 }} />
         <Typography variant="body2" color="rgba(255,255,255,0.8)">
-          <strong>{t('strategy_guide.important')}:</strong> {t('strategy_guide.important_text')}
+          <strong>Important:</strong> These strategies can enhance entertainment. Always gamble responsibly and set clear limits for your play.
         </Typography>
       </Box>
     </Paper>
   );
 };
 
-export default StrategyGuide;
+export default StrategyGuide; 

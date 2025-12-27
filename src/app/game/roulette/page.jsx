@@ -998,7 +998,7 @@ const BettingStats = ({ history, t }) => {
     if (!history || history.length === 0) return null;
 
     // Calculate session total bets (sum of all totalBets from each round)
-    const statTotal = history.reduce((sum, bet) => sum + bet.totalBets, 0);
+    const statTotal = Number(history.reduce((sum, bet) => sum + bet.totalBets, 0).toFixed(2));
 
     // Calculate session total winnings (sum of all winningBets from each round)
     const statWinnings = history.reduce((sum, bet) => sum + bet.winningBets, 0);
@@ -3851,7 +3851,7 @@ export default function GameRoulette() {
                     <Button onClick={handleGoAgain}>{t('roulette_page.go_again')}</Button>
                     <Box sx={{ mt: 1, textAlign: 'center' }}>
                       <Typography variant="h5">
-                        {t('roulette_page.result_label')} <span style={{
+                        {t('roulette_page.result_label')}<span style={{
                           color: rollResult === 0 ? '#14D854' :
                             [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36].includes(rollResult) ? '#d82633' : 'white'
                         }}>{rollResult}</span>
