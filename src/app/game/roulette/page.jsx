@@ -1168,8 +1168,8 @@ export default function GameRoulette() {
     // Calculate real statistics from betting history
     const gameStatistics = {
       totalBets: bettingHistory.length,
-      totalVolume: bettingHistory.reduce((sum, bet) => sum + parseFloat(bet.amount || 0), 0).toFixed(5),
-      maxWin: bettingHistory.length > 0 ? Math.max(...bettingHistory.map(bet => parseFloat(bet.payout || 0))).toFixed(5) : '0.00000'
+      totalVolume: bettingHistory.reduce((sum, bet) => sum + parseFloat(bet.amount || 0), 0),
+      maxWin: bettingHistory.length > 0 ? Math.max(...bettingHistory.map(bet => parseFloat(bet.payout || 0))) : '0.00000'
     };
 
     return (
@@ -1813,7 +1813,7 @@ export default function GameRoulette() {
     switch (type) {
       case "red":
         oldVal = red;
-        const updatedRed = revert ? newVal : red + newVal;
+        const updatedRed = revert ? newVal : parseFloat((red + newVal).toFixed(3));
         if (red !== updatedRed) {
           if (!revert) {
             dispatchEvents({ type: "update", payload: [...events, { type, oldVal, newVal: updatedRed, ind }] });
@@ -1823,7 +1823,7 @@ export default function GameRoulette() {
         break;
       case "black":
         oldVal = black;
-        const updatedBlack = revert ? newVal : black + newVal;
+        const updatedBlack = revert ? newVal : parseFloat((black + newVal).toFixed(3));
         if (black !== updatedBlack) {
           if (!revert) {
             dispatchEvents({ type: "update", payload: [...events, { type, oldVal, newVal: updatedBlack, ind }] });
@@ -1833,7 +1833,7 @@ export default function GameRoulette() {
         break;
       case "odd":
         oldVal = odd;
-        const updatedOdd = revert ? newVal : odd + newVal;
+        const updatedOdd = revert ? newVal : parseFloat((odd + newVal).toFixed(3));
         if (odd !== updatedOdd) {
           if (!revert) {
             dispatchEvents({ type: "update", payload: [...events, { type, oldVal, newVal: updatedOdd, ind }] });
@@ -1843,7 +1843,7 @@ export default function GameRoulette() {
         break;
       case "even":
         oldVal = even;
-        const updatedEven = revert ? newVal : even + newVal;
+        const updatedEven = revert ? newVal : parseFloat((even + newVal).toFixed(3));
         if (even !== updatedEven) {
           if (!revert) {
             dispatchEvents({ type: "update", payload: [...events, { type, oldVal, newVal: updatedEven, ind }] });
@@ -1853,7 +1853,7 @@ export default function GameRoulette() {
         break;
       case "over":
         oldVal = over;
-        const updatedOver = revert ? newVal : over + newVal;
+        const updatedOver = revert ? newVal : parseFloat((over + newVal).toFixed(3));
         if (over !== updatedOver) {
           if (!revert) {
             dispatchEvents({ type: "update", payload: [...events, { type, oldVal, newVal: updatedOver, ind }] });
@@ -1863,7 +1863,7 @@ export default function GameRoulette() {
         break;
       case "under":
         oldVal = under;
-        const updatedUnder = revert ? newVal : under + newVal;
+        const updatedUnder = revert ? newVal : parseFloat((under + newVal).toFixed(3));
         if (under !== updatedUnder) {
           if (!revert) {
             dispatchEvents({ type: "update", payload: [...events, { type, oldVal, newVal: updatedUnder, ind }] });
@@ -1873,7 +1873,7 @@ export default function GameRoulette() {
         break;
       case "dozens":
         oldVal = dozens[ind];
-        const updatedDozen = revert ? newVal : dozens[ind] + newVal;
+        const updatedDozen = revert ? newVal : parseFloat((dozens[ind] + newVal).toFixed(3));
         if (dozens[ind] !== updatedDozen) {
           if (!revert) {
             dispatchEvents({ type: "update", payload: [...events, { type, oldVal, newVal: updatedDozen, ind }] });
@@ -1883,7 +1883,7 @@ export default function GameRoulette() {
         break;
       case "columns":
         oldVal = columns[ind];
-        const updatedColumn = revert ? newVal : columns[ind] + newVal;
+        const updatedColumn = revert ? newVal : parseFloat((columns[ind] + newVal).toFixed(3));
         if (columns[ind] !== updatedColumn) {
           if (!revert) {
             dispatchEvents({ type: "update", payload: [...events, { type, oldVal, newVal: updatedColumn, ind }] });
@@ -1893,7 +1893,7 @@ export default function GameRoulette() {
         break;
       case "inside":
         oldVal = inside[ind];
-        const updatedInside = revert ? newVal : inside[ind] + newVal;
+        const updatedInside = revert ? newVal : parseFloat((inside[ind] + newVal).toFixed(3));
         if (inside[ind] !== updatedInside) {
           if (!revert) {
             dispatchEvents({ type: "update", payload: [...events, { type, oldVal, newVal: updatedInside, ind }] });
@@ -1951,7 +1951,7 @@ export default function GameRoulette() {
     const totalBetAmount = total;
 
     if (currentBalance < totalBetAmount) {
-      alert(t('roulette_page.alert_insufficient_balance', { balance: currentBalance.toFixed(5), needed: totalBetAmount.toFixed(5) }));
+      alert(t('roulette_page.alert_insufficient_balance', { balance: currentBalance, needed: totalBetAmount }));
       return;
     }
 
@@ -1973,7 +1973,7 @@ export default function GameRoulette() {
       
       // Check if user has enough balance
       if (originalBalance < totalBetAmount) {
-        alert(`Insufficient balance. You have ${originalBalance.toFixed(5)} OCT but need ${totalBetAmount.toFixed(5)} OCT`);
+        alert(`Insufficient balance. You have ${originalBalance} OCT but need ${totalBetAmount} OCT`);
         setSubmitDisabled(false);
         setWheelSpinning(false);
         return;
@@ -1981,12 +1981,12 @@ export default function GameRoulette() {
       
       // Deduct bet amount immediately from balance
       const balanceAfterBet = originalBalance - totalBetAmount;
-      dispatch(setBalance(balanceAfterBet.toFixed(5)));
+      dispatch(setBalance(balanceAfterBet));
       
       console.log("Balance deducted:", {
-        originalBalance: originalBalance.toFixed(5),
-        betAmount: totalBetAmount.toFixed(5),
-        balanceAfterBet: balanceAfterBet.toFixed(5)
+        originalBalance: originalBalance,
+        betAmount: totalBetAmount,
+        balanceAfterBet: balanceAfterBet
       });
 
       // Convert ALL bets into an array for multiple bet processing
@@ -2323,14 +2323,14 @@ export default function GameRoulette() {
         // netResult = totalPayout (includes original bet since we already deducted it)
         // So we just add the total winnings to the balance after bet deduction
         const finalBalance = balanceAfterBet + netResult;
-        dispatch(setBalance(finalBalance.toFixed(5)));
+        dispatch(setBalance(finalBalance));
 
         console.log("Balance update:", {
-          originalBalance: originalBalance.toFixed(5),
-          balanceAfterBet: balanceAfterBet.toFixed(5),
-          totalPayout: totalPayout.toFixed(5),
-          netResult: netResult.toFixed(5),
-          finalBalance: finalBalance.toFixed(5),
+          originalBalance: originalBalance,
+          balanceAfterBet: balanceAfterBet,
+          totalPayout: totalPayout,
+          netResult: netResult,
+          finalBalance: finalBalance,
           explanation: "netResult = totalPayout (includes original bet), so we add full winnings"
         });
 
@@ -2484,16 +2484,16 @@ export default function GameRoulette() {
         // Show result notification
         if (netResult > 0) {
           const winMessage = winningBets.length === 1
-                    ? t('roulette_page.notification_win_single', { betName: winningBets[0].name, amount: (netResult - totalBetAmount).toFixed(5) })
-                    : t('roulette_page.notification_win_multiple', { count: winningBets.length, amount: (netResult - totalBetAmount).toFixed(5) });
+                    ? t('roulette_page.notification_win_single', { betName: winningBets[0].name, amount: (netResult - totalBetAmount) })
+                    : t('roulette_page.notification_win_multiple', { count: winningBets.length, amount: (netResult - totalBetAmount) });
 
           setNotificationMessage(winMessage);
           setNotificationSeverity("success");
           setSnackbarMessage(winMessage);
         } else {
-          setNotificationMessage(t('roulette_page.notification_loss', { number: winningNumber, amount: totalBetAmount.toFixed(5) }));
+          setNotificationMessage(t('roulette_page.notification_loss', { number: winningNumber, amount: totalBetAmount }));
           setNotificationSeverity("error");
-          setSnackbarMessage(t('notification_loss_long', { winningNumber: winningNumber, totalBetAmount: totalBetAmount.toFixed(5) }));
+          setSnackbarMessage(t('notification_loss_long', { winningNumber: winningNumber, totalBetAmount: totalBetAmount }));
         }
         setSnackbarOpen(true);
 
@@ -2842,7 +2842,7 @@ export default function GameRoulette() {
     val += inside.reduce((acc, currVal) => {
       return acc + currVal;
     }, 0);
-    return val;
+    return parseFloat(val.toFixed(3));
   }, [red, black, odd, even, over, under, dozens, columns, inside]);
 
   // Update the clear bet function
@@ -3228,7 +3228,7 @@ export default function GameRoulette() {
                 }}
               >
                 <FaCoins className="text-yellow-400" />
-                {t('roulette_page.balance_label')} {isConnected ? t('roulette_page.balance_value', { balance: parseFloat(userBalance || '0').toFixed(5) }) : t('roulette_page.balance_connect_wallet')}
+                {t('roulette_page.balance_label')} {isConnected ? t('roulette_page.balance_value', { balance: parseFloat(userBalance || '0') }) : t('roulette_page.balance_connect_wallet')}
               </Typography>
           </Box>
 
@@ -3786,7 +3786,7 @@ export default function GameRoulette() {
               />
 
               <Typography color="white" sx={{ opacity: 0.8 }}>
-                {t('roulette_page.current_bet_total', { total: total.toFixed(5) })}
+                {t('roulette_page.current_bet_total', { total: total })}
               </Typography>
 
               {/* Quick Bet Buttons */}
@@ -3871,7 +3871,7 @@ export default function GameRoulette() {
                       loading={submitDisabled}
                       onClick={lockBet}
                     >
-                      {total > 0 ? t('roulette_page.place_bet_total', { total: total.toFixed(5) }) : t('roulette_page.place_bet_oct')}
+                      {total > 0 ? t('roulette_page.place_bet_total', { total: total }) : t('roulette_page.place_bet_oct')}
                     </Button>
                     {submitDisabled && rollResult < 0 && (
                       <Typography color="white" sx={{ opacity: 0.8 }}>
