@@ -2439,7 +2439,7 @@ export default function GameRoulette() {
                 totalBets: allBets.length,
                 winningBets: winningBets.length,
                 netResult: netResult
-              }, // resultData
+              }, // resultData 
               totalPayout.toString() // payoutAmount
             ).then((onechainTxHash) => {
               console.log('✅ ONE CHAIN: Roulette game logged successfully');
@@ -3228,7 +3228,7 @@ export default function GameRoulette() {
                 }}
               >
                 <FaCoins className="text-yellow-400" />
-                {t('roulette_page.balance_label')} {isConnected ? t('roulette_page.balance_value', { balance: parseFloat(userBalance || '0') }) : t('roulette_page.balance_connect_wallet')}
+                {t('roulette_page.balance_label')} {isConnected ? t('roulette_page.balance_value', { balance: parseFloat(userBalance || '0').toFixed(3) }) : t('roulette_page.balance_connect_wallet')}
               </Typography>
           </Box>
 
