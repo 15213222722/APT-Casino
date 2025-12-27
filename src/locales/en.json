@@ -892,6 +892,18 @@
     "on_win_increase_placeholder": "e.g., 10%",
     "on_loss_increase_placeholder": "e.g., 20%",
     "stop_on_profit_placeholder": "e.g., 100 OCT",
-    "stop_on_loss_placeholder": "e.g., 50 OCT"
+    "stop_on_loss_placeholder": "e.g., 50 OCT",
+    "select_mines_count_placeholder": "Select number of mines",
+    "tiles_to_reveal_label": "Tiles to Reveal",
+    "tiles_to_reveal_placeholder": "Select number of tiles to reveal",
+    "number_of_rounds_placeholder": "Enter number of rounds",
+    "on_win_placeholder": "Select action on win",
+    "on_loss_placeholder": "Select action on loss",
+    "increase_bet_by_10": "Increase bet by 10%",
+    "increase_bet_by_25": "Increase bet by 25%",
+    "increase_bet_by_50": "Increase bet by 50%",
+    "increase_bet_by_100": "Increase bet by 100%",
+    "ai_assist_label": "AI Assist",
+    "ai_assist_placeholder": "Enable AI to assist with tile selection"
   }
 }

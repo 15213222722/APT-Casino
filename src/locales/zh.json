@@ -969,6 +969,18 @@
     "on_win_increase_placeholder": "例如 10%",
     "on_loss_increase_placeholder": "例如 20%",
     "stop_on_profit_placeholder": "例如 100 OCT",
-    "stop_on_loss_placeholder": "例如 50 OCT"
+    "stop_on_loss_placeholder": "例如 50 OCT",
+    "select_mines_count_placeholder": "选择地雷数量",
+    "tiles_to_reveal_label": "要揭示的图块",
+    "tiles_to_reveal_placeholder": "选择要揭示的图块数量",
+    "number_of_rounds_placeholder": "输入回合数",
+    "on_win_placeholder": "选择获胜时的操作",
+    "on_loss_placeholder": "选择失败时的操作",
+    "increase_bet_by_10": "增加投注 10%",
+    "increase_bet_by_25": "增加投注 25%",
+    "increase_bet_by_50": "增加投注 50%",
+    "increase_bet_by_100": "增加投注 100%",
+    "ai_assist_label": "AI 辅助",
+    "ai_assist_placeholder": "启用 AI 辅助选择图块"
   }
 }

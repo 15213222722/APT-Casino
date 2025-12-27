@@ -24,6 +24,7 @@ const DynamicForm = ({ config, onSubmit, gameStatus = { isPlaying: false, hasPla
         ? field.defaultValue 
         : field.type === "multiSelect" ? [] : "";
     });
+    console.log("Initial Data:", initialData);  
     setFormData(initialData);
   }, [config]);
 
@@ -159,7 +160,7 @@ const DynamicForm = ({ config, onSubmit, gameStatus = { isPlaying: false, hasPla
                       value={formData[field.id] || ""}
                       onChange={handleChange}
                       label={t(field.label)}
-                      options={field.options.map(opt => ({ ...opt, label: t(opt.label) }))}
+                      options={field.options.map(opt => opt)}
                       className="pl-11 bg-black/20 border-purple-800/30 focus:border-purple-600/50"
                       disabled={gameStatus.isPlaying || gameStatus.hasPlacedBet}
                     />

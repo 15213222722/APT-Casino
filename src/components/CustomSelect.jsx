@@ -11,6 +11,7 @@ const CustomSelect = ({
   label,
   options = [],
 }) => {
+  console.log("CustomSelect Rendered with props:", { id, name, value, options });
   // Helper function to determine icon based on field name
   const getIconForField = (fieldName) => {
     switch(fieldName) {
@@ -80,6 +81,7 @@ const CustomSelect = ({
               Select {label}
             </option>
             {options.map((option, index) => (
+              console.log("Rendering option:", option),
               <option 
                 key={index} 
                 value={option} 
