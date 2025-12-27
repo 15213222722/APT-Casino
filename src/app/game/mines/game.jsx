@@ -38,6 +38,49 @@ const SOUNDS = {
   bet: "/sounds/bet.mp3",
 };
 
+// Helper function to initialize the grid, moved outside the component
+const initializeGrid = async (gridSize, mines) => {
+  // Ensure mines count is valid (never more than totalTiles - 1)
+  const totalTiles = gridSize * gridSize;
+  const validMines = Math.min(mines, totalTiles - 1);
+  
+  let newGrid = Array(gridSize)
+    .fill()
+    .map(() =>
+      Array(gridSize)
+        .fill()
+        .map(() => ({
+          isDiamond: false,
+          isBomb: false,
+          isRevealed: false,
+          isHovered: false,
+          spriteIndex: 0,
+        }))
+    );
+
+  // Place mines using simple random generation
+  let bombsPlaced = 0;
+  while (bombsPlaced < validMines) {
+    const row = Math.floor(Math.random() * gridSize);
+    const col = Math.floor(Math.random() * gridSize);
+    if (!newGrid[row][col].isBomb) {
+      newGrid[row][col].isBomb = true;
+      bombsPlaced++;
+    }
+  }
+
+  // All non-bomb cells are diamonds (gems)
+  for (let i = 0; i < gridSize; i++) {
+    for (let j = 0; j < gridSize; j++) {
+      if (!newGrid[i][j].isBomb) {
+        newGrid[i][j].isDiamond = true;
+      }
+    }
+  }
+
+  return newGrid;
+};
+
 const Game = ({ betSettings = {}, onGameStatusChange, onGameComplete }) => {
   // Redux integration
   const dispatch = useDispatch();
@@ -198,49 +241,6 @@ const Game = ({ betSettings = {}, onGameStatusChange, onGameComplete }) => {
     }
   };
   
-  // Initialize the grid with Pyth Entropy randomness
-  const initializeGrid = async (mines = minesCount) => {
-    // Ensure mines count is valid (never more than totalTiles - 1)
-    const validMines = Math.min(mines, totalTiles - 1);
-    
-    let newGrid = Array(gridSize)
-      .fill()
-      .map(() =>
-        Array(gridSize)
-          .fill()
-          .map(() => ({
-            isDiamond: false,
-            isBomb: false,
-            isRevealed: false,
-            isHovered: false,
-            spriteIndex: 0, // Always use the first sprite
-          }))
-      );
-
-    // Place mines using simple random generation
-    let bombsPlaced = 0;
-    while (bombsPlaced < validMines) {
-      const row = Math.floor(Math.random() * gridSize);
-      const col = Math.floor(Math.random() * gridSize);
-      if (!newGrid[row][col].isBomb) {
-        newGrid[row][col].isBomb = true;
-        bombsPlaced++;
-        console.log(`Mine ${bombsPlaced}/${validMines} → [${row}, ${col}]`);
-      }
-    }
-
-    // All non-bomb cells are diamonds (gems)
-    for (let i = 0; i < gridSize; i++) {
-      for (let j = 0; j < gridSize; j++) {
-        if (!newGrid[i][j].isBomb) {
-          newGrid[i][j].isDiamond = true;
-        }
-      }
-    }
-
-    return newGrid;
-  };
-
   // Initialize the game on component mount
   useEffect(() => {
     const initGame = async () => {
@@ -248,7 +248,7 @@ const Game = ({ betSettings = {}, onGameStatusChange, onGameComplete }) => {
       setGridSize(size);
       
       try {
-        const newGrid = await initializeGrid();
+        const newGrid = await initializeGrid(size, settings.mines);
         setGrid(newGrid);
       } catch (error) {
         console.error('❌ Error initializing game grid:', error);
@@ -290,19 +290,24 @@ const Game = ({ betSettings = {}, onGameStatusChange, onGameComplete }) => {
     const newMinesCount = settings.mines || defaultSettings.mines;
     const newBetAmount = parseFloat(settings.betAmount) || defaultSettings.betAmount;
 
-    // Only update if things have actually changed
-    if (newMinesCount !== minesCount) {
+    const updateGridForNewSettings = async () => {
       setMinesCount(newMinesCount);
-      setGrid(initializeGrid(newMinesCount));
+      const newGrid = await initializeGrid(gridSize, newMinesCount);
+      setGrid(newGrid);
       setMultiplier(1.0);
       setProfit(0);
       setRevealedCount(0);
+    };
+
+    // Only update if things have actually changed
+    if (newMinesCount !== minesCount) {
+      updateGridForNewSettings();
     }
     if (newBetAmount !== betAmount) {
       setBetAmount(newBetAmount);
     }
     
-  }, [settings, isPlaying, hasPlacedBet]);
+  }, [settings.mines, settings.betAmount, isPlaying, hasPlacedBet]);
 
   // This effect will now ONLY handle the form submission (actual bet)
   useEffect(() => {
@@ -341,7 +346,7 @@ const Game = ({ betSettings = {}, onGameStatusChange, onGameComplete }) => {
         // Reset game state for new round
         setGameOver(false);
         setGameWon(false);
-        setGrid(await initializeGrid(settings.mines));
+        setGrid(await initializeGrid(gridSize, settings.mines));
         setMultiplier(1.0);
         setProfit(0);
         setRevealedCount(0);
@@ -621,7 +626,13 @@ const Game = ({ betSettings = {}, onGameStatusChange, onGameComplete }) => {
     setIsPlaying(false);
     setGameOver(false);
     setGameWon(false);
-    setGrid(initializeGrid(minesCount));
+    
+    const resetGrid = async () => {
+      const newGrid = await initializeGrid(gridSize, minesCount);
+      setGrid(newGrid);
+    };
+    resetGrid();
+
     setMultiplier(1.0);
     setProfit(0);
     setRevealedCount(0);
@@ -684,7 +695,11 @@ const Game = ({ betSettings = {}, onGameStatusChange, onGameComplete }) => {
         // processedSettingsRef.current = null; // Don't reset this
         
         // Force a complete game reset
-        setGrid(initializeGrid(minesCount));
+        const resetGridOnCashout = async () => {
+          const newGrid = await initializeGrid(gridSize, minesCount);
+          setGrid(newGrid);
+        };
+        resetGridOnCashout();
         
         // Force parent component to update immediately
         if (onGameStatusChange) {
