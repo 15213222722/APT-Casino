@@ -38,6 +38,49 @@ const SOUNDS = {
   bet: "/sounds/bet.mp3",
 };
 
+// Helper function to calculate combinations (nCk)
+const combinations = (n, k) => {
+  if (k < 0 || k > n) {
+    return 0;
+  }
+  if (k === 0 || k === n) {
+    return 1;
+  }
+  if (k > n / 2) {
+    k = n - k;
+  }
+  let res = 1;
+  for (let i = 1; i <= k; i++) {
+    res = (res * (n - i + 1)) / i;
+  }
+  return res;
+};
+
+// New multiplier calculation function with house edge
+const calculateMultiplier = (revealedCount, minesCount, gridSize, houseEdge = 0.03) => {
+  if (revealedCount === 0) {
+    return 1.0;
+  }
+  const totalTiles = gridSize * gridSize;
+  const safeTiles = totalTiles - minesCount;
+
+  if (revealedCount > safeTiles) {
+    return 0; // Should not happen in a normal game flow
+  }
+
+  const prob = combinations(safeTiles, revealedCount) / combinations(totalTiles, revealedCount);
+  
+  if (prob === 0) {
+    // This can happen if revealedCount > safeTiles, return a high number as it's a "win"
+    // but cap it to avoid infinity. This case indicates all safe tiles are revealed.
+    const maxMultiplier = (1 - houseEdge) / (combinations(safeTiles, safeTiles) / combinations(totalTiles, safeTiles));
+    return maxMultiplier;
+  }
+
+  const multiplier = (1 - houseEdge) / prob;
+  return multiplier;
+};
+
 // Helper function to initialize the grid, moved outside the component
 const initializeGrid = async (gridSize, mines) => {
   // Ensure mines count is valid (never more than totalTiles - 1)
@@ -138,92 +181,53 @@ const Game = ({ betSettings = {}, onGameStatusChange, onGameComplete }) => {
   const totalTiles = gridSize * gridSize;
   const safeTiles = totalTiles - minesCount;
   
-  // Calculate next multiplier based on revealed count
-  const calculateNextMultiplier = (revealed) => {
-    const nextRevealed = revealed + 1;
-    
-    // Special case for very high mine counts (24 mines in 5x5 grid)
-    if (safeTiles === 1 && nextRevealed === 1) {
-      return 25.00; // Fixed high multiplier for the 1 safe tile
-    }
-    
-    // Allow higher tile reveals for high mine counts
-    const maxReveal = minesCount >= 20 ? safeTiles : 15;
-    if (nextRevealed > maxReveal) return multiplier;
-    
-    // Formula: totalTiles / (totalTiles - minesCount - revealed)
-    // Guard against division by zero or negative numbers
-    const denominator = totalTiles - minesCount - nextRevealed;
-    if (denominator <= 0) return multiplier;
-    
-    return parseFloat((totalTiles / denominator).toFixed(2));
-  };
-  
-  // Calculate chance of hitting a mine
-  const calculateMineChance = () => {
-    // Edge cases
-    if (revealedCount >= totalTiles) return 0; // All tiles revealed
-    if (revealedCount >= safeTiles) return 100; // All safe tiles revealed, only mines left
-    if (safeTiles <= 0) return 100; // No safe tiles
-    if (minesCount <= 0) return 0; // No mines
-    
-    // Regular case: mines / unrevealed tiles
-    const unrevealedTiles = totalTiles - revealedCount;
-    if (unrevealedTiles <= 0) return 0;
-    
-    const chance = Math.round((minesCount / unrevealedTiles) * 100);
-    return isNaN(chance) ? 0 : chance; // Guard against NaN
-  };
-  
   // Calculate current payout
   const calculatePayout = () => {
-    // Use the bet amount from settings (form) instead of local state
-            const currentBetAmount = parseFloat(settings.betAmount) || 0.001;
+    const currentBetAmount = parseFloat(settings.betAmount) || 0.001;
     const payout = currentBetAmount * multiplier;
     console.log('Calculating payout:', { currentBetAmount, multiplier, payout });
     return payout;
   };
 
+  // Calculate the chance of hitting a mine on the next click
+  const calculateMineChance = () => {
+    const remainingTiles = totalTiles - revealedCount;
+    if (remainingTiles <= 0) {
+      return 0;
+    }
+    const chance = (minesCount / remainingTiles) * 100;
+    return Math.round(chance);
+  };
+
   // Multiplier table (memoized to avoid recalculation)
   const multiplierTable = useMemo(() => {
     const table = [];
-    
-    // If we have very few or no safe tiles, show at least one entry
-    if (safeTiles <= 1) {
-      // For edge case with 1 safe tile (e.g., 24 mines in 5x5 grid)
-      if (safeTiles === 1) {
-        // Formula: totalTiles / (totalTiles - minesCount - 1)
-        const denominator = totalTiles - minesCount - 1;
-        if (denominator > 0) {
-          const mult = parseFloat((totalTiles / denominator).toFixed(2));
-          table.push({ tiles: 1, multiplier: mult });
-        } else {
-          // Fallback for impossible math case
-          table.push({ tiles: 1, multiplier: 25.00 });
-        }
-      } else {
-        // No safe tiles case (shouldn't happen, but just in case)
-        table.push({ tiles: 1, multiplier: 1.00 });
+    const safeTiles = totalTiles - minesCount;
+
+    // Show multipliers for revealing 1 up to all safe tiles
+    for (let i = 1; i <= safeTiles; i++) {
+      const multiplierValue = calculateMultiplier(i, minesCount, gridSize);
+      if (multiplierValue > 0 && multiplierValue !== Infinity) {
+        table.push({
+          tiles: i,
+          multiplier: multiplierValue.toFixed(2) + 'x',
+        });
       }
-      return table;
     }
     
-    // Show up to 15 tiles, or all safe tiles for high mine counts
-    // For very high mine counts (20+), we'll show all possible safe tiles
-    const maxTiles = minesCount >= 20 ? safeTiles : Math.min(15, safeTiles);
-    
-    for (let i = 1; i <= maxTiles; i++) {
-      // Formula: totalTiles / (totalTiles - minesCount - revealed)
-      // Make sure we don't divide by zero or negative numbers
-      const denominator = totalTiles - minesCount - i;
-      if (denominator <= 0) break;
-      
-      const mult = parseFloat((totalTiles / denominator).toFixed(2));
-      table.push({ tiles: i, multiplier: mult });
+    // If the table is empty (e.g., 25 mines), show a message
+    if (table.length === 0 && safeTiles > 0) {
+      const finalMultiplier = calculateMultiplier(safeTiles, minesCount, gridSize);
+      if (finalMultiplier > 0 && finalMultiplier !== Infinity) {
+        table.push({
+          tiles: safeTiles,
+          multiplier: finalMultiplier.toFixed(2) + 'x',
+        });
+      }
     }
-    console.log('Multiplier table:', table);
+
     return table;
-  }, [minesCount, safeTiles, totalTiles]);
+  }, [minesCount, totalTiles, gridSize]);
 
   // Play sound helper function
   const playSound = (sound) => {
@@ -443,13 +447,13 @@ const Game = ({ betSettings = {}, onGameStatusChange, onGameComplete }) => {
         setRevealedCount(prev => {
           const newCount = prev + 1;
           
-          // Allow higher multipliers for high mine counts
-          const maxTiles = minesCount >= 20 ? safeTiles : 15;
-          if (newCount <= maxTiles) {
-            const newMultiplier = calculateNextMultiplier(prev);
-            setMultiplier(newMultiplier);
-            setProfit(Math.round(betAmount * (newMultiplier - 1)));
-          }
+          // Update multiplier using the new formula
+          const newMultiplier = calculateMultiplier(newCount, minesCount, gridSize);
+          setMultiplier(newMultiplier);
+
+          // Update profit
+          const currentBetAmount = parseFloat(betAmount) || 0.001;
+          setProfit(Math.round(currentBetAmount * (newMultiplier - 1)));
           
           // Check if all safe tiles are revealed
           if (newCount === safeTiles) {
@@ -1019,7 +1023,7 @@ const Game = ({ betSettings = {}, onGameStatusChange, onGameComplete }) => {
                     }`}
                   >
                     <div className="text-xs font-medium mb-1">{t('mines_game.tiles_label', { count: item.tiles })}</div>
-                    <div className="text-xl font-semibold">{item.multiplier.toFixed(2)}x</div>
+                    <div className="text-xl font-semibold">{item.multiplier}</div>
                   </div>
                 ))}
               </div>
