@@ -470,7 +470,7 @@ const Game = ({ betSettings = {}, onGameStatusChange, onGameComplete }) => {
 
           // Update profit
           const currentBetAmount = parseFloat(betAmount) || 0.001;
-          setProfit(Math.round(currentBetAmount * (newMultiplier - 1)));
+          setProfit(currentBetAmount * (newMultiplier - 1));
           
           // Check if all safe tiles are revealed
           if (newCount === safeTiles) {
@@ -919,7 +919,7 @@ const Game = ({ betSettings = {}, onGameStatusChange, onGameComplete }) => {
         <div className="bg-gray-900/50 rounded p-2 text-center">
           <div className="text-xs text-white/50 mb-1">{t('mines_game.profit_label')}</div>
           <div className={`text-lg font-bold ${profit > 0 ? 'text-green-400' : 'text-white'}`}>
-            {profit > 0 ? '+' : ''}{profit}
+            {profit > 0 ? '+' : ''}{profit.toFixed(5)}
           </div>
         </div>
       </div>
