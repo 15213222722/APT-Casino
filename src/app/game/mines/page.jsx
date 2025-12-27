@@ -22,7 +22,6 @@ import EthereumConnectWalletButton from '@/components/EthereumConnectWalletButto
 import Image from "next/image";
 import "./mines.css";
 import GameDetail from "@/components/GameDetail";
-import AIAutoBetting from "./components/AIAutoBetting";
 import AISettingsModal from "./components/AISettingsModal";
 import pythEntropyService from '@/services/PythEntropyService';
 import { useOneChainCasino } from '@/hooks/useOneChainCasino';
@@ -185,13 +184,7 @@ export default function Mines() {
       content: (
         <DynamicForm config={manualFormConfig} onSubmit={handleFormSubmit} gameStatus={gameStatus} />
       ),
-    },
-    {
-      label: "Auto",
-      content: (
-        <DynamicForm config={autoFormConfig} onSubmit={handleFormSubmit} gameStatus={gameStatus} />
-      ),
-    },
+    }
   ], [gameStatus]);
 
   // Handle game completion (only when game ends - cashout or mine hit)
@@ -959,12 +952,7 @@ export default function Mines() {
         {renderGameInfo()}
       </div>
 
-      {/* AI Auto Betting Panel */}
-      <AIAutoBetting 
-        isActive={isAIActive} 
-        onActivate={handleAIToggle}
-        onSettings={() => setShowAISettings(true)} 
-      />
+     
       
       {/* AI Settings Modal */}
       <AISettingsModal
