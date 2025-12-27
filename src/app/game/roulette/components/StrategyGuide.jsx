@@ -2,76 +2,38 @@
 import React, { useState } from 'react';
 import { Box, Typography, Paper, Accordion, AccordionSummary, AccordionDetails, Avatar, Chip, Divider, Fade } from '@mui/material';
 import { FaLightbulb, FaChevronDown, FaStar, FaExclamationTriangle, FaChartLine, FaQuestion, FaCalculator, FaBookOpen, FaCheck, FaTimes } from 'react-icons/fa';
+import { useTranslation } from 'react-i18next';
 
 const StrategyGuide = () => {
   const [expanded, setExpanded] = useState(false);
+  const { t } = useTranslation();
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
 
-  const strategies = [
-    {
-      id: 'strategy-1',
-      title: 'Martingale System',
-      difficulty: 'Beginner',
-      effectiveness: 4,
-      risk: 'High',
-      color: '#00d4ff',
-      description: 'The Martingale strategy involves doubling your bet after each loss, so when you eventually win, you recover all previous losses plus a small profit equal to your original bet.',
-      pros: ['Simple to understand and execute', 'Can be effective in short sessions', 'Works with even-money bets (Red/Black, Odd/Even)'],
-      cons: ['Requires a large bankroll', 'Table limits can prevent doubling after several losses', 'A losing streak can deplete your funds quickly'],
-      example: 'Start with $10 on Red. If you lose, bet $20 on Red. If you lose again, bet $40, then $80, and so on until you win.'
-    },
-    {
-      id: 'strategy-2',
-      title: 'D\'Alembert System',
-      difficulty: 'Intermediate',
-      effectiveness: 3,
-      risk: 'Medium',
-      color: '#0066ff',
-      description: 'A gentler progression system where you increase your bet by one unit after a loss and decrease it by one unit after a win. This approach is less aggressive than Martingale.',
-      pros: ['Lower risk than Martingale', 'Doesn\'t require large bankroll', 'More sustainable for longer sessions'],
-      cons: ['Slower recovery from losses', 'Still vulnerable to long losing streaks', 'Lower potential short-term gains'],
-      example: 'Start with $10 on Black. If you win, bet $9 next. If you lose, bet $11 next. Continue adding after losses and subtracting after wins.'
-    },
-    {
-      id: 'strategy-3',
-      title: 'Fibonacci System',
-      difficulty: 'Intermediate',
-      effectiveness: 3,
-      risk: 'Medium',
-      color: '#7209B7',
-      description: 'Based on the Fibonacci sequence (1, 1, 2, 3, 5, 8, 13...), you move one step forward in the sequence after a loss and two steps back after a win.',
-      pros: ['More measured progression than Martingale', 'Can recover losses with fewer wins', 'Mathematical approach appeals to some players'],
-      cons: ['Complex to track during play', 'Can still lead to large bets after losing streaks', 'Requires discipline to follow correctly'],
-      example: 'Using units: Bet 1 unit. If you lose, bet 1 again. If you lose again, bet 2, then 3, then 5, etc. After a win, move back two numbers in the sequence.'
-    },
-    {
-      id: 'strategy-4',
-      title: 'James Bond Strategy',
-      difficulty: 'Advanced',
-      effectiveness: 2,
-      risk: 'High',
-      color: '#4361EE',
-      description: 'A flat betting system that covers more than half the table. Place $140 on high numbers (19-36), $50 on six numbers (13-18), and $10 on zero for insurance.',
-      pros: ['Covers 25 numbers out of 37', 'Can provide exciting gameplay', 'Fixed betting amount (no progression)'],
-      cons: ['Requires larger initial bet ($200 total)', 'Doesn\'t guarantee a profit', 'House edge still applies to overall strategy'],
-      example: 'With a $200 bankroll, bet $140 on high (19-36), $50 on 13-18, and $10 on 0. This covers 25 out of 37 possible outcomes.'
-    },
-    {
-      id: 'strategy-5',
-      title: 'Oscar\'s Grind',
-      difficulty: 'Advanced',
-      effectiveness: 3,
-      risk: 'Low',
-      color: '#14D854',
-      description: 'A positive progression system focused on winning one unit at a time. You increase your bet by one unit after a win, but keep it the same after a loss.',
-      pros: ['Conservative approach with minimal risk', 'Good for players with patience', 'Can be profitable in the long run with even-money bets'],
-      cons: ['Very slow progression', 'Small profit goals', 'Requires lots of time and many winning spins'],
-      example: 'Start with 1 unit. Keep betting 1 unit until you win. After a win, increase to 2 units. Continue until you\'ve made a profit of 1 unit, then start over.'
-    }
-  ];
+  const strategyKeys = ['martingale', 'dalembert', 'fibonacci', 'james_bond', 'oscars_grind'];
+  const strategyColors = {
+    martingale: '#00d4ff',
+    dalembert: '#0066ff',
+    fibonacci: '#7209B7',
+    james_bond: '#4361EE',
+    oscars_grind: '#14D854'
+  };
+
+  const strategies = strategyKeys.map(key => ({
+    id: `strategy-${key}`,
+    key: key,
+    title: t(`strategy_guide.strategies.${key}.title`),
+    difficulty: t(`strategy_guide.strategies.${key}.difficulty`),
+    effectiveness: parseInt(t(`strategy_guide.strategies.${key}.effectiveness`)),
+    risk: t(`strategy_guide.strategies.${key}.risk_level`),
+    color: strategyColors[key],
+    description: t(`strategy_guide.strategies.${key}.description`),
+    pros: t(`strategy_guide.strategies.${key}.pros`, { returnObjects: true }) || [],
+    cons: t(`strategy_guide.strategies.${key}.cons`, { returnObjects: true }) || [],
+    example: t(`strategy_guide.strategies.${key}.example`)
+  }));
 
   return (
     <Paper
@@ -114,7 +76,7 @@ const StrategyGuide = () => {
       >
         <FaBookOpen color="#00d4ff" size={22} />
         <span style={{ background: 'linear-gradient(90deg, #FFFFFF, #00d4ff)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-          Cosmic Strategy Guide
+          {t('strategy_guide.title')}
         </span>
       </Typography>
       
@@ -123,7 +85,7 @@ const StrategyGuide = () => {
         color="rgba(255,255,255,0.7)"
         sx={{ mb: 3 }}
       >
-        Popular betting strategies to enhance your roulette experience. Remember that no strategy can overcome the house edge entirely.
+        {t('strategy_guide.description')}
       </Typography>
 
       {strategies.map((strategy, index) => (
@@ -221,7 +183,7 @@ const StrategyGuide = () => {
                     />
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
                       <Typography variant="caption" color="rgba(255,255,255,0.7)">
-                        Effectiveness:
+                        {t('strategy_guide.effectiveness')}:
                       </Typography>
                       {[...Array(5)].map((_, i) => (
                         <FaStar 
@@ -232,17 +194,17 @@ const StrategyGuide = () => {
                       ))}
                     </Box>
                     <Chip 
-                      label={`Risk: ${strategy.risk}`} 
+                      label={`${t('strategy_guide.risk')}: ${strategy.risk}`} 
                       size="small" 
                       sx={{ 
-                        bgcolor: strategy.risk === 'High' ? 'rgba(0, 200, 255, 0.2)' : 
-                                strategy.risk === 'Medium' ? 'rgba(0, 160, 180, 0.2)' : 
+                        bgcolor: strategy.risk === t('strategy_guide.risk_levels.high') ? 'rgba(0, 200, 255, 0.2)' : 
+                                strategy.risk === t('strategy_guide.risk_levels.medium') ? 'rgba(0, 160, 180, 0.2)' : 
                                 'rgba(0, 180, 216, 0.2)', 
-                        color: strategy.risk === 'High' ? '#00d4ff' : 
-                               strategy.risk === 'Medium' ? '#00a8cc' : 
+                        color: strategy.risk === t('strategy_guide.risk_levels.high') ? '#00d4ff' : 
+                               strategy.risk === t('strategy_guide.risk_levels.medium') ? '#00a8cc' : 
                                '#14D854',
-                        border: `1px solid ${strategy.risk === 'High' ? '#00d4ff40' : 
-                                          strategy.risk === 'Medium' ? '#00a8cc40' : 
+                        border: `1px solid ${strategy.risk === t('strategy_guide.risk_levels.high') ? '#00d4ff40' : 
+                                          strategy.risk === t('strategy_guide.risk_levels.medium') ? '#00a8cc40' : 
                                           '#14D85440'}`,
                         height: 24
                       }} 
@@ -268,10 +230,10 @@ const StrategyGuide = () => {
                 >
                   <Typography variant="subtitle2" color="#14D854" sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
                     <FaCheck color="#14D854" />
-                    Advantages
+                    {t('strategy_guide.advantages')}
                   </Typography>
                   <Box component="ul" sx={{ pl: 2, m: 0 }}>
-                    {strategy.pros.map((pro, i) => (
+                    {Array.isArray(strategy.pros) && strategy.pros.map((pro, i) => (
                       <Typography component="li" key={i} variant="body2" color="rgba(255,255,255,0.8)" sx={{ mb: 0.5 }}>
                         {pro}
                       </Typography>
@@ -290,10 +252,10 @@ const StrategyGuide = () => {
                 >
                   <Typography variant="subtitle2" color="#00d4ff" sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
                     <FaTimes color="#00d4ff" />
-                    Disadvantages
+                    {t('strategy_guide.disadvantages')}
                   </Typography>
                   <Box component="ul" sx={{ pl: 2, m: 0 }}>
-                    {strategy.cons.map((con, i) => (
+                    {Array.isArray(strategy.cons) && strategy.cons.map((con, i) => (
                       <Typography component="li" key={i} variant="body2" color="rgba(255,255,255,0.8)" sx={{ mb: 0.5 }}>
                         {con}
                       </Typography>
@@ -316,7 +278,7 @@ const StrategyGuide = () => {
                 <FaCalculator color="#00a8cc" style={{ marginTop: '3px' }} />
                 <Box>
                   <Typography variant="subtitle2" color="#00a8cc" sx={{ mb: 1 }}>
-                    Example:
+                    {t('strategy_guide.example')}:
                   </Typography>
                   <Typography variant="body2" color="rgba(255,255,255,0.8)">
                     {strategy.example}
@@ -343,11 +305,11 @@ const StrategyGuide = () => {
       >
         <FaExclamationTriangle color="#00d4ff" size={20} style={{ flexShrink: 0 }} />
         <Typography variant="body2" color="rgba(255,255,255,0.8)">
-          <strong>Important:</strong> These strategies can enhance entertainment. Always gamble responsibly and set clear limits for your play.
+          <strong>{t('strategy_guide.important')}:</strong> {t('strategy_guide.important_text')}
         </Typography>
       </Box>
     </Paper>
   );
 };
 
-export default StrategyGuide; 
+export default StrategyGuide;

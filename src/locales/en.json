@@ -491,103 +491,108 @@
     "corner_bet": "Corner {{numbers}}",
     "split_bet": "Split {{numbers}}",
     "street_bet": "Street {{numbers}}",
-    "bet_type_2_to_1_short": "2 To 1 (row {{row}})"
+    "bet_type_2_to_1_short": "2 to 1 ({{row}}rd)"
   },
   "strategy_guide": {
-    "title": "Cosmic Strategy Guide",
-    "description": "Popular betting strategies to enhance your roulette experience. Remember that no strategy can overcome the house edge entirely.",
+    "title": "Strategy Guide",
+    "description": "Explore popular roulette strategies to enhance your gameplay. Understand the risks and rewards of each approach.",
     "effectiveness": "Effectiveness",
     "risk": "Risk",
+    "risk_levels": {
+      "high": "High",
+      "medium": "Medium",
+      "low": "Low"
+    },
     "advantages": "Advantages",
     "disadvantages": "Disadvantages",
     "example": "Example",
     "important": "Important",
-    "important_text": "These strategies can enhance entertainment. Always gamble responsibly and set clear limits for your play.",
+    "important_text": "Remember, no strategy guarantees a win. Always play responsibly and use these strategies as a tool to manage your game and bankroll.",
     "strategies": {
       "martingale": {
-        "title": "Martingale System",
-        "difficulty": "Beginner",
-        "description": "Double your bet after each loss until you win, recovering all previous losses plus a profit equal to the original bet.",
+        "title": "Martingale Strategy",
+        "difficulty": "Easy",
+        "effectiveness": "2",
+        "risk_level": "High",
+        "description": "A high-risk strategy of doubling your bet after each loss, with the goal of recovering all previous losses and gaining a profit with a single win.",
         "pros": [
-          "Simple to understand and implement",
-          "Guaranteed profit on winning streak",
-          "Works well in short sessions"
+          "Simple to understand",
+          "Potential to recover losses quickly in the short term"
         ],
         "cons": [
-          "Requires large bankroll for long losing streaks",
-          "Table limits can prevent continuation",
-          "Risk of rapid bankroll depletion"
+          "Extremely risky, can hit table limits quickly",
+          "Requires a large bankroll"
         ],
-        "example": "Start with $1 bet. Lose, bet $2. Lose, bet $4. Win $4 bet, recover $7 total ($1+2+4) plus $1 profit."
+        "example": "Start with a $1 bet. If you lose, bet $2 on the next spin. If you lose again, bet $4, and so on, until you win."
       },
       "dalembert": {
-        "title": "D'Alembert System",
-        "difficulty": "Beginner",
-        "description": "Increase bet by one unit after loss, decrease by one unit after win. More conservative than Martingale.",
+        "title": "D'Alembert Strategy",
+        "difficulty": "Medium",
+        "effectiveness": "3",
+        "risk_level": "Medium",
+        "description": "A safer alternative to Martingale, where you increase your bet by one unit after a loss and decrease it by one unit after a win.",
         "pros": [
-          "Less aggressive than Martingale",
-          "Easier on bankroll",
-          "Works well for even money bets"
+          "Less risky than Martingale",
+          "Slower bet progression"
         ],
         "cons": [
-          "Slower recovery from losses",
-          "Still vulnerable to long losing streaks",
-          "Profit potential is limited"
+          "Slower to recover losses",
+          "Can be ineffective during long losing streaks"
         ],
-        "example": "Start with $5 bet. Lose, bet $6. Lose, bet $7. Win $7 bet, decrease to $6 next bet."
+        "example": "Start with a $5 bet. If you lose, bet $6 on the next spin. If you win, bet $5 again."
       },
       "fibonacci": {
-        "title": "Fibonacci System",
-        "difficulty": "Intermediate",
-        "description": "Follow the Fibonacci sequence for bet sizing. Move forward two numbers after loss, back one after win.",
+        "title": "Fibonacci Strategy",
+        "difficulty": "Medium",
+        "effectiveness": "3",
+        "risk_level": "Medium",
+        "description": "This strategy uses the Fibonacci sequence (1, 1, 2, 3, 5, 8...) to determine your bet size. After a loss, you move to the next number in the sequence; after a win, you move back two numbers.",
         "pros": [
-          "Mathematically sound sequence",
-          "More conservative than Martingale",
-          "Natural progression feels intuitive"
+          "Safer than Martingale",
+          "Structured betting system"
         ],
         "cons": [
-          "Complex to track during play",
-          "Recovery can take time",
-          "Still requires discipline"
+          "Can be difficult to keep track of",
+          "May take a while to recover losses"
         ],
-        "example": "Sequence: 1, 1, 2, 3, 5, 8, 13... Bet $1, lose, bet $1. Lose, bet $2. Win, go back one: bet $1."
+        "example": "Start with a $1 bet. If you lose, bet 1, 2, 3, 5, and so on. If you win on a $5 bet, move back two steps and bet $2 on the next spin."
       },
       "james_bond": {
         "title": "James Bond Strategy",
-        "difficulty": "Advanced",
-        "description": "Complex strategy covering multiple bet types simultaneously with a $200 bankroll for higher payout potential.",
+        "difficulty": "Easy",
+        "effectiveness": "4",
+        "risk_level": "Medium",
+        "description": "A flat betting strategy that aims to increase your odds of winning by covering more than half of the table on every spin.",
         "pros": [
-          "Covers wide range of numbers",
-          "Higher payout potential",
-          "Interesting and engaging"
+          "High chance of winning (over 67%)",
+          "Easy to execute"
         ],
         "cons": [
-          "Requires large initial bankroll",
-          "Complex bet placement",
-          "Still subject to house edge"
+          "Fixed loss if the outcome is an uncovered number",
+          "Requires a fixed bet size"
         ],
-        "example": "With $200: $140 on high numbers (19-36), $50 on 6-number bet (13-18), $10 on 0 for insurance."
+        "example": "On a total bet of $200: $140 on high numbers (19-36), $50 on six numbers (13-18), and $10 on 0 for insurance."
       },
-      "oscar_grind": {
-        "title": "Oscar's Grind",
-        "difficulty": "Intermediate",
-        "description": "Increase bet by one unit after win, reset to original after reaching profit target. Conservative progression.",
+      "oscars_grind": {
+        "title": "Oscar's Grind Strategy",
+        "difficulty": "Complex",
+        "effectiveness": "4",
+        "risk_level": "Low",
+        "description": "A progressive betting strategy that aims to win a profit of one unit per cycle. After a win, the bet is increased by one unit until a profit of one unit is achieved.",
         "pros": [
-          "Very conservative approach",
-          "Minimal risk of large losses",
-          "Focus on small, consistent wins"
+          "Low-risk and systematic",
+          "Focuses on small, consistent gains"
         ],
         "cons": [
-          "Very slow profit accumulation",
-          "Requires long playing sessions",
-          "Can be frustratingly slow"
+          "Slow progression",
+          "Can be ineffective in choppy games"
         ],
-        "example": "Start with $5 bet. Win, increase to $10. Lose, stay at $10. Win, increase to $15. Reach profit goal, reset to $5."
+        "example": "Start with a $1 bet. If you win, the cycle is over. If you lose, maintain a $1 bet. After your first win, increase your bet to $2 and continue until you have a profit of $1."
       }
     }
   },
   "smart_account_modal": {
-    "title": "Account Information",
+    "title": "Account Info",
     "smart_account": "Smart Account",
     "eoa_account": "EOA Account",
     "advanced_features": "Advanced account features available",
