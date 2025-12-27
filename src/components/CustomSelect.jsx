@@ -1,6 +1,7 @@
 import React from "react";
 import { FaCoins, FaBomb, FaSearch, FaHistory, FaPercentage, FaStopCircle } from "react-icons/fa";
 import { GiMining } from "react-icons/gi";
+import { useTranslation } from "react-i18next";
 
 const CustomSelect = ({
   id,
@@ -10,7 +11,9 @@ const CustomSelect = ({
   className = "",
   label,
   options = [],
+  disabled = false,
 }) => {
+  const { t } = useTranslation();
   console.log("CustomSelect Rendered with props:", { id, name, value, options });
   // Helper function to determine icon based on field name
   const getIconForField = (fieldName) => {
@@ -36,16 +39,21 @@ const CustomSelect = ({
 
   // Format value display for specific fields
   const formatOptionDisplay = (option, fieldName) => {
+    const optionValue = typeof option === 'object' ? option.value : option;
+    const optionLabel = typeof option === 'object' ? option.label : option;
+
     if (fieldName === 'betAmount') {
-      return `${option.toLocaleString()} OCT`;
+      return t('common.currency_oct', { amount: optionValue.toLocaleString() });
     } else if (fieldName === 'mines') {
-      return `${option} ${option === 1 ? 'Mine' : 'Mines'}`;
+      return t('mines_form.mine_count', { count: optionValue });
     } else if (fieldName === 'tilesToReveal') {
-      return `${option} ${option === 1 ? 'Tile' : 'Tiles'}`;
+      return t('mines_form.tile_count', { count: optionValue });
     } else if (fieldName.includes('stop')) {
-      return `${option.toLocaleString()} OCT`;
+      return t('common.currency_oct', { amount: optionValue.toLocaleString() });
+    } else if (typeof option === 'object') {
+      return optionLabel;
     } else {
-      return option;
+      return optionLabel;
     }
   };
 
@@ -76,20 +84,23 @@ const CustomSelect = ({
               backgroundPosition: "right 1rem center",
               backgroundSize: "1em" 
             }}
+            disabled={disabled}
           >
             <option value="" disabled className="bg-[#190026] text-white/70">
-              Select {label}
+              {t('mines_form.select_placeholder', { label })}
             </option>
-            {options.map((option, index) => (
-              console.log("Rendering option:", option),
-              <option 
-                key={index} 
-                value={option} 
-                className="bg-[#190026] text-white py-2"
-              >
-                {formatOptionDisplay(option, name)}
-              </option>
-            ))}
+            {options.map((option, index) => {
+              const optionValue = typeof option === 'object' ? option.value : option;
+              return (
+                <option 
+                  key={index} 
+                  value={optionValue} 
+                  className="bg-[#190026] text-white py-2"
+                >
+                  {formatOptionDisplay(option, name)}
+                </option>
+              );
+            })}
           </select>
         </div>
       </div>

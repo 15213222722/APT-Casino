@@ -95,7 +95,8 @@
   },
   "common": {
     "loading": "加载中...",
-    "processing": "处理中..."
+    "processing": "处理中...",
+    "currency_oct": "{{amount}} OCT"
   },
   "wallet": {
     "connect_button": "连接钱包"
@@ -981,6 +982,9 @@
     "increase_bet_by_50": "增加投注 50%",
     "increase_bet_by_100": "增加投注 100%",
     "ai_assist_label": "AI 辅助",
-    "ai_assist_placeholder": "启用 AI 辅助选择图块"
+    "ai_assist_placeholder": "启用 AI 辅助选择图块",
+    "mine_count": "{{count}} 个地雷",
+    "tile_count": "{{count}} 个图块",
+    "select_placeholder": "选择 {{label}}"
   }
 }

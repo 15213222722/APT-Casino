@@ -95,7 +95,8 @@
   },
   "common": {
     "loading": "Loading...",
-    "processing": "Processing..."
+    "processing": "Processing...",
+    "currency_oct": "{{amount}} OCT"
   },
   "wallet": {
     "connect_button": "Connect Wallet"
@@ -904,6 +905,9 @@
     "increase_bet_by_50": "Increase bet by 50%",
     "increase_bet_by_100": "Increase bet by 100%",
     "ai_assist_label": "AI Assist",
-    "ai_assist_placeholder": "Enable AI to assist with tile selection"
+    "ai_assist_placeholder": "Enable AI to assist with tile selection",
+    "mine_count": "{{count}} Mines",
+    "tile_count": "{{count}} Tiles",
+    "select_placeholder": "Select {{label}}"
   }
 }
