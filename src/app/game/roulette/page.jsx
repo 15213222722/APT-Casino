@@ -1772,6 +1772,11 @@ export default function GameRoulette() {
       e.stopPropagation();
     }
 
+    if (!revert && newVal > 0 && newVal < 0.001) {
+      alert("Minimum bet must be at least 0.001");
+      return;
+    }
+
     // --- Bet FX trigger (doesn't affect logic) ---
     // only for real placement (not revert) and positive amount
     if (!revert && typeof newVal === 'number' && newVal > 0) {
