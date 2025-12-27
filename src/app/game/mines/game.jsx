@@ -56,13 +56,30 @@ const combinations = (n, k) => {
   return res;
 };
 
+// Function to get a dynamic house edge based on the number of mines
+const getDynamicHouseEdge = (minesCount) => {
+  // Higher edge for very low mine counts to balance risk
+  if (minesCount <= 1) return 0.50; // 10% edge for 1 mine
+  if (minesCount <= 2) return 0.45; // 8% edge for 2 mines
+  if (minesCount <= 3) return 0.4; // 6% edge for 3 mines
+  if (minesCount <= 4) return 0.35; // 4% edge for 4 mines
+  if (minesCount <= 5) return 0.30;
+  if (minesCount <= 6) return 0.25;
+  if (minesCount <= 7) return 0.2;
+  if (minesCount <= 8) return 0.15;
+  if (minesCount <= 9) return 0.1;
+  // Standard edge for 5 or more mines
+  return 0.03; // 3% standard edge
+};
+
 // New multiplier calculation function with house edge
-const calculateMultiplier = (revealedCount, minesCount, gridSize, houseEdge = 0.03) => {
+const calculateMultiplier = (revealedCount, minesCount, gridSize) => {
   if (revealedCount === 0) {
     return 1.0;
   }
   const totalTiles = gridSize * gridSize;
   const safeTiles = totalTiles - minesCount;
+  const houseEdge = getDynamicHouseEdge(minesCount);
 
   if (revealedCount > safeTiles) {
     return 0; // Should not happen in a normal game flow
