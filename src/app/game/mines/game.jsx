@@ -888,29 +888,6 @@ const Game = ({ betSettings = {}, onGameStatusChange, onGameComplete }) => {
             <HiOutlineInformationCircle className="text-white/70 text-xl" />
           </button>
         </div>
-        
-        <div className="flex items-center">
-          <div className="text-sm text-white/70 mr-2">{t('mines_game.mines_label')}:</div>
-          <div className="flex items-center bg-gray-900/50 rounded overflow-hidden">
-            <button 
-              className="px-2 py-1 bg-red-900/30 hover:bg-red-900/50 text-white disabled:opacity-50"
-              onClick={() => adjustMinesCount(-1)}
-              disabled={isPlaying || hasPlacedBet || minesCount <= 1}
-            >
-              -
-            </button>
-            <div className="px-3 py-1 font-medium text-white">
-              {minesCount}
-            </div>
-            <button 
-              className="px-2 py-1 bg-green-900/30 hover:bg-green-900/50 text-white disabled:opacity-50"
-              onClick={() => adjustMinesCount(1)}
-              disabled={isPlaying || hasPlacedBet || minesCount >= 24}
-            >
-              +
-            </button>
-          </div>
-        </div>
       </div>
       
       {/* Game Stats */}
