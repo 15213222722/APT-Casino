@@ -5,72 +5,72 @@ import { FaChartPie, FaInfoCircle, FaThumbsUp, FaDice, FaQuestion, FaChevronRigh
 import Grid from "@mui/material/Unstable_Grid2";
 import { useTranslation } from 'react-i18next';
 
-const probabilityData = [
-  {
-    type: 'Red/Black',
-    probability: 48.6,
-    odds: '1:1',
-    color: '#00d4ff'
-  },
-  {
-    type: 'Odd/Even',
-    probability: 48.6,
-    odds: '1:1',
-    color: '#0066ff'
-  },
-  {
-    type: 'High/Low',
-    probability: 48.6,
-    odds: '1:1',
-    color: '#7209B7'
-  },
-  {
-    type: 'Dozens',
-    probability: 32.4,
-    odds: '2:1',
-    color: '#4361EE'
-  },
-  {
-    type: 'Columns',
-    probability: 32.4,
-    odds: '2:1',
-    color: '#4CC9F0'
-  },
-  {
-    type: 'Six Line',
-    probability: 16.2,
-    odds: '5:1',
-    color: '#F72585'
-  },
-  {
-    type: 'Corner',
-    probability: 10.8,
-    odds: '8:1',
-    color: '#3A0CA3'
-  },
-  {
-    type: 'Street',
-    probability: 8.1,
-    odds: '11:1',
-    color: '#4895EF'
-  },
-  {
-    type: 'Split',
-    probability: 5.4,
-    odds: '17:1',
-    color: '#F94144'
-  },
-  {
-    type: 'Straight Up',
-    probability: 2.7,
-    odds: '35:1',
-    color: '#14D854'
-  }
-];
 
 const WinProbabilities = () => {
   const [sortBy, setSortBy] = useState('probability'); // or 'odds'
   const { t } = useTranslation();
+  const probabilityData = [
+    {
+      type: t('win_probabilities.bet_types.red_black.name'),
+      probability: 48.6,
+      odds: '1:1',
+      color: '#00d4ff'
+    },
+    { 
+      type: t('win_probabilities.bet_types.odd_even.name'),
+      probability: 48.6,
+      odds: '1:1',
+      color: '#0066ff'
+    },
+    {
+      type: t('win_probabilities.bet_types.high_low.name'),
+      probability: 48.6,
+      odds: '1:1',
+      color: '#7209B7'
+    },
+    {
+      type: t('win_probabilities.bet_types.dozen.name'),
+      probability: 32.4,
+      odds: '2:1',
+      color: '#4361EE'
+    },
+    {
+      type: t('win_probabilities.bet_types.column.name'),
+      probability: 32.4,
+      odds: '2:1',
+      color: '#4CC9F0'
+    },
+    {
+      type: t('win_probabilities.bet_types.six_line.name'),
+      probability: 16.2,
+      odds: '5:1',
+      color: '#F72585'
+    },
+    {
+      type: t('win_probabilities.bet_types.corner.name'),
+      probability: 10.8,
+      odds: '8:1',
+      color: '#3A0CA3'
+    },
+    {
+      type: t('win_probabilities.bet_types.street.name'),
+      probability: 8.1,
+      odds: '11:1',
+      color: '#4895EF'
+    },
+    {
+      type: t('win_probabilities.bet_types.split.name'),
+      probability: 5.4,
+      odds: '17:1',
+      color: '#F94144'
+    },
+    {
+      type: t('win_probabilities.bet_types.straight_up.name'),
+      probability: 2.7,
+      odds: '35:1',
+      color: '#14D854'
+    }
+  ];
   
   const sortedData = [...probabilityData].sort((a, b) => {
     if (sortBy === 'probability') {
