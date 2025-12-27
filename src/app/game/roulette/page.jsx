@@ -1168,8 +1168,8 @@ export default function GameRoulette() {
     // Calculate real statistics from betting history
     const gameStatistics = {
       totalBets: bettingHistory.length,
-      totalVolume: bettingHistory.reduce((sum, bet) => sum + parseFloat(bet.amount || 0), 0),
-      maxWin: bettingHistory.length > 0 ? Math.max(...bettingHistory.map(bet => parseFloat(bet.payout || 0))) : '0.00000'
+      totalVolume: parseFloat(bettingHistory.reduce((sum, bet) => sum + parseFloat(bet.amount || 0), 0)).toFixed(3),
+      maxWin: bettingHistory.length > 0 ? Math.max(...bettingHistory.map(bet => parseFloat(bet.payout || 0).toFixed(3))) : '0.000'
     };
 
     return (
