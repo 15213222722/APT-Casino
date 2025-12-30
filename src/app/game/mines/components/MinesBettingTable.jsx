@@ -5,13 +5,16 @@ import { motion, AnimatePresence } from "framer-motion";
 import { FaTable, FaGem, FaBomb, FaTrophy, FaInfoCircle, FaChevronRight, FaChevronDown, FaChartLine, FaCalculator, FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { GiMining, GiTreasureMap, GiDiamonds, GiGoldBar, GiCrystalGrowth } from "react-icons/gi";
 import { HiOutlineLightningBolt } from "react-icons/hi";
+import { useTranslation, Trans } from 'react-i18next';
 
 const MinesBettingTable = ({ bettingTableData }) => {
+  const { t } = useTranslation();
+
   if (!bettingTableData) {
     console.error('MinesBettingTable: bettingTableData prop is required');
     return (
       <div className="bg-gradient-to-br from-red-900/20 to-red-800/10 rounded-xl border border-red-800/30 p-4 mt-6 shadow-lg">
-        <div className="text-red-400 font-medium">Error: Betting table data not available</div>
+        <div className="text-red-400 font-medium">{t('mines_betting_table.error_no_data')}</div>
       </div>
     );
   }
@@ -43,24 +46,24 @@ const MinesBettingTable = ({ bettingTableData }) => {
   // Strategy tips
   const strategyTips = [
     {
-      title: "Low Risk",
-      description: "Select 1-3 mines for safer play with modest returns.",
+      title: t('mines_betting_table.tip_low_risk_title'),
+      description: t('mines_betting_table.tip_low_risk_desc'),
       icon: <FaTrophy className="text-yellow-400" />,
       color: "from-green-900/40 to-green-800/20",
       borderColor: "green-800/30",
       hoverColor: "from-green-800/40 to-green-700/20"
     },
     {
-      title: "Balanced",
-      description: "5 mines offers a good risk/reward ratio for most players.",
+      title: t('mines_betting_table.tip_balanced_title'),
+      description: t('mines_betting_table.tip_balanced_desc'),
       icon: <FaGem className="text-blue-400" />,
       color: "from-blue-900/40 to-blue-800/20",
       borderColor: "blue-800/30",
       hoverColor: "from-blue-800/40 to-blue-700/20"
     },
     {
-      title: "High Risk",
-      description: "10+ mines for experienced players seeking massive multipliers.",
+      title: t('mines_betting_table.tip_high_risk_title'),
+      description: t('mines_betting_table.tip_high_risk_desc'),
       icon: <FaBomb className="text-red-400" />,
       color: "from-red-900/40 to-red-800/20",
       borderColor: "red-800/30",
@@ -72,7 +75,7 @@ const MinesBettingTable = ({ bettingTableData }) => {
   if (!bettingTableData.table || !bettingTableData.table[activeTab]) {
     return (
       <div className="bg-gradient-to-br from-red-900/20 to-red-800/10 rounded-xl border border-red-800/30 p-4 mt-6 shadow-lg">
-        <div className="text-red-400 font-medium">Error: Invalid betting table data structure</div>
+        <div className="text-red-400 font-medium">{t('mines_betting_table.error_invalid_structure')}</div>
       </div>
     );
   }
@@ -88,7 +91,7 @@ const MinesBettingTable = ({ bettingTableData }) => {
           <div className="p-2 bg-gradient-to-br from-purple-900/40 to-purple-700/10 rounded-lg shadow-lg shadow-purple-900/10 border border-purple-800/20 mr-3">
             <FaTable className="text-purple-300" />
           </div>
-          {bettingTableData.title || "Mines Payouts"}
+          {bettingTableData.title || t('mines_betting_table.title')}
         </h3>
         
         <button
@@ -96,13 +99,13 @@ const MinesBettingTable = ({ bettingTableData }) => {
           className="flex items-center bg-gradient-to-r from-purple-900/30 to-purple-800/20 px-3 py-1.5 rounded-full text-white/80 text-sm font-medium border border-purple-800/30 hover:from-purple-800/40 hover:to-purple-700/30 transition-colors shadow-md shadow-purple-900/10"
         >
           <GiTreasureMap className="mr-1.5 text-yellow-400" />
-          Tips {showTips ? <FaChevronDown className="ml-1.5" /> : <FaChevronRight className="ml-1.5" />}
+          {t('mines_betting_table.tips_button')} {showTips ? <FaChevronDown className="ml-1.5" /> : <FaChevronRight className="ml-1.5" />}
         </button>
       </div>
       
       {/* Description */}
       <p className="text-white/70 font-sans text-sm mb-6 max-w-3xl">
-        {bettingTableData.description || "Your multiplier increases as you reveal more safe tiles. Higher mine counts offer larger rewards."}
+        {bettingTableData.description || t('mines_betting_table.description')}
       </p>
       
       {/* Strategy Tips Section */}
@@ -116,7 +119,7 @@ const MinesBettingTable = ({ bettingTableData }) => {
           >
             <div className="bg-gradient-to-r from-purple-900/20 to-blue-900/10 border border-purple-800/30 rounded-lg p-4 shadow-lg shadow-purple-900/5">
               <h4 className="text-white font-semibold mb-3 flex items-center font-display">
-                <GiTreasureMap className="mr-2 text-yellow-400" /> Strategy Guide
+                <GiTreasureMap className="mr-2 text-yellow-400" /> {t('mines_betting_table.strategy_guide_title')}
               </h4>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {strategyTips.map((tip, index) => (
@@ -143,12 +146,14 @@ const MinesBettingTable = ({ bettingTableData }) => {
               
               <div className="mt-4 p-3 bg-black/30 rounded-lg border border-gray-800/50 shadow-inner">
                 <h5 className="text-white flex items-center text-sm font-medium mb-2 font-display">
-                  <FaCalculator className="mr-2 text-blue-400" /> Probability Insight
+                  <FaCalculator className="mr-2 text-blue-400" /> {t('mines_betting_table.probability_insight_title')}
                 </h5>
                 <p className="text-white/70 text-xs font-sans">
-                  Every game of Mines is statistically independent. This means the probability of hitting a mine 
-                  on any given tile is: <span className="font-mono text-green-400 bg-black/50 px-1.5 py-0.5 rounded">mines / (total tiles - revealed tiles)</span>. 
-                  This probability increases with each safe tile you reveal.
+                  <Trans i18nKey="mines_betting_table.probability_insight_desc">
+                    Every game of Mines is statistically independent. This means the probability of hitting a mine 
+                    on any given tile is: <span className="font-mono text-green-400 bg-black/50 px-1.5 py-0.5 rounded">mines / (total tiles - revealed tiles)</span>. 
+                    This probability increases with each safe tile you reveal.
+                  </Trans>
                 </p>
               </div>
             </div>
@@ -181,7 +186,7 @@ const MinesBettingTable = ({ bettingTableData }) => {
               whileTap={{ y: 0 }}
             >
               <FaBomb className="mr-2" />
-              {item.mines} {item.mines === 1 ? 'Mine' : 'Mines'}
+              {item.mines} {item.mines === 1 ? t('mines_betting_table.mine') : t('mines_betting_table.mines')}
             </motion.button>
           ))}
         </div>
@@ -190,9 +195,9 @@ const MinesBettingTable = ({ bettingTableData }) => {
       {/* Table Content */}
       <div className="bg-black/40 rounded-xl p-5 border border-purple-900/30 shadow-inner">
         <div className="grid grid-cols-3 gap-3 mb-4 text-white/80 text-sm font-medium border-b border-gray-800/50 pb-3">
-          <div className="font-display">Tiles Revealed</div>
-          <div className="font-display">Multiplier</div>
-                          <div className="font-display">For 1 OCT</div>
+          <div className="font-display">{t('mines_betting_table.header_tiles')}</div>
+          <div className="font-display">{t('mines_betting_table.header_multiplier')}</div>
+          <div className="font-display">{t('mines_betting_table.header_payout')}</div>
         </div>
         
         <motion.div
@@ -263,7 +268,7 @@ const MinesBettingTable = ({ bettingTableData }) => {
                     >
                       <div className="flex items-center">
                         <FaChartLine className="mr-1.5 text-blue-400" />
-                        <span>Chance: {(100 - (bettingTableData.table[activeTab].mines * 100 / (25 - tile.revealed))).toFixed(1)}%</span>
+                        <span>{t('mines_betting_table.chance')}: {(100 - (bettingTableData.table[activeTab].mines * 100 / (25 - tile.revealed))).toFixed(1)}%</span>
                       </div>
                     </motion.div>
                   )}
@@ -278,11 +283,13 @@ const MinesBettingTable = ({ bettingTableData }) => {
       <div className="mt-5 text-white/80 text-sm flex items-start p-4 bg-purple-900/20 rounded-lg border border-purple-800/30 shadow-md">
         <HiOutlineLightningBolt className="mt-0.5 mr-3 text-purple-400 flex-shrink-0 text-xl" />
         <span className="font-sans">
-          The multiplier formula is based on probability: <span className="text-xs bg-black/60 rounded px-2 py-1 font-mono">multiplier = totalTiles / (totalTiles - mines - revealed)</span>. Higher risk leads to exponentially higher rewards.
+          <Trans i18nKey="mines_betting_table.formula_info">
+            The multiplier formula is based on probability: <span className="text-xs bg-black/60 rounded px-2 py-1 font-mono">multiplier = totalTiles / (totalTiles - mines - revealed)</span>. Higher risk leads to exponentially higher rewards.
+          </Trans>
         </span>
       </div>
     </div>
   );
 };
 
-export default MinesBettingTable; 
+export default MinesBettingTable;

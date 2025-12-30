@@ -1044,5 +1044,26 @@
     "pro_tip_title": "专业提示：",
     "pro_tip_description": "根据您的游戏风格平衡风险与回报。",
     "ev_tip": "正的期望值 (EV) 表明长期回报有利，但请记住，短期方差可能很大。"
+  },
+  "mines_betting_table": {
+    "error_no_data": "错误：投注表数据不可用",
+    "error_invalid_structure": "错误：无效的投注表数据结构",
+    "tips_button": "提示",
+    "strategy_guide_title": "策略指南",
+    "tip_low_risk_title": "低风险",
+    "tip_low_risk_desc": "选择1-3个地雷进行更安全的游戏，回报适中。",
+    "tip_balanced_title": "均衡",
+    "tip_balanced_desc": "5个地雷为大多数玩家提供了良好的风险/回报比。",
+    "tip_high_risk_title": "高风险",
+    "tip_high_risk_desc": "10个以上地雷，适合寻求巨大倍数的经验丰富的玩家。",
+    "probability_insight_title": "概率洞察",
+    "probability_insight_desc": "每局扫雷游戏在统计上都是独立的。这意味着在任何给定方块上踩到地雷的概率是：<1>地雷数 / (总方块数 - 已揭示方块数)</1>。这个概率会随着您揭示的每个安全方块而增加。",
+    "mine": "地雷",
+    "mines": "地雷",
+    "header_tiles": "揭示的方块",
+    "header_multiplier": "倍数",
+    "header_payout": "对于 1 OCT",
+    "chance": "机会",
+    "formula_info": "倍数公式基于概率：<1>倍数 = 总方块数 / (总方块数 - 地雷数 - 已揭示数)</1>。更高的风险会导致指数级更高的回报。"
   }
 }

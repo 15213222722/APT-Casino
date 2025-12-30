@@ -967,5 +967,26 @@
     "pro_tip_title": "Pro tip:",
     "pro_tip_description": "Balance risk vs. reward based on your playing style.",
     "ev_tip": "A positive expected value (EV) suggests favorable long-term returns, but remember that short-term variance can be significant."
+  },
+  "mines_betting_table": {
+    "error_no_data": "Error: Betting table data not available",
+    "error_invalid_structure": "Error: Invalid betting table data structure",
+    "tips_button": "Tips",
+    "strategy_guide_title": "Strategy Guide",
+    "tip_low_risk_title": "Low Risk",
+    "tip_low_risk_desc": "Select 1-3 mines for safer play with modest returns.",
+    "tip_balanced_title": "Balanced",
+    "tip_balanced_desc": "5 mines offers a good risk/reward ratio for most players.",
+    "tip_high_risk_title": "High Risk",
+    "tip_high_risk_desc": "10+ mines for experienced players seeking massive multipliers.",
+    "probability_insight_title": "Probability Insight",
+    "probability_insight_desc": "Every game of Mines is statistically independent. This means the probability of hitting a mine on any given tile is: <1>mines / (total tiles - revealed tiles)</1>. This probability increases with each safe tile you reveal.",
+    "mine": "Mine",
+    "mines": "Mines",
+    "header_tiles": "Tiles Revealed",
+    "header_multiplier": "Multiplier",
+    "header_payout": "For 1 OCT",
+    "chance": "Chance",
+    "formula_info": "The multiplier formula is based on probability: <1>multiplier = totalTiles / (totalTiles - mines - revealed)</1>. Higher risk leads to exponentially higher rewards."
   }
 }
