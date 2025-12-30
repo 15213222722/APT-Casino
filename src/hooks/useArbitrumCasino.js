@@ -26,7 +26,7 @@ const formatEthAmount = (amount) => {
   return (parseFloat(amount) / 100000000).toFixed(8);
 };
 
-const parseMON amount = (amount) => {
+const parseMONamount = (amount) => {
   // Mock parsing for demo
   return (parseFloat(amount) * 100000000).toString();
 };
@@ -128,7 +128,7 @@ export const useArbitrumCasino = () => {
       setLoading(true);
       setError(null);
 
-      const payload = CasinoGames.roulette.placeBet(betType, betValue, parseMON amount(amount), numbers);
+      const payload = CasinoGames.roulette.placeBet(betType, betValue, parseMONamount(amount), numbers);
       
       // Mock transaction for demo
       const mockTxHash = '0x' + Math.random().toString(16).substr(2, 64);
@@ -166,7 +166,7 @@ export const useArbitrumCasino = () => {
       setLoading(true);
       setError(null);
 
-      const payload = CasinoGames.mines.startGame(parseMON amount(betAmount), minesCount, tilesToreveal);
+      const payload = CasinoGames.mines.startGame(parseMONamount(betAmount), minesCount, tilesToreveal);
       
       // Mock transaction for demo
       const mockTxHash = '0x' + Math.random().toString(16).substr(2, 64);
@@ -248,7 +248,7 @@ export const useArbitrumCasino = () => {
       setLoading(true);
       setError(null);
 
-      const payload = CasinoGames.wheel.spin(parseMON amount(betAmount), segments);
+      const payload = CasinoGames.wheel.spin(parseMONamount(betAmount), segments);
       
       // Mock transaction for demo
       const mockTxHash = '0x' + Math.random().toString(16).substr(2, 64);
@@ -317,6 +317,6 @@ export const useArbitrumCasino = () => {
     
     // Utility functions
     formatEthAmount,
-    parseMON amount,
+    parseMONamount,
   };
 };

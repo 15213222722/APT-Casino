@@ -259,7 +259,8 @@ export default function Mines() {
             result.gameId || `mines_${Date.now()}`, // gameId
             result.tileIndex || 0, // tileIndex
             result.isMine || false, // isMine
-            parseFloat(result.multiplier || 1.0) // currentMultiplier
+            parseFloat(result.multiplier || 1.0), // currentMultiplier
+            result.betAmount || '0' // betAmount
           ).then((txHash) => {
             console.log('✅ ONE CHAIN: Mines tile reveal logged successfully');
             console.log('📋 ONE CHAIN Transaction Hash:', txHash);

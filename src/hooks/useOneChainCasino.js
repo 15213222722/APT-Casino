@@ -244,12 +244,12 @@ export const useOneChainCasino = () => {
       
       // Send transaction to backend API for signing with treasury wallet
       console.log('🔐 ONE CHAIN: Sending to backend for treasury signing...');
-      
+      console.log("11111:",txData.data.module);
       const response = await fetch('/api/onechain-log-game', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-        },
+        }, 
         body: JSON.stringify({
           packageId: txData.data.packageObjectId,
           module: txData.data.module,
@@ -293,9 +293,10 @@ export const useOneChainCasino = () => {
    * @param {number} tileIndex - Index of tile to reveal
    * @param {boolean} isMine - Whether the revealed tile is a mine
    * @param {number} currentMultiplier - Current multiplier after reveal
+   * @param {string} betAmount - Original bet amount in OCT
    * @returns {Promise<string>} Transaction hash
    */
-  const revealMinesTile = useCallback(async (gameId, tileIndex, isMine = false, currentMultiplier = 1.0) => {
+  const revealMinesTile = useCallback(async (gameId, tileIndex, isMine = false, currentMultiplier = 1.0, betAmount = '0') => {
     if (!connected || !account) {
       throw new Error('Wallet not connected');
     }
@@ -304,12 +305,14 @@ export const useOneChainCasino = () => {
       setLoading(true);
       setError(null);
 
+      const betAmountWei = parseOCTAmount(betAmount);
+
       // Create game data for tile reveal with all required fields
       const gameData = {
         gameType: 'MINES',
         playerAddress: account,
-        betAmount: '0', // No additional bet
-        payoutAmount: '0',
+        betAmount: betAmountWei, // Include original bet amount
+        payoutAmount: '0', // No payout on reveal
         gameConfig: {
           gameId,
           action: 'reveal'
@@ -335,7 +338,10 @@ export const useOneChainCasino = () => {
       
       // Send transaction to backend API for signing with treasury wallet
       console.log('🔐 ONE CHAIN: Sending to backend for treasury signing...');
-      
+      console.log("22222:",txData.data.module);
+      console.log("33333:",txData.data.function);
+      console.log("44444:",txData.data.arguments);
+      console.log("55555:",txData.data.typeArguments);
       const response = await fetch('/api/onechain-log-game', {
         method: 'POST',
         headers: {
@@ -351,7 +357,7 @@ export const useOneChainCasino = () => {
       });
 
       const result = await response.json();
-
+      console.log("66666:",result);
       if (!response.ok || !result.success) {
         throw new Error(result.error || 'Failed to log game to OneChain');
       }
@@ -681,7 +687,7 @@ export const useOneChainCasino = () => {
     try {
       // Query game history from One Chain
       const history = await oneChainClientService.queryGameHistory(account, limit);
-      
+      console.log('Fetched game history from One Chain:', history);
       // Filter by game type if specified
       if (gameType) {
         return history.filter(game => game.gameType === gameType);

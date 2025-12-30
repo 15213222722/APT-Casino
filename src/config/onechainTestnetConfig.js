@@ -43,7 +43,7 @@ export const ONECHAIN_TESTNET_TOKENS = {
   OCT: {
     symbol: 'OCT',
     name: 'One Chain Token',
-    decimals: parseInt(process.env.NEXT_PUBLIC_OCT_DECIMALS || '18', 10),
+    decimals: 9,
     address: 'native',
     isNative: true,
     icon: '⛓️',

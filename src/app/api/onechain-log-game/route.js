@@ -30,11 +30,10 @@ const suiClient = new SuiClient({
 export async function POST(request) {
   try {
     const body = await request.json();
+    console.log('ONE CHAIN API: Logging game...', body);
     const { packageId, module, functionName, arguments: args, typeArguments = [] } = body;
 
-    console.log('🎮 ONE CHAIN API: Logging game result...');
-    console.log('📦 Package:', packageId);
-    console.log('🔧 Function:', `${module}::${functionName}`);
+    
 
     // Validate required fields
     if (!packageId || !module || !functionName || !args) {
@@ -46,6 +45,7 @@ export async function POST(request) {
 
     // Get treasury private key from environment
     const treasuryPrivateKey = process.env.ONECHAIN_TREASURY_PRIVATE_KEY;
+    console.log('🔑 Treasury private key found:', treasuryPrivateKey);
     if (!treasuryPrivateKey) {
       console.error('❌ ONE CHAIN API: Treasury private key not configured');
       return NextResponse.json({
@@ -109,6 +109,7 @@ export async function POST(request) {
     
     // Convert arguments to proper format
     const txArguments = args.map((arg, index) => {
+      console.log(`🔧 Processing argument[${index}]:`, arg);
       // Last argument is Clock object (0x6)
       if (index === args.length - 1 && arg === '0x6') {
         return tx.object(arg);
@@ -130,9 +131,9 @@ export async function POST(request) {
       }
       
       // For other types
-      return tx.pure(arg);
+      return tx.pure(arg); 
     });
-
+    
     tx.moveCall({
       target: `${packageId}::${module}::${functionName}`,
       arguments: txArguments,

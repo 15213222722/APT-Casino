@@ -1,15 +1,67 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaHistory, FaStar, FaTrophy, FaChartBar, FaChartLine, FaBomb, FaSort, FaSortUp, FaSortDown, FaExternalLinkAlt } from "react-icons/fa";
 import { GiMining, GiDiamonds, GiTreasureMap, GiGoldBar, GiDiamondHard, GiDiamondTrophy } from "react-icons/gi";
 import { HiClock, HiOutlineLightningBolt } from "react-icons/hi";
 import oneChainClientService from '../../../../services/OneChainClientService.js';
 import { useTranslation } from 'react-i18next';
+import { useOneChainCasino } from "@/hooks/useOneChainCasino.js";
+import { useCurrentAccount } from "@mysten/dapp-kit";
 
-const MinesHistory = ({ gameHistory = [], userStats = {} }) => {
+const MinesHistory = ({ userStats = {} }) => {
   const { t } = useTranslation();
+  const [history, setHistory] = useState([]);
+  const [error, setError] = useState(null);
+  const { getGameHistory, formatOCTAmount } = useOneChainCasino();
+  const currentAccount = useCurrentAccount();
+  const isConnected = !!currentAccount;
+
+  useEffect(() => {
+    const fetchHistory = async () => {
+      if (getGameHistory && isConnected && formatOCTAmount) {
+        try {
+          // Assuming gameType 0 is for Mines. Adjust if necessary.
+          const onChainHistory = await getGameHistory(2, 50); 
+          console.log("Fetched Mines history from chain:", onChainHistory);
+
+          const formattedHistory = onChainHistory.map(item => {
+            const betAmount = parseFloat(formatOCTAmount(item.betAmount || '0'));
+            const payoutAmount = parseFloat(formatOCTAmount(item.payoutAmount || '0'));
+            console.log("gameId:",item.gameConfig?.gameId.substring(6));
+            return {
+              id: item.gameConfig?.gameId.substring(6),
+              mines: item.gameConfig?.minesCount || 0,
+              bet: `${betAmount.toFixed(4)} OCT`,
+              multiplier: `${item.resultData.currentMultiplier}x`,
+              payout: `${payoutAmount.toFixed(4)} OCT`,
+              time: new Date(item.timestamp).toLocaleString(),
+              timestamp: item.timestamp, // Keep original timestamp for sorting
+              outcome: item.resultData.isWin ? 'win' : 'loss',
+              onechainTxHash: item.transactionHash,
+              entropyProof: {
+                transactionHash: item.entropyTxHash,
+                // Assuming explorerUrl might be part of the data in the future
+              },
+            };
+          });
+          
+          setHistory(formattedHistory.sort((a, b) => b.timestamp - a.timestamp));
+
+        } catch (error) {
+          console.error("Failed to fetch Mines betting history:", error);
+          setError("Failed to load past game history.");
+        }
+      }
+    };
+
+    fetchHistory();
+    // Fetch history every 30 seconds
+    const interval = setInterval(fetchHistory, 30000); 
+    return () => clearInterval(interval);
+  }, [getGameHistory, isConnected, formatOCTAmount]);
+
   // State for sorting
   const [sortField, setSortField] = useState(null);
   const [sortDirection, setSortDirection] = useState('asc');
@@ -48,9 +100,6 @@ const MinesHistory = ({ gameHistory = [], userStats = {} }) => {
 
   const stats = { ...defaultStats, ...userStats };
 
-  // Use real game history data from props
-  const history = gameHistory.length > 0 ? gameHistory : [];
-  
   // Handle sorting
   const handleSort = (field) => {
     if (sortField === field) {
