@@ -6,8 +6,10 @@ import { FaHistory, FaStar, FaTrophy, FaChartBar, FaChartLine, FaBomb, FaSort, F
 import { GiMining, GiDiamonds, GiTreasureMap, GiGoldBar, GiDiamondHard, GiDiamondTrophy } from "react-icons/gi";
 import { HiClock, HiOutlineLightningBolt } from "react-icons/hi";
 import oneChainClientService from '../../../../services/OneChainClientService.js';
+import { useTranslation } from 'react-i18next';
 
 const MinesHistory = ({ gameHistory = [], userStats = {} }) => {
+  const { t } = useTranslation();
   // State for sorting
   const [sortField, setSortField] = useState(null);
   const [sortDirection, setSortDirection] = useState('asc');
@@ -102,12 +104,12 @@ const MinesHistory = ({ gameHistory = [], userStats = {} }) => {
               <FaHistory className="text-purple-400" />
             </div>
             <span className="bg-gradient-to-r from-white to-purple-300 bg-clip-text text-transparent">
-              Your Mines History
+              {t('mines_history.title')}
             </span>
           </h3>
           <div className="bg-gradient-to-r from-purple-900/30 to-blue-900/20 px-3 py-1.5 rounded-full text-xs border border-purple-800/30 shadow-inner">
             <span className="font-medium text-white/90">{history.length}</span>
-            <span className="text-white/70"> Games</span>
+            <span className="text-white/70"> {t('mines_history.games_count', { count: '' })}</span>
           </div>
         </div>
         
@@ -135,7 +137,7 @@ const MinesHistory = ({ gameHistory = [], userStats = {} }) => {
           whileHover="hover"
           variants={cardHoverVariants}
         >
-          <div className="text-xs text-white/60 mb-1 font-sans">Games Played</div>
+          <div className="text-xs text-white/60 mb-1 font-sans">{t('mines_history.stats.games_played')}</div>
           <div className="text-sm font-semibold text-white flex items-center mt-1">
             <FaChartBar className="mr-1.5 text-blue-400" /> 
             <span className="font-display">{stats.totalPlayed}</span>
@@ -147,7 +149,7 @@ const MinesHistory = ({ gameHistory = [], userStats = {} }) => {
           whileHover="hover"
           variants={cardHoverVariants}
         >
-          <div className="text-xs text-white/60 mb-1 font-sans">Games Won</div>
+          <div className="text-xs text-white/60 mb-1 font-sans">{t('mines_history.stats.games_won')}</div>
           <div className="text-sm font-semibold text-white flex items-center mt-1">
             <FaTrophy className="mr-1.5 text-yellow-400" /> 
             <span className="font-display">{stats.totalWon}</span>
@@ -159,7 +161,7 @@ const MinesHistory = ({ gameHistory = [], userStats = {} }) => {
           whileHover="hover"
           variants={cardHoverVariants}
         >
-          <div className="text-xs text-white/60 mb-1 font-sans">Win Rate</div>
+          <div className="text-xs text-white/60 mb-1 font-sans">{t('mines_history.stats.win_rate')}</div>
           <div className="text-sm font-semibold text-white flex items-center mt-1">
             <FaStar className="mr-1.5 text-orange-400" /> 
             <span className="font-display">{stats.winRate}</span>
@@ -171,7 +173,7 @@ const MinesHistory = ({ gameHistory = [], userStats = {} }) => {
           whileHover="hover"
           variants={cardHoverVariants}
         >
-          <div className="text-xs text-white/60 mb-1 font-sans">Biggest Win</div>
+          <div className="text-xs text-white/60 mb-1 font-sans">{t('mines_history.stats.biggest_win')}</div>
           <div className="text-sm font-semibold text-green-400 flex items-center mt-1">
             <GiDiamondTrophy className="mr-1.5" /> 
             <span className="font-display">{stats.biggestWin}</span>
@@ -183,7 +185,7 @@ const MinesHistory = ({ gameHistory = [], userStats = {} }) => {
           whileHover="hover"
           variants={cardHoverVariants}
         >
-          <div className="text-xs text-white/60 mb-1 font-sans">Avg Multiplier</div>
+          <div className="text-xs text-white/60 mb-1 font-sans">{t('mines_history.stats.avg_multiplier')}</div>
           <div className="text-sm font-semibold text-yellow-400 flex items-center mt-1">
             <HiOutlineLightningBolt className="mr-1.5" /> 
             <span className="font-display">{stats.avgMultiplier}</span>
@@ -195,7 +197,7 @@ const MinesHistory = ({ gameHistory = [], userStats = {} }) => {
           whileHover="hover"
           variants={cardHoverVariants}
         >
-          <div className="text-xs text-white/60 mb-1 font-sans">Profit/Loss</div>
+          <div className="text-xs text-white/60 mb-1 font-sans">{t('mines_history.stats.profit_loss')}</div>
           <div className={`text-sm font-semibold flex items-center mt-1 ${
             stats.profitLoss.startsWith('-') ? 'text-red-400' : 'text-green-400'
           }`}>
@@ -213,42 +215,42 @@ const MinesHistory = ({ gameHistory = [], userStats = {} }) => {
             className="flex items-center cursor-pointer hover:text-white/90 transition-colors text-white/70"
             onClick={() => handleSort('id')}
           >
-            Game <SortIcon field="id" />
+            {t('mines_history.table_headers.game')} <SortIcon field="id" />
           </div>
           <div 
             className="flex items-center cursor-pointer hover:text-white/90 transition-colors text-white/70"
             onClick={() => handleSort('mines')}
           >
-            Mines <SortIcon field="mines" />
+            {t('mines_history.table_headers.mines')} <SortIcon field="mines" />
           </div>
           <div 
             className="flex items-center cursor-pointer hover:text-white/90 transition-colors text-white/70"
             onClick={() => handleSort('bet')}
           >
-            Bet <SortIcon field="bet" />
+            {t('mines_history.table_headers.bet')} <SortIcon field="bet" />
           </div>
           <div 
             className="flex items-center cursor-pointer hover:text-white/90 transition-colors text-white/70"
             onClick={() => handleSort('multiplier')}
           >
-            Multiplier <SortIcon field="multiplier" />
+            {t('mines_history.table_headers.multiplier')} <SortIcon field="multiplier" />
           </div>
           <div 
             className="flex items-center cursor-pointer hover:text-white/90 transition-colors text-white/70"
             onClick={() => handleSort('payout')}
           >
-            Payout <SortIcon field="payout" />
+            {t('mines_history.table_headers.payout')} <SortIcon field="payout" />
           </div>
           <div 
             className="flex items-center cursor-pointer hover:text-white/90 transition-colors text-white/70"
             onClick={() => handleSort('time')}
           >
-            Time <SortIcon field="time" />
+            {t('mines_history.table_headers.time')} <SortIcon field="time" />
           </div>
           <div 
             className="flex items-center cursor-pointer hover:text-white/90 transition-colors text-white/70"
           >
-            Entropy Explorer
+            {t('mines_history.table_headers.entropy_explorer')}
           </div>
         </div>
         
@@ -328,7 +330,7 @@ const MinesHistory = ({ gameHistory = [], userStats = {} }) => {
                           className="flex items-center gap-1 px-2 py-1 bg-[#4CAF50]/10 border border-[#4CAF50]/30 rounded text-[#4CAF50] text-xs hover:bg-[#4CAF50]/20 transition-colors"
                         >
                           <FaExternalLinkAlt size={8} />
-                          One Chain
+                          {t('mines_history.explorer_links.one_chain')}
                         </button>
                       )}
                       {/* Arbitrum Sepolia Entropy Link */}
@@ -341,7 +343,7 @@ const MinesHistory = ({ gameHistory = [], userStats = {} }) => {
                           className="flex items-center gap-1 px-2 py-1 bg-[#2196F3]/10 border border-[#2196F3]/30 rounded text-[#2196F3] text-xs hover:bg-[#2196F3]/20 transition-colors"
                         >
                           <FaExternalLinkAlt size={8} />
-                          Entropy
+                          {t('mines_history.explorer_links.entropy')}
                         </button>
                       )}
                       {/* Pyth Entropy Explorer Link */}
@@ -351,7 +353,7 @@ const MinesHistory = ({ gameHistory = [], userStats = {} }) => {
                           className="flex items-center gap-1 px-2 py-1 bg-[#681DDB]/10 border border-[#681DDB]/30 rounded text-[#681DDB] text-xs hover:bg-[#681DDB]/20 transition-colors"
                         >
                           <FaExternalLinkAlt size={8} />
-                          Pyth
+                          {t('mines_history.explorer_links.pyth')}
                         </button>
                       )}
                     </div>
@@ -359,7 +361,7 @@ const MinesHistory = ({ gameHistory = [], userStats = {} }) => {
                 ) : (
                   <div className="flex items-center gap-2">
                     <div className="w-4 h-4 border-2 border-purple-500 border-t-transparent rounded-full animate-spin"></div>
-                    <span className="text-purple-400 text-xs">Generating...</span>
+                    <span className="text-purple-400 text-xs">{t('mines_history.generating')}</span>
                   </div>
                 )}
               </div>
@@ -377,9 +379,9 @@ const MinesHistory = ({ gameHistory = [], userStats = {} }) => {
             transition={{ duration: 0.5 }}
           >
             <GiTreasureMap className="mx-auto text-5xl mb-3 text-purple-500/60" />
-            <h4 className="text-lg font-medium text-white mb-2 font-display">No Game History Yet</h4>
+            <h4 className="text-lg font-medium text-white mb-2 font-display">{t('mines_history.no_history_title')}</h4>
             <p className="text-white/60 text-sm max-w-md mx-auto font-sans">
-              Start playing to see your results! Your game history will track your wins, losses, and overall performance.
+              {t('mines_history.no_history_description')}
             </p>
           </motion.div>
         </div>

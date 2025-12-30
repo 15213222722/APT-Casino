@@ -1065,5 +1065,34 @@
     "header_payout": "对于 1 OCT",
     "chance": "机会",
     "formula_info": "倍数公式基于概率：<1>倍数 = 总方块数 / (总方块数 - 地雷数 - 已揭示数)</1>。更高的风险会导致指数级更高的回报。"
+  },
+  "mines_history": {
+    "title": "您的扫雷历史",
+    "games_count": "{{count}} 场游戏",
+    "stats": {
+      "games_played": "已玩游戏",
+      "games_won": "获胜游戏",
+      "win_rate": "胜率",
+      "biggest_win": "最大胜利",
+      "avg_multiplier": "平均倍数",
+      "profit_loss": "盈/亏"
+    },
+    "table_headers": {
+      "game": "游戏",
+      "mines": "地雷",
+      "bet": "投注",
+      "multiplier": "倍数",
+      "payout": "赔付",
+      "time": "时间",
+      "entropy_explorer": "熵浏览器"
+    },
+    "explorer_links": {
+      "one_chain": "One Chain",
+      "entropy": "熵",
+      "pyth": "Pyth"
+    },
+    "generating": "生成中...",
+    "no_history_title": "暂无游戏历史",
+    "no_history_description": "开始游戏以查看您的结果！您的游戏历史将跟踪您的胜利、失败和整体表现。"
   }
 }

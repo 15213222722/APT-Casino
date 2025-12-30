@@ -988,5 +988,34 @@
     "header_payout": "For 1 OCT",
     "chance": "Chance",
     "formula_info": "The multiplier formula is based on probability: <1>multiplier = totalTiles / (totalTiles - mines - revealed)</1>. Higher risk leads to exponentially higher rewards."
+  },
+  "mines_history": {
+    "title": "Your Mines History",
+    "games_count": "{{count}} Games",
+    "stats": {
+      "games_played": "Games Played",
+      "games_won": "Games Won",
+      "win_rate": "Win Rate",
+      "biggest_win": "Biggest Win",
+      "avg_multiplier": "Avg Multiplier",
+      "profit_loss": "Profit/Loss"
+    },
+    "table_headers": {
+      "game": "Game",
+      "mines": "Mines",
+      "bet": "Bet",
+      "multiplier": "Multiplier",
+      "payout": "Payout",
+      "time": "Time",
+      "entropy_explorer": "Entropy Explorer"
+    },
+    "explorer_links": {
+      "one_chain": "One Chain",
+      "entropy": "Entropy",
+      "pyth": "Pyth"
+    },
+    "generating": "Generating...",
+    "no_history_title": "No Game History Yet",
+    "no_history_description": "Start playing to see your results! Your game history will track your wins, losses, and overall performance."
   }
 }
