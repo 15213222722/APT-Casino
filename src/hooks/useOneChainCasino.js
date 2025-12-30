@@ -244,7 +244,7 @@ export const useOneChainCasino = () => {
       
       // Send transaction to backend API for signing with treasury wallet
       console.log('🔐 ONE CHAIN: Sending to backend for treasury signing...');
-      console.log("11111:",txData.data.module);
+      
       const response = await fetch('/api/onechain-log-game', {
         method: 'POST',
         headers: {
@@ -338,10 +338,7 @@ export const useOneChainCasino = () => {
       
       // Send transaction to backend API for signing with treasury wallet
       console.log('🔐 ONE CHAIN: Sending to backend for treasury signing...');
-      console.log("22222:",txData.data.module);
-      console.log("33333:",txData.data.function);
-      console.log("44444:",txData.data.arguments);
-      console.log("55555:",txData.data.typeArguments);
+      
       const response = await fetch('/api/onechain-log-game', {
         method: 'POST',
         headers: {
@@ -357,7 +354,7 @@ export const useOneChainCasino = () => {
       });
 
       const result = await response.json();
-      console.log("66666:",result);
+     
       if (!response.ok || !result.success) {
         throw new Error(result.error || 'Failed to log game to OneChain');
       }

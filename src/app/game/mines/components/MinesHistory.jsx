@@ -10,6 +10,33 @@ import { useTranslation } from 'react-i18next';
 import { useOneChainCasino } from "@/hooks/useOneChainCasino.js";
 import { useCurrentAccount } from "@mysten/dapp-kit";
 
+
+const formatTime = (timeString) => {
+    let date;
+    if (timeString instanceof Date) {
+      date = timeString;
+    } else if (typeof timeString === 'string') {
+      // Check if it's a timestamp string (numeric) or ISO string
+      if (/^\d+$/.test(timeString)) {
+        // It's a numeric timestamp string, convert to number first
+        date = new Date(parseInt(timeString));
+      } else {
+        // It's an ISO date string
+        date = new Date(timeString);
+      }
+    } else if (typeof timeString === 'number') {
+      date = new Date(timeString);
+    } else {
+      return '--:--';
+    }
+    // Check if date is valid
+    if (isNaN(date.getTime())) {
+      return '--:--';
+    }
+    return date.toLocaleString([], { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' });
+  };
+
+
 const MinesHistory = ({ userStats = {} }) => {
   const { t } = useTranslation();
   const [history, setHistory] = useState([]);
@@ -362,8 +389,8 @@ const MinesHistory = ({ userStats = {} }) => {
               <div className="text-white/70 flex items-center">
                 <div className="w-4 h-4 rounded-full bg-purple-900/30 border border-purple-800/30 flex items-center justify-center mr-1.5">
                   <HiClock className="text-purple-400" size={8} />
-                </div>
-                <span>{game.time}</span>
+                </div> 
+                <span>{formatTime(game.timestamp)}</span>
               </div>
               <div className="text-white/70 flex items-center justify-center">
                 {game.entropyProof || game.transactionHash || game.onechainTxHash ? (
