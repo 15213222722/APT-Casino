@@ -91,11 +91,17 @@ const calculateMultiplier = (revealedCount, minesCount, gridSize) => {
     // This can happen if revealedCount > safeTiles, return a high number as it's a "win"
     // but cap it to avoid infinity. This case indicates all safe tiles are revealed.
     const maxMultiplier = (1 - houseEdge) / (combinations(safeTiles, safeTiles) / combinations(totalTiles, safeTiles));
-    return maxMultiplier;
+    return Math.min(maxMultiplier, 20.0);
   }
 
   const multiplier = (1 - houseEdge) / prob;
-  return multiplier;
+
+  // Only allow the absolute max multiplier if all safe tiles are revealed
+  if (revealedCount < safeTiles) {
+    return Math.min(multiplier, 19.99);
+  }
+  
+  return Math.min(multiplier, 20.0);
 };
 
 // Helper function to initialize the grid, moved outside the component
@@ -220,15 +226,22 @@ const Game = ({ betSettings = {}, onGameStatusChange, onGameComplete }) => {
   const multiplierTable = useMemo(() => {
     const table = [];
     const safeTiles = totalTiles - minesCount;
+    const MAX_MULTIPLIER_CAP = 19.99;
 
     // Show multipliers for revealing 1 up to all safe tiles
     for (let i = 1; i <= safeTiles; i++) {
       const multiplierValue = calculateMultiplier(i, minesCount, gridSize);
+      
       if (multiplierValue > 0 && multiplierValue !== Infinity) {
         table.push({
           tiles: i,
           multiplier: multiplierValue.toFixed(2) + 'x',
         });
+        
+        // If we've hit the max multiplier cap before the final tile, stop.
+        if (i < safeTiles && multiplierValue >= MAX_MULTIPLIER_CAP) {
+          break;
+        }
       }
     }
     
@@ -343,7 +356,7 @@ const Game = ({ betSettings = {}, onGameStatusChange, onGameComplete }) => {
     const startGameWithBet = async () => {
       console.log('🔌 Mines Bet - Wallet Status:', { isConnected, userBalance });
       if (!isConnected) {
-        toast.error('Please connect your wallet first to play Mines!');
+        toast.error(t('notifications.connect_wallet_to_play', { gameName: 'Mines' }));
         return;
       }
       
@@ -351,7 +364,7 @@ const Game = ({ betSettings = {}, onGameStatusChange, onGameComplete }) => {
       const betToPlace = parseFloat(settings.betAmount);
       
       if (currentBalance < betToPlace) {
-        toast.error(`Insufficient balance. You have ${currentBalance.toFixed(5)} OCT but need ${betToPlace} OCT`);
+        toast.error(t('notifications.insufficient_balance_game', { balance: currentBalance.toFixed(5), needed: betToPlace }));
         return;
       }
 
@@ -377,17 +390,17 @@ const Game = ({ betSettings = {}, onGameStatusChange, onGameComplete }) => {
         setHasPlacedBet(true);
         playSound('bet');
         
-        toast.success(`Bet placed! ${betToPlace.toFixed(5)} OCT deducted.`);
+        toast.success(t('notifications.bet_placed', { amount: betToPlace.toFixed(5) }));
         
         if (settings.isAutoBetting) {
-          toast.info(`Auto betting mode: Will reveal ${settings.tilesToReveal || 5} tiles`);
+          toast.info(t('notifications.auto_bet_mode_reveal', { count: settings.tilesToReveal || 5 }));
           setTimeout(() => {
             autoRevealTiles(settings.tilesToReveal);
           }, 100);
         }
       } catch (error) {
         console.error('Error placing bet:', error);
-        toast.error(`Bet placement failed: ${error.message}`);
+        toast.error(t('notifications.bet_placement_failed', { error: error.message }));
         // Refund on error
         dispatch(setBalance(userBalance));
       }
@@ -419,7 +432,7 @@ const Game = ({ betSettings = {}, onGameStatusChange, onGameComplete }) => {
     setTimeout(() => {
     if (grid[row][col].isBomb) {
         playSound('explosion');
-        toast.error('Game Over! You hit a mine!');
+        toast.error(t('notifications.game_over_mine_hit'));
         
         // Immediately reset critical states
         setIsPlaying(false);
@@ -476,7 +489,7 @@ const Game = ({ betSettings = {}, onGameStatusChange, onGameComplete }) => {
           if (newCount === safeTiles) {
             playSound('win');
             setShowConfetti(true);
-            toast.success('Congratulations! You revealed all safe tiles!');
+            toast.success(t('notifications.congrats_all_safe_tiles'));
             setTimeout(() => setShowConfetti(false), 5000);
             
             // Immediately reset critical states
@@ -543,7 +556,7 @@ const Game = ({ betSettings = {}, onGameStatusChange, onGameComplete }) => {
     let timerIds = [];
     
     // Add AI decision notice
-    toast.info("AI is making decisions...");
+    toast.info(t('notifications.ai_making_decisions'));
     
     const revealNext = () => {
       if (revealed >= maxTiles) {
@@ -551,7 +564,7 @@ const Game = ({ betSettings = {}, onGameStatusChange, onGameComplete }) => {
         cashout();
         
         // Add cashout notice from AI
-        toast.success("AI Agent: Optimal cashout point reached ✓");
+        toast.success(t('notifications.ai_optimal_cashout'));
         return;
       }
       
@@ -587,7 +600,7 @@ const Game = ({ betSettings = {}, onGameStatusChange, onGameComplete }) => {
           } else {
             setAutoRevealInProgress(false);
             if (gameOver) {
-              toast.error("AI Agent: Mine detected - round lost");
+              toast.error(t('notifications.ai_mine_detected'));
               // Reset game state after auto-reveal loss
               const resetAfterAutoLoss = () => {
                 setIsPlaying(false);
@@ -599,7 +612,7 @@ const Game = ({ betSettings = {}, onGameStatusChange, onGameComplete }) => {
               };
               setTimeout(resetAfterAutoLoss, 0);
             } else if (gameWon) {
-              toast.success("AI Agent: Perfect game! All safe tiles revealed!");
+              toast.success(t('notifications.ai_perfect_game'));
               // Reset game state after auto-reveal win
               const resetAfterAutoWin = () => {
                 setIsPlaying(false);
@@ -674,7 +687,7 @@ const Game = ({ betSettings = {}, onGameStatusChange, onGameComplete }) => {
       
       // Cashout is just a local operation - no blockchain transaction needed
       // The actual payout was already handled in the initial bet transaction
-              toast.success(`Cashed out: ${payout.toFixed(5)} OCT (${multiplier.toFixed(2)}x)`);
+              toast.success(t('notifications.cashed_out', { amount: payout.toFixed(5), multiplier: multiplier.toFixed(2) }));
       playSound('cashout');
       
       // Update user balance in Redux store (add payout to current balance)
@@ -747,7 +760,7 @@ const Game = ({ betSettings = {}, onGameStatusChange, onGameComplete }) => {
       
     } catch (error) {
       console.error('Error cashing out:', error);
-      toast.error(`Cashout failed: ${error.message}`);
+      toast.error(t('mines_game.cashout_failed', { error: error.message }));
     }
   };
   

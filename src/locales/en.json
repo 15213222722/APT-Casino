@@ -91,12 +91,27 @@
     "wallet_permission_denied": "Wallet permission denied. Please disconnect and reconnect your wallet, then try again.",
     "deposit_success": "Successfully deposited {amount} OCT! TX: {tx}",
     "deposit_failed": "Deposit failed: {error}",
-    "all_marked_as_read": "All notifications marked as read"
+    "all_marked_as_read": "All notifications marked as read",
+    "connect_wallet_to_play": "Please connect your wallet first to play {{gameName}}!",
+    "insufficient_balance_game": "Insufficient balance. You have {{balance}} OCT but need {{needed}} OCT",
+    "bet_placed": "Bet placed! {{amount}} OCT deducted.",
+    "auto_bet_mode_reveal": "Auto betting mode: Will reveal {{count}} tiles",
+    "bet_placement_failed": "Bet placement failed: {{error}}",
+    "game_over_mine_hit": "Game Over! You hit a mine!",
+    "congrats_all_safe_tiles": "Congratulations! You revealed all safe tiles!",
+    "ai_making_decisions": "AI is making decisions...",
+    "ai_optimal_cashout": "AI Agent: Optimal cashout point reached ✓",
+    "ai_mine_detected": "AI Agent: Mine detected - round lost",
+    "ai_perfect_game": "AI Agent: Perfect game! All safe tiles revealed!",
+    "cashed_out": "Cashed out: {{amount}} OCT ({{multiplier}}x)"
   },
   "common": {
     "loading": "Loading...",
     "processing": "Processing...",
-    "currency_oct": "{{amount}} OCT"
+    "currency_oct": "{{amount}} OCT",
+    "one_safe_tile_message": "Find the 1 safe tile to win a {{multiplier}}x multiplier!",
+    "swipe_message": "Swipe to see more",
+    "cashout_failed": "Cashout failed: {{error}}"
   },
   "wallet": {
     "connect_button": "Connect Wallet"
@@ -909,5 +924,32 @@
     "mine_count": "{{count}} Mines",
     "tile_count": "{{count}} Tiles",
     "select_placeholder": "Select {{label}}"
+  },
+  "mines_details": {
+    "gameData": {
+      "label": "Game Description",
+      "title": "Mines",
+      "description": "Unearth hidden gems while avoiding mines in this thrilling crypto game!",
+      "paragraphs": [
+        "Select mines on a 5x5 grid – more mines mean higher rewards but greater risk.",
+        "Uncover gems while avoiding mines to increase your multiplier. Cash out anytime or keep going for bigger rewards.",
+        "With provably fair gameplay and instant payouts, Mines offers the perfect blend of strategy and luck."
+      ]
+    },
+    "bettingTableData": {
+      "title": "Mines Payouts",
+      "description": "Your potential payout increases with each safe tile you reveal. The more mines you select at the start, the higher your potential rewards will be."
+    },
+    "winProbabilities": {
+      "config_1_mine": "1 mine (24 safe tiles)",
+      "config_3_mines": "3 mines (22 safe tiles)",
+      "config_5_mines": "5 mines (20 safe tiles)",
+      "config_10_mines": "10 mines (15 safe tiles)",
+      "config_15_mines": "15 mines (10 safe tiles)"
+    },
+    "recentBigWins": {
+      "time_ago": "{{time}} ago",
+      "config": "{{count}} mines"
+    }
   }
 }

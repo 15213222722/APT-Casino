@@ -91,12 +91,27 @@
     "wallet_permission_denied": "钱包权限被拒绝。请断开并重新连接您的钱包，然后重试。",
     "deposit_success": "成功充值 {amount} OCT！交易：{tx}",
     "deposit_failed": "充值失败：{error}",
-    "all_marked_as_read": "所有通知已标记为已读"
+    "all_marked_as_read": "所有通知已标记为已读",
+    "connect_wallet_to_play": "请先连接您的钱包才能玩 {{gameName}}！",
+    "insufficient_balance_game": "余额不足。您有 {{balance}} OCT，但需要 {{needed}} OCT",
+    "bet_placed": "已下注！已扣除 {{amount}} OCT。",
+    "auto_bet_mode_reveal": "自动投注模式：将揭示 {{count}} 个方块",
+    "bet_placement_failed": "下注失败：{{error}}",
+    "game_over_mine_hit": "游戏结束！你踩到地雷了！",
+    "congrats_all_safe_tiles": "恭喜！你揭开了所有安全的方块！",
+    "ai_making_decisions": "AI 正在做决定...",
+    "ai_optimal_cashout": "AI 代理：已达到最佳兑现点 ✓",
+    "ai_mine_detected": "AI 代理：检测到地雷 - 本轮失败",
+    "ai_perfect_game": "AI 代理：完美游戏！所有安全方块均已揭开！",
+    "cashed_out": "已兑现：{{amount}} OCT ({{multiplier}}x)"
   },
   "common": {
     "loading": "加载中...",
     "processing": "处理中...",
-    "currency_oct": "{{amount}} OCT"
+    "currency_oct": "{{amount}} OCT",
+    "one_safe_tile_message": "找到1个安全的格子即可赢得 {{multiplier}}x 的倍数！",
+    "swipe_message": "滑动查看更多",
+    "cashout_failed": "提现失败：{{error}}"
   },
   "wallet": {
     "connect_button": "连接钱包"
@@ -986,5 +1001,32 @@
     "mine_count": "{{count}} 个地雷",
     "tile_count": "{{count}} 个图块",
     "select_placeholder": "选择 {{label}}"
+  },
+  "mines_details": {
+    "gameData": {
+      "label": "游戏说明",
+      "title": "扫雷",
+      "description": "在这款激动人心的加密游戏中，避开地雷，发掘隐藏的宝石！",
+      "paragraphs": [
+        "在5x5的网格上选择地雷——地雷越多意味着奖励越高，但风险也越大。",
+        "在避开地雷的同时发现宝石以增加您的倍数。随时兑现或继续游戏以获得更大的奖励。",
+        "凭借可证明的公平游戏和即时支付，扫雷完美融合了策略和运气。"
+      ]
+    },
+    "bettingTableData": {
+      "title": "扫雷赔付表",
+      "description": "您每揭开一个安全的方块，您的潜在赔付就会增加。开始时选择的地雷越多，您的潜在奖励就越高。"
+    },
+    "winProbabilities": {
+      "config_1_mine": "1个地雷（24个安全格）",
+      "config_3_mines": "3个地雷（22个安全格）",
+      "config_5_mines": "5个地雷（20个安全格）",
+      "config_10_mines": "10个地雷（15个安全格）",
+      "config_15_mines": "15个地雷（10个安全格）"
+    },
+    "recentBigWins": {
+      "time_ago": "{{time}}前",
+      "config": "{{count}}个地雷"
+    }
   }
 }
