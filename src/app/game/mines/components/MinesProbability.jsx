@@ -5,8 +5,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import { FaPercentage, FaBomb, FaInfoCircle, FaChartLine, FaDice, FaQuestion } from "react-icons/fa";
 import { GiCardRandom, GiMineExplosion, GiTreasureMap, GiDiamonds } from "react-icons/gi";
 import { HiLightningBolt, HiOutlineChartBar } from "react-icons/hi";
+import { useTranslation } from 'react-i18next';
 
 const MinesProbability = ({ winProbabilities, gridSize = 5 }) => {
+  const { t } = useTranslation();
   const [expandedItem, setExpandedItem] = useState(null);
   
   // Calculate additional probabilities
@@ -72,16 +74,15 @@ const MinesProbability = ({ winProbabilities, gridSize = 5 }) => {
     <div className="bg-gradient-to-b from-[#1A0015]/90 to-[#190020]/90 rounded-xl border-2 border-[#333947] p-5 mt-6 shadow-lg shadow-purple-900/5 backdrop-blur-sm">
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-xl font-bold text-white flex items-center font-display">
-          <HiOutlineChartBar className="mr-2 text-blue-400" /> Win Probabilities
+          <HiOutlineChartBar className="mr-2 text-blue-400" /> {t('mines_probability.title')}
         </h3>
         <div className="text-xs px-2 py-1 bg-gradient-to-r from-purple-900/50 to-blue-900/30 rounded-full text-white/80 border border-purple-800/30">
-          <span className="font-display">25 total tiles</span>
+          <span className="font-display">{t('mines_probability.total_tiles', { count: 25 })}</span>
         </div>
       </div>
       
       <p className="text-white/70 text-sm mb-4 font-sans">
-        Your chance of winning depends on the number of mines and how many tiles you plan to reveal.
-        The fewer mines you select, the higher your win probability but lower potential rewards.
+        {t('mines_probability.description')}
       </p>
       
       {/* Probability Visualizations */}
@@ -116,10 +117,10 @@ const MinesProbability = ({ winProbabilities, gridSize = 5 }) => {
                     <p className="text-white font-medium font-display">{item.config}</p>
                     <div className="flex text-xs text-white/60 items-center mt-1 font-sans">
                       <GiDiamonds className="mr-1 text-blue-400" />
-                      <span>{item.safeTiles} safe</span>
+                      <span>{item.safeTiles} {t('mines_probability.safe')}</span>
                       <span className="mx-1">•</span>
                       <FaBomb className="mr-1 text-red-400" />
-                      <span>{item.mineCount} {item.mineCount === 1 ? 'mine' : 'mines'}</span>
+                      <span>{item.mineCount} {item.mineCount === 1 ? t('mines_probability.mine') : t('mines_probability.mines')}</span>
                     </div>
                   </div>
                 </div>
@@ -138,7 +139,7 @@ const MinesProbability = ({ winProbabilities, gridSize = 5 }) => {
                       }}
                     />
                   </div>
-                  <p className="text-xs text-white/60 font-sans">Win chance</p>
+                  <p className="text-xs text-white/60 font-sans">{t('mines_probability.win_chance')}</p>
                 </div>
               </div>
               
@@ -172,21 +173,21 @@ const MinesProbability = ({ winProbabilities, gridSize = 5 }) => {
                     {/* Additional stats */}
                     <div className="grid grid-cols-3 gap-2 text-xs">
                       <div className="bg-black/30 rounded p-2.5">
-                        <p className="text-white/60 mb-1 font-sans">First click risk</p>
+                        <p className="text-white/60 mb-1 font-sans">{t('mines_probability.first_click_risk')}</p>
                         <p className="text-white font-medium flex items-center">
                           <FaDice className="mr-1 text-purple-400" />
                           {item.firstClickMineProb.toFixed(1)}%
                         </p>
                       </div>
                       <div className="bg-black/30 rounded p-2.5">
-                        <p className="text-white/60 mb-1 font-sans">Expected value</p>
+                        <p className="text-white/60 mb-1 font-sans">{t('mines_probability.expected_value')}</p>
                         <p className={`font-medium flex items-center ${item.expectedValue >= 0 ? 'text-green-400' : 'text-red-400'}`}>
                           <FaChartLine className="mr-1" />
                           {item.expectedValue.toFixed(2)}x
                         </p>
                       </div>
                       <div className="bg-black/30 rounded p-2.5">
-                        <p className="text-white/60 mb-1 font-sans">Max multiplier</p>
+                        <p className="text-white/60 mb-1 font-sans">{t('mines_probability.max_multiplier')}</p>
                         <p className="text-yellow-400 font-medium flex items-center">
                           <HiLightningBolt className="mr-1" />
                           {item.maxMultiplier}x
@@ -198,7 +199,7 @@ const MinesProbability = ({ winProbabilities, gridSize = 5 }) => {
                       <p className="flex items-center">
                         <GiTreasureMap className="text-yellow-400 mr-1.5" />
                         <span>
-                          With {item.mineCount} mines, you have a {item.probability}% chance of avoiding all mines when revealing {Math.floor(item.safeTiles/2)} gems.
+                          {t('mines_probability.summary', { mineCount: item.mineCount, probability: item.probability, gemCount: Math.floor(item.safeTiles/2) })}
                         </span>
                       </p>
                     </div>
@@ -214,12 +215,12 @@ const MinesProbability = ({ winProbabilities, gridSize = 5 }) => {
       <div className="mt-5 flex items-start bg-gradient-to-r from-purple-900/20 to-blue-900/10 p-3 rounded-lg border border-purple-900/30">
         <FaInfoCircle className="mt-0.5 mr-2 text-purple-400 flex-shrink-0" />
         <div className="text-sm text-white/80 font-sans">
-          <p className="mb-1"><strong className="font-display">Pro tip:</strong> Balance risk vs. reward based on your playing style.</p>
-          <p>A positive expected value (EV) suggests favorable long-term returns, but remember that short-term variance can be significant.</p>
+          <p className="mb-1"><strong className="font-display">{t('mines_probability.pro_tip_title')}</strong> {t('mines_probability.pro_tip_description')}</p>
+          <p>{t('mines_probability.ev_tip')}</p>
         </div>
       </div>
     </div>
   );
 };
 
-export default MinesProbability; 
+export default MinesProbability;

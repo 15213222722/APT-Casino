@@ -951,5 +951,21 @@
       "time_ago": "{{time}} ago",
       "config": "{{count}} mines"
     }
+  },
+  "mines_probability": {
+    "title": "Win Probabilities",
+    "total_tiles": "{{count}} total tiles",
+    "description": "Your chance of winning depends on the number of mines and how many tiles you plan to reveal. The fewer mines you select, the higher your win probability but lower potential rewards.",
+    "safe": "safe",
+    "mine": "mine",
+    "mines": "mines",
+    "win_chance": "Win chance",
+    "first_click_risk": "First click risk",
+    "expected_value": "Expected value",
+    "max_multiplier": "Max multiplier",
+    "summary": "With {{mineCount}} mines, you have a {{probability}}% chance of avoiding all mines when revealing {{gemCount}} gems.",
+    "pro_tip_title": "Pro tip:",
+    "pro_tip_description": "Balance risk vs. reward based on your playing style.",
+    "ev_tip": "A positive expected value (EV) suggests favorable long-term returns, but remember that short-term variance can be significant."
   }
 }

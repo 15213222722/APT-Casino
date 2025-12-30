@@ -1028,5 +1028,21 @@
       "time_ago": "{{time}}前",
       "config": "{{count}}个地雷"
     }
+  },
+  "mines_probability": {
+    "title": "获胜概率",
+    "total_tiles": "总共 {{count}} 个方块",
+    "description": "您的获胜机会取决于地雷的数量以及您计划揭开多少个方块。您选择的地雷越少，您的获胜概率就越高，但潜在奖励也越低。",
+    "safe": "安全",
+    "mine": "地雷",
+    "mines": "地雷",
+    "win_chance": "获胜机会",
+    "first_click_risk": "首次点击风险",
+    "expected_value": "期望值",
+    "max_multiplier": "最大倍数",
+    "summary": "在有 {{mineCount}} 个地雷的情况下，当您揭开 {{gemCount}} 个宝石时，您有 {{probability}}% 的机会避开所有地雷。",
+    "pro_tip_title": "专业提示：",
+    "pro_tip_description": "根据您的游戏风格平衡风险与回报。",
+    "ev_tip": "正的期望值 (EV) 表明长期回报有利，但请记住，短期方差可能很大。"
   }
 }
