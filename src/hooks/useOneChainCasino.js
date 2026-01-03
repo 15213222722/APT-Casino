@@ -379,12 +379,12 @@ export const useOneChainCasino = () => {
    * Cashout from mines game
    * @param {string} gameId - Game ID (transaction hash)
    * @param {string} payoutAmount - Payout amount in OCT
-   * @param {number} finalMultiplier - Final multiplier achieved
+   * @param {number} currentMultiplier - Final multiplier achieved
    * @param {number} tilesRevealed - Number of tiles revealed
    * @param {string} betAmount - Original bet amount in OCT
    * @returns {Promise<string>} Transaction hash
    */
-  const cashoutMinesGame = useCallback(async (gameId, payoutAmount, finalMultiplier = 1.0, tilesRevealed = 0, betAmount = '0') => {
+  const cashoutMinesGame = useCallback(async (gameId, payoutAmount, currentMultiplier = 1.0, tilesRevealed = 0, betAmount = '0') => {
     if (!connected || !account) {
       throw new Error('Wallet not connected');
     }
@@ -408,7 +408,7 @@ export const useOneChainCasino = () => {
         },
         resultData: {
           status: 'completed',
-          finalMultiplier,
+          currentMultiplier,
           tilesRevealed,
           isWin: true,
           timestamp: Date.now()
