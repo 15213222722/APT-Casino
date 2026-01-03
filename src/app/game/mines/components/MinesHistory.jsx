@@ -56,7 +56,6 @@ const MinesHistory = ({ userStats = {} }) => {
           const formattedHistory = onChainHistory.map(item => {
             const betAmount = parseFloat(formatOCTAmount(item.betAmount || '0'));
             const payoutAmount = parseFloat(formatOCTAmount(item.payoutAmount || '0'));
-            console.log("gameId:",item.gameConfig?.gameId.substring(6));
             return {
               id: item.gameConfig?.gameId.substring(6),
               mines: item.gameConfig?.minesCount || 0,
