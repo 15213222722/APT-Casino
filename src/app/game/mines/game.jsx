@@ -56,52 +56,44 @@ const combinations = (n, k) => {
   return res;
 };
 
-// Function to get a dynamic house edge based on the number of mines
-const getDynamicHouseEdge = (minesCount) => {
-  // Higher edge for very low mine counts to balance risk
-  if (minesCount <= 1) return 0.50; // 10% edge for 1 mine
-  if (minesCount <= 2) return 0.45; // 8% edge for 2 mines
-  if (minesCount <= 3) return 0.4; // 6% edge for 3 mines
-  if (minesCount <= 4) return 0.35; // 4% edge for 4 mines
-  if (minesCount <= 5) return 0.30;
-  if (minesCount <= 6) return 0.25;
-  if (minesCount <= 7) return 0.2;
-  if (minesCount <= 8) return 0.15;
-  if (minesCount <= 9) return 0.1;
-  // Standard edge for 5 or more mines
-  return 0.03; // 3% standard edge
-};
-
-// New multiplier calculation function with house edge
+// New multiplier calculation function with an exponential growth curve and dynamic max multiplier
+// New multiplier calculation function with an exponential growth curve and dynamic max multiplier (NO HOUSE EDGE)
+// New multiplier calculation function with an exponential growth curve and dynamic max multiplier (NO HOUSE EDGE)
 const calculateMultiplier = (revealedCount, minesCount, gridSize) => {
   if (revealedCount === 0) {
     return 1.0;
   }
+
   const totalTiles = gridSize * gridSize;
   const safeTiles = totalTiles - minesCount;
-  const houseEdge = getDynamicHouseEdge(minesCount);
-
-  if (revealedCount > safeTiles) {
-    return 0; // Should not happen in a normal game flow
-  }
-
-  const prob = combinations(safeTiles, revealedCount) / combinations(totalTiles, revealedCount);
   
-  if (prob === 0) {
-    // This can happen if revealedCount > safeTiles, return a high number as it's a "win"
-    // but cap it to avoid infinity. This case indicates all safe tiles are revealed.
-    const maxMultiplier = (1 - houseEdge) / (combinations(safeTiles, safeTiles) / combinations(totalTiles, safeTiles));
-    return Math.min(maxMultiplier, 20.0);
+  // Dynamically calculate maxMultiplier based on minesCount (1 mine -> 2x, 24 mines -> 50x)
+  // The result is rounded to ensure the max multiplier is always an integer.
+  const minMaxMultiplier = 2.0; // Start from 2x for 1 mine
+  const maxMaxMultiplier = 50.0;
+  const maxMultiplier = Math.round(
+    minMaxMultiplier + ((minesCount - 1) * (maxMaxMultiplier - minMaxMultiplier)) / (23)
+  );
+
+  const minMultiplier = 1.0;
+
+  // Ensure safeTiles is at least 1 to avoid division by zero
+  if (safeTiles <= 0) {
+    return minMultiplier;
   }
 
-  const multiplier = (1 - houseEdge) / prob;
+  // Normalize progress: how many of the safe tiles have been revealed (0 to 1)
+  const progress = revealedCount / safeTiles;
 
-  // Only allow the absolute max multiplier if all safe tiles are revealed
-  if (revealedCount < safeTiles) {
-    return Math.min(multiplier, 19.99);
-  }
-  
-  return Math.min(multiplier, 20.0);
+  // Dynamic growth rate: Slower growth for fewer mines.
+  const growthRate = 2.5 + (minesCount / 8);
+
+  // Calculate the multiplier using an exponential curve.
+  // This formula ensures the multiplier starts at 1.0 and ends exactly at maxMultiplier.
+  const finalMultiplier = minMultiplier + (maxMultiplier - minMultiplier) * (Math.exp(progress * growthRate) - 1) / (Math.exp(growthRate) - 1);
+
+  // Ensure the final multiplier is within the defined bounds [1.0, maxMultiplier]
+  return Math.max(minMultiplier, Math.min(finalMultiplier, maxMultiplier));
 };
 
 // Helper function to initialize the grid, moved outside the component
@@ -995,7 +987,7 @@ const Game = ({ betSettings = {}, onGameStatusChange, onGameComplete }) => {
               } rounded-lg text-white font-bold shadow-lg transition-all flex items-center justify-center gap-2`}
             >
               <FaCoins className="text-yellow-300" />
-              <span>{t('mines_game.cashout_button', { amount: calculatePayout() })}</span>
+              <span>{t('mines_game.cashout_button', { amount: calculatePayout().toFixed(5) })}</span>
             </button>
           </div>
         )}
@@ -1005,7 +997,7 @@ const Game = ({ betSettings = {}, onGameStatusChange, onGameComplete }) => {
           <div className="text-center py-3 bg-gradient-to-r from-green-600 to-emerald-600 rounded-lg text-white font-bold">
             <span>{t('mines_game.congratulations_message')}</span>
             <div className="mt-2 text-sm opacity-90">
-              {t('mines_game.winnings_message', { amount: calculatePayout(), multiplier: multiplier.toFixed(2) })}
+              {t('mines_game.winnings_message', { amount: calculatePayout().toFixed(5), multiplier: multiplier.toFixed(2) })}
             </div>
           </div>
         )}
