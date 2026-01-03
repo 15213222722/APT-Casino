@@ -124,7 +124,24 @@ const MinesHistory = ({ userStats = {} }) => {
     profitLoss: "0",
   };
 
-  const stats = { ...defaultStats, ...userStats };
+  const stats = history.length > 0 ? {
+    totalPlayed: history.length,
+    totalWon: history.filter(game => game.outcome === 'win').length,
+    winRate: history.length > 0 ? `${(history.filter(game => game.outcome === 'win').length / history.length * 100).toFixed(0)}%` : "0%",
+    biggestWin: `${Math.max(0, ...history.map(game => parseFloat(game.payout))).toFixed(4)} OCT`,
+    avgMultiplier: (() => {
+      const winningGames = history.filter(game => game.outcome === 'win');
+      if (winningGames.length === 0) return "0x";
+      const totalMultiplier = winningGames.reduce((acc, game) => acc + parseFloat(game.multiplier), 0);
+      return `${(totalMultiplier / winningGames.length).toFixed(2)}x`;
+    })(),
+    profitLoss: (() => {
+      const totalPayout = history.reduce((acc, game) => acc + parseFloat(game.payout), 0);
+      const totalBet = history.reduce((acc, game) => acc + parseFloat(game.bet), 0);
+      const profit = totalPayout - totalBet;
+      return `${profit.toFixed(4)} OCT`;
+    })(),
+  } : defaultStats;
 
   // Handle sorting
   const handleSort = (field) => {
